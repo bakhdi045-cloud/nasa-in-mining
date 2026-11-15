@@ -26,7 +26,7 @@ from nasa_in_mining.access import cmr, nisar_subset  # noqa: E402
 
 CASE = ROOT / "cases" / "benguerir"
 EPSG, SNAP, MARGIN_M = 32629, 80.0, 400.0
-COLLECTIONS = ["NISAR_L2_GUNW_V1", "NISAR_L2_GUNW_PROVISIONAL_V1", "NISAR_L2_GCOV_V1", "NISAR_L2_GCOV_PROVISIONAL_V1",
+COLLECTIONS = ["NISAR_L2_GUNW_V1", "NISAR_L2_GUNW_BETA_V1", "NISAR_L2_GUNW_PROVISIONAL_V1", "NISAR_L2_GCOV_V1", "NISAR_L2_GCOV_PROVISIONAL_V1",
                "NISAR_L2_GOFF_V1", "NISAR_L2_GOFF_PROVISIONAL_V1", "NISAR_L3_SME2_PROVISIONAL_V1"]
 
 
@@ -53,13 +53,14 @@ def main() -> None:
     searched = datetime.now(timezone.utc).isoformat(timespec="seconds")
     gunw = []
     for coll in COLLECTIONS:
-        grans = cmr.search(coll, wgs)
+        grans, completeness = cmr.search(coll, wgs)
         (inv_dir / f"{coll}.json").write_text(json.dumps(
             {"collection": coll, "searched_utc": searched, "bbox_wgs84": wgs, "n": len(grans),
+             "completeness": completeness,
              "note": "catalogue presence only; download and usability are recorded separately",
              "granules": [g.to_dict() for g in grans]}, indent=1), encoding="utf-8", newline="\n")
         print(f"{coll}: {len(grans)} granules", flush=True)
-        if coll.startswith("NISAR_L2_GUNW"):
+        if coll == "NISAR_L2_GUNW_PROVISIONAL_V1":   # other versions are inventoried, processed in a separate batch
             gunw += grans
     if args.inventory_only:
         return

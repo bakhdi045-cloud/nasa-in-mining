@@ -14,7 +14,9 @@ from datetime import datetime, timezone
 import hashlib
 import json
 import math
+import os
 from pathlib import Path
+import shutil
 
 import h5py
 import numpy as np
@@ -83,25 +85,68 @@ def _sha256(path: Path) -> str:
     return h.hexdigest()
 
 
+EXTRACTOR_VERSION = "2"
+
+
+def cache_key(granule_id: str, aoi_utm, epsg: int) -> dict:
+    """Parameters that define a crop: a cached crop is reused only if all of them are identical."""
+    return {"granule_id": granule_id, "aoi_utm": [float(v) for v in aoi_utm], "epsg": int(epsg),
+            "layers": {k: v[1] for k, v in LAYERS.items()}, "extractor_version": EXTRACTOR_VERSION}
+
+
+def verify(folder: Path, key: dict | None = None) -> tuple[bool, str]:
+    """(True, '') if the crop is complete, unmodified and was made with the same parameters."""
+    prov = folder / "provenance.json"
+    if not (folder / "_DONE").exists() or not prov.exists():
+        return False, "incomplete crop (no _DONE or provenance)"
+    try:
+        rec = json.loads(prov.read_text(encoding="utf-8"))
+    except ValueError:
+        return False, "unreadable provenance"
+    if key is not None and rec.get("cache_key") != key:
+        return False, "crop made with other parameters"
+    for name, digest in rec.get("files", {}).items():
+        f = folder / name
+        if not f.exists():
+            return False, f"missing file {name}"
+        if _sha256(f) != digest:
+            return False, f"file {name} differs from its recorded fingerprint"
+    if not rec.get("files"):
+        return False, "provenance without file fingerprints (extractor v1)"
+    return True, ""
+
+
+def _attr(ds, name):
+    v = ds.attrs.get(name)
+    if v is None:
+        return None
+    return v.decode("utf-8", "replace") if isinstance(v, bytes) else (v.item() if isinstance(v, np.generic) else str(v))
+
+
 def extract(url: str, granule_id: str, out_root: Path, aoi_utm: tuple[float, float, float, float],
             epsg_expected: int = 32629, overwrite: bool = False) -> dict:
-    """Crop one GUNW granule. Returns its provenance record (also written as provenance.json)."""
+    """Crop one GUNW granule into a temporary folder, verify it, then publish it atomically."""
     folder = Path(out_root) / "GUNW" / granule_id
-    done = folder / "_DONE"
-    if done.exists() and not overwrite:
-        return json.loads((folder / "provenance.json").read_text(encoding="utf-8"))
-    folder.mkdir(parents=True, exist_ok=True)
+    key = cache_key(granule_id, aoi_utm, epsg_expected)
+    if not overwrite:
+        ok, _ = verify(folder, key)
+        if ok:
+            return json.loads((folder / "provenance.json").read_text(encoding="utf-8"))
+    tmp = folder.with_name(folder.name + ".partial")
+    shutil.rmtree(tmp, ignore_errors=True)
+    tmp.mkdir(parents=True)
     rf = RangeFile(url)
     record: dict = {"granule_id": granule_id, "source_url": url, "source_size_bytes": rf.size,
                     "aoi_utm": list(aoi_utm), "epsg": None, "layers": {}, "identification": {},
                     "processing": {}, "extracted_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-                    "method": "HTTP range read of the original HDF5; no resampling; aligned crop on product grid"}
+                    "method": "HTTP range read of the original HDF5; no resampling; aligned crop on product grid",
+                    "cache_key": key}
     with h5py.File(rf, "r") as h5:
         ident = h5["science/LSAR/identification"]
         record["identification"] = {k: _scalar(ident[k]) for k in IDENT if k in ident}
-        for key, path in PARAMS.items():
+        for k, path in PARAMS.items():
             full = f"{META}/{path}"
-            record["processing"][key] = _scalar(h5[full]) if full in h5 else None
+            record["processing"][k] = _scalar(h5[full]) if full in h5 else None
         freq = float(h5[f"{GRID}/centerFrequency"][()])
         record["center_frequency_hz"] = freq
         for fname, (grid, rel) in LAYERS.items():
@@ -121,23 +166,27 @@ def extract(url: str, granule_id: str, out_root: Path, aoi_utm: tuple[float, flo
             fill = None if fill is None else float(fill)
             transform = from_origin(float(x[win[1].start]) - dx / 2, float(y[win[0].start]) - dy / 2, abs(dx), abs(dy))
             nodata = np.nan if arr.dtype.kind == "f" else (None if fill is None or not math.isfinite(fill) else fill)
-            path = folder / fname
+            path = tmp / fname
             with rasterio.open(path, "w", driver="GTiff", width=arr.shape[1], height=arr.shape[0], count=1,
                                dtype=arr.dtype, crs=f"EPSG:{epsg}", transform=transform, nodata=nodata,
                                compress="deflate", tiled=False) as dst:
                 dst.write(arr, 1)
-                units = ds.attrs.get("units")
-                dst.update_tags(source_dataset=f"{GRID}/{rel}", granule=granule_id,
-                                units=units.decode() if isinstance(units, bytes) else str(units))
+                dst.update_tags(source_dataset=f"{GRID}/{rel}", granule=granule_id, units=str(_attr(ds, "units")))
             record["layers"][fname] = {
                 "dataset": f"{GRID}/{rel}", "grid": grid, "spacing_m": [dx, dy], "shape": list(arr.shape),
                 "rows": [win[0].start, win[0].stop], "cols": [win[1].start, win[1].stop],
-                "units": (ds.attrs.get("units").decode() if isinstance(ds.attrs.get("units"), bytes)
-                          else ds.attrs.get("units")),
+                "units": _attr(ds, "units"), "description": _attr(ds, "description"),
                 "fill_value": fill if fill is None or math.isfinite(fill) else "NaN", "sha256": _sha256(path)}
-    np.savez_compressed(folder / "radar_geometry.npz", centerFrequency=freq)
+    np.savez_compressed(tmp / "radar_geometry.npz", centerFrequency=freq)
     record["bytes_transferred"] = rf.bytes_read
     record["range_requests"] = rf.requests
-    (folder / "provenance.json").write_text(json.dumps(record, indent=2, default=str), encoding="utf-8")
-    done.write_text(json.dumps({"provenance": "provenance.json"}), encoding="utf-8")
+    record["files"] = {**{k: v["sha256"] for k, v in record["layers"].items()},
+                       "radar_geometry.npz": _sha256(tmp / "radar_geometry.npz")}
+    (tmp / "provenance.json").write_text(json.dumps(record, indent=2, default=str), encoding="utf-8", newline="\n")
+    (tmp / "_DONE").write_text(json.dumps({"provenance": "provenance.json"}), encoding="utf-8")
+    ok, why = verify(tmp, key)
+    if not ok:
+        raise RuntimeError(f"{granule_id}: crop failed verification ({why})")
+    shutil.rmtree(folder, ignore_errors=True)
+    os.replace(tmp, folder)
     return record

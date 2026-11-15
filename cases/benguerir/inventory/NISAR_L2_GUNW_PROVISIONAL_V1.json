@@ -1,6 +1,6 @@
 {
  "collection": "NISAR_L2_GUNW_PROVISIONAL_V1",
- "searched_utc": "2026-11-15T02:48:01+00:00",
+ "searched_utc": "2026-11-15T12:53:41+00:00",
  "bbox_wgs84": [
   -7.913499502600662,
   32.164121536460875,
@@ -8,6 +8,12 @@
   32.34798962039192
  ],
  "n": 17,
+ "completeness": {
+  "pages": 1,
+  "cmr_hits": 17,
+  "n_unique": 17,
+  "complete": true
+ },
  "note": "catalogue presence only; download and usability are recorded separately",
  "granules": [
   {

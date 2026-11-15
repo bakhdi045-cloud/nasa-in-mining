@@ -59,11 +59,11 @@ def _to_mercator(arr: np.ndarray, transform, epsg: int, resampling=Resampling.ne
 
 
 def png_continuous(path: Path, arr: np.ndarray, transform, epsg: int, cmap: str, vmin: float, vmax: float,
-                   alpha: int = 220) -> dict:
+                   alpha: int = 220, levels: int = 254) -> dict:
     from PIL import Image
     merc, corners = _to_mercator(arr, transform, epsg)
-    # Indexed PNG: 254 colour levels between vmin and vmax (values outside are clipped), index 255 = no data.
-    levels = 254
+    # Indexed PNG: `levels` colour levels (<= 254) between vmin and vmax (values outside clipped), index 255 = no data.
+    levels = min(int(levels), 254)
     norm = np.clip((merc - vmin) / (vmax - vmin + 1e-12), 0, 1)
     idx = np.where(np.isfinite(merc), np.round(np.nan_to_num(norm) * (levels - 1)), 255).astype("uint8")
     lut = (legacy_raster._colormap(cmap)(np.linspace(0, 1, levels))[:, :3] * 255).astype("uint8")
