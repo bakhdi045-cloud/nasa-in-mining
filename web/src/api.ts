@@ -23,24 +23,35 @@ async function getJson(url: string): Promise<unknown> {
 
 export const API = "/api";
 
-export function fileUrl(caseId: string, path: string): string {
-  return `${API}/cases/${encodeURIComponent(caseId)}/files/${path.split("/").map(encodeURIComponent).join("/")}`;
+export interface CaseListItem {
+  case_id: string;
+  published_run: string | null;
+  runs: string[];
+  error?: string;
+  message?: string;
 }
 
-export async function loadCase(caseId?: string): Promise<MiningCase> {
-  let id = caseId;
-  if (!id) {
-    const list = (await getJson(`${API}/cases`)) as { case_id: string; error?: string; message?: string }[];
-    if (!Array.isArray(list) || list.length === 0) throw new LoadError("no_case", "the service holds no recorded case");
-    const usable = list.find((c) => !c.error);
-    if (!usable) throw new LoadError(list[0].error ?? "case_error", list[0].message ?? "the recorded case is unreadable");
-    id = usable.case_id;
-  }
-  const data = await getJson(`${API}/cases/${encodeURIComponent(id)}`);
+export function fileUrl(caseId: string, path: string, run?: string | null): string {
+  const p = path.split("/").map(encodeURIComponent).join("/");
+  return `${API}/cases/${encodeURIComponent(caseId)}/files/${p}${run ? `?run=${encodeURIComponent(run)}` : ""}`;
+}
+
+export async function listCases(): Promise<CaseListItem[]> {
+  const list = (await getJson(`${API}/cases`)) as CaseListItem[];
+  if (!Array.isArray(list) || list.length === 0) throw new LoadError("no_case", "the service holds no recorded case");
+  return list;
+}
+
+export async function loadCase(caseId?: string, run?: string): Promise<{ data: MiningCase; list: CaseListItem[] }> {
+  const list = await listCases();
+  const item = list.find((c) => c.case_id === caseId) ?? list.find((c) => !c.error) ?? list[0];
+  if (item.error) throw new LoadError(item.error, item.message ?? "the recorded case is unreadable");
+  const r = run && item.runs.includes(run) ? run : undefined;
+  const data = await getJson(`${API}/cases/${encodeURIComponent(item.case_id)}${r ? `?run=${encodeURIComponent(r)}` : ""}`);
   try {
     assertMiningCase(data);
   } catch (e) {
     throw new LoadError("contract_violation", (e as Error).message);
   }
-  return data;
+  return { data, list };
 }

@@ -45,7 +45,7 @@
     "min_overlap_days": 6,
     "coherence_preview_levels": 64,
     "max_dossiers": 10,
-    "block_justification": "Median autocorrelation of the flag indicator in the control ring (v2 run, 15 pairs): 0.37 at 20 m, 0.12 at 100 m, 0.07 at 250 m, 0.04 at 500 m, 0.02 at 1 km and 2 km. Blocks of 1 km keep the correlation between neighbouring blocks near 0.02; 500 m and 2 km are reported as sensitivity. The study perimeter holds about 40 blocks of 1 km and 10 blocks of 2 km, so 2 km intervals are less reliable."
+    "block_justification": "Median autocorrelation of the flag indicator in the control ring (15 analysed pairs): 0.37 at 20 m, 0.12 at 100 m, 0.07 at 250 m, 0.04 at 500 m, 0.02 at 1 km and 2 km. Blocks of 1 km keep the correlation between neighbouring blocks near 0.02; 500 m and 2 km are reported as sensitivity. 64 blocks of 1 km (many partial) intersect the study perimeter; with 2 km blocks there are far fewer, so those intervals are the least reliable."
   },
   "optical": {
     "dir": "S2",

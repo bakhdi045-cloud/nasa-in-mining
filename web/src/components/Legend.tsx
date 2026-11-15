@@ -8,8 +8,8 @@ export function Legend({ layer }: { layer?: Layer }) {
   const { t, f } = useI18n();
   const lg = layer?.legend;
   return (
-    <div className="legend" aria-label={t("map.legend")}>
-      <h3 className="legend__title">{t("map.legend")}</h3>
+    <div className="legend" role="group" aria-label={t("map.legend")}>
+      <p className="legend__title">{t("map.legend")}</p>
       <ul className="legend__zones">
         {Object.entries(ZONE_STYLE).map(([role, st]) => (
           <li key={role}>
@@ -30,7 +30,7 @@ export function Legend({ layer }: { layer?: Layer }) {
           {lg.kind === "categorical" && lg.classes ? (
             <ul className="legend__classes">
               {Object.entries(lg.classes).map(([k, c]) => (
-                <li key={k}><span className="swatch" style={{ background: rgb(c) }} />{t(lg.class_keys?.[k] ?? k)}</li>
+                <li key={k}><span className="swatch" style={{ background: rgb(c as number[]) }} />{t(lg.class_keys?.[k] ?? k)}</li>
               ))}
             </ul>
           ) : null}
@@ -38,6 +38,7 @@ export function Legend({ layer }: { layer?: Layer }) {
             {layer.date_start ? t("map.dates", { a: layer.date_start, b: layer.date_end ?? layer.date_start }) : null}
             {layer.resolution_m ? ` · ${t("map.resolution", { r: layer.resolution_m })}` : null}
           </p>
+          {layer.display_note_key ? <p className="legend__meta">{t(layer.display_note_key)}</p> : null}
         </div>
       ) : null}
     </div>

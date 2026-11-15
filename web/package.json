@@ -8,16 +8,19 @@
     "build": "tsc --noEmit && vite build",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "contract": "node scripts_gen_contract.mjs"
   },
   "dependencies": {
     "@fontsource-variable/archivo": "5.3.0",
     "@fontsource-variable/noto-sans-arabic": "5.3.0",
+    "ajv": "8.20.0",
     "maplibre-gl": "6.18.0",
     "react": "19.3.1",
     "react-dom": "19.3.1"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
     "@playwright/test": "1.65.1",
     "@testing-library/jest-dom": "7.0.1",
     "@testing-library/react": "16.3.3",
@@ -27,6 +30,7 @@
     "@types/react-dom": "19.3.0",
     "@vitejs/plugin-react": "6.3.0",
     "jsdom": "26.1.0",
+    "json-schema-to-typescript": "16.0.0",
     "typescript": "5.9.3",
     "vite": "8.3.8",
     "vitest": "5.1.0"
