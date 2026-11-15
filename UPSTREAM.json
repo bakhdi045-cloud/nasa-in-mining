@@ -1,0 +1,109 @@
+{
+  "source_repository": "https://github.com/AYmANTwill/NASA_SAR",
+  "source_revision": "9fbac7311da026149243ff3fb5a25adc7188dbab",
+  "source_license": "No project/backend license found in the inspected source revision.",
+  "adaptations": [
+    "Package-qualified imports and normalized extracted text line endings.",
+    "Independent configuration, no hard-coded Moroccan data gap or credentials.",
+    "Offline-by-default external helpers and Windows-compatible auxiliary cache path.",
+    "Exposure helper HTTP User-Agent identifies the new project."
+  ],
+  "files": [
+    {
+      "source": "backend/catalog.py",
+      "source_sha256": "7c83bd11cb8acf1be97d362338a3d2728d8b348f9dde7f84b96bda57303e4e13",
+      "destination": "src/nasa_in_mining/catalog.py",
+      "extracted_sha256": "b03398dac5e0c7b7af2496d3eb47e13f087e510c49da8fe063c019d2f92616bc"
+    },
+    {
+      "source": "backend/raster.py",
+      "source_sha256": "6ebeeaf1b093b1bd9540b3290c6aa8f662c6d2678e545ce8deb33d8ca727fac6",
+      "destination": "src/nasa_in_mining/raster.py",
+      "extracted_sha256": "670e759c7bba0d0b3575de5c5f8fcd64d39fde9fbb4c34bed99d047109de865e"
+    },
+    {
+      "source": "backend/quality.py",
+      "source_sha256": "d29af093f67c32809c84e7196832271a9468f6a92778d19880f2c0de9e72c09e",
+      "destination": "src/nasa_in_mining/quality.py",
+      "extracted_sha256": "5a23512fe54401a2e4bc9840c0db47bb914a97f538eee25bf57e65192b05d350"
+    },
+    {
+      "source": "backend/uncertainty.py",
+      "source_sha256": "9caaac709429f6ee53b90086f07191ac0c2b339fe7d6991049b862e36d5d2600",
+      "destination": "src/nasa_in_mining/uncertainty.py",
+      "extracted_sha256": "79a22e1361dee14b003491a863009d0b646064f39df4bab6a9121b48ad319898"
+    },
+    {
+      "source": "backend/palettes.json",
+      "source_sha256": "719b0d9d546168a3420dc2cf1e3dc483f44812f1cbb02b29bcdb60b5bf7ae864",
+      "destination": "src/nasa_in_mining/palettes.json",
+      "extracted_sha256": "60ba52e66554c998916daa304e6ec4a6712a46c80f83f15083ac4b343892b811"
+    },
+    {
+      "source": "backend/science/exposure.py",
+      "source_sha256": "e340ec9a96f524ff7c46c2ac8b50c7872bd836121edca9ce24173d8f266e7560",
+      "destination": "src/nasa_in_mining/exposure.py",
+      "extracted_sha256": "48017cbea2e9f458f70d8dcdc0a5e39719256012ed4cac4b7b29d7fd81f1d6f2"
+    },
+    {
+      "source": "backend/recipes/__init__.py",
+      "source_sha256": "f381e8bbd312384281da38345a37ed62071ace3da9d8b03cda81236be29ca6ba",
+      "destination": "src/nasa_in_mining/recipes/__init__.py",
+      "extracted_sha256": "250cda2d1a8fa0bf6113b70456d2eb015c04b320f6e83f1cffdad7a6affeb76e"
+    },
+    {
+      "source": "backend/recipes/backscatter.py",
+      "source_sha256": "e804f2676993fae1c67767cda07156b90a3a62c046c3818eb1e83788a1aa9dac",
+      "destination": "src/nasa_in_mining/recipes/backscatter.py",
+      "extracted_sha256": "e3a5876807187ddf25edf8cbace8821add3d0aee60a4e8ada847380d86d8a50e"
+    },
+    {
+      "source": "backend/recipes/corrections.py",
+      "source_sha256": "10c75953c87aebd9bf15d2021058d6be321d74e78e3847c3e712298e44d2b27f",
+      "destination": "src/nasa_in_mining/recipes/corrections.py",
+      "extracted_sha256": "368d2d2587fe548f812b0e88a8f16924db9730b620315cf56582bb8429404e9f"
+    },
+    {
+      "source": "backend/recipes/damage.py",
+      "source_sha256": "c96918a1a7935d6099f9ab1f5362dce1f1f603f92283b7b879e46234b398049b",
+      "destination": "src/nasa_in_mining/recipes/damage.py",
+      "extracted_sha256": "2c17de14b8fac971e496cdd7cfbb7db8fc31861e4bccdf56234bd30196ccfa71"
+    },
+    {
+      "source": "backend/recipes/decompose.py",
+      "source_sha256": "29753b85dae736d6a152c7ca3a18de3a70219764b77ebb92baa1204e1b2deac0",
+      "destination": "src/nasa_in_mining/recipes/decompose.py",
+      "extracted_sha256": "8fbaa35ad8a43b683308fb5cc54a3f0dd6d6e9dfadaaf3db90a8101a37637c7c"
+    },
+    {
+      "source": "backend/recipes/displacement.py",
+      "source_sha256": "f613d0fa55740df95876ec08bfb1acf4b1ba5e5279823ac608300a92ed39d0ca",
+      "destination": "src/nasa_in_mining/recipes/displacement.py",
+      "extracted_sha256": "1877512f43976b664f68af972939080478fd2cb7957af79f6d1d7dcd75fe196b"
+    },
+    {
+      "source": "backend/recipes/offsets.py",
+      "source_sha256": "fcae64d9c595e13dae59841afa941af121f06fcc23429220b052b67d08c40db6",
+      "destination": "src/nasa_in_mining/recipes/offsets.py",
+      "extracted_sha256": "9f74c323968528251860d70f540452082254fe15c36b12935dbd7798918fdd62"
+    },
+    {
+      "source": "backend/recipes/soil_moisture.py",
+      "source_sha256": "63ecd87a9f01331279c57ff1cc75770c8457333e795d0c7a7e80e2986709d213",
+      "destination": "src/nasa_in_mining/recipes/soil_moisture.py",
+      "extracted_sha256": "0d5f99bb56655bea403df8b31bd2c9db001b89b1825cbd67bb2485c209abdf3b"
+    },
+    {
+      "source": "backend/recipes/timeseries.py",
+      "source_sha256": "2f971ba5f147717db099f0967150b30884c0dcdeb430fd639b3653e8ee6c531e",
+      "destination": "src/nasa_in_mining/recipes/timeseries.py",
+      "extracted_sha256": "e36e62fed33a508c6f75bb00f8c2a7ab272416cecac422ea7c442ee75ee47969"
+    },
+    {
+      "source": "backend/recipes/wavelength.py",
+      "source_sha256": "09add9f93bcbb8372784a36b7662f07eb21d4dab5f820eb4d6eefc416bbc6cef",
+      "destination": "src/nasa_in_mining/recipes/wavelength.py",
+      "extracted_sha256": "aa4db8c2de5abf5437b76a9d531bbaaca08fe6d82f6868b1bb59e1076bcb9456"
+    }
+  ]
+}
