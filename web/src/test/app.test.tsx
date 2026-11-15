@@ -6,7 +6,8 @@ import { assertMiningCase, type MiningCase } from "../contract";
 import { DICTS, LANGS, makeFmt, translate } from "../i18n";
 import { I18nContext, makeI18n } from "../i18nContext";
 
-const recorded = resolve(__dirname, "../../../cases/benguerir/output/case.json");
+// vitest runs from web/; the recorded case is the real pipeline output
+const recorded = resolve(process.cwd(), "../cases/benguerir/output/case.json");
 const realCase = (): MiningCase => JSON.parse(readFileSync(recorded, "utf-8"));
 
 function renderCase(data: MiningCase, lang: "fr" | "en" | "ar" = "fr") {
