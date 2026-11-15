@@ -33,6 +33,19 @@ Les modules `config.py`, `analysis.py`, `roi.py`, `cli.py`, les tests et cette d
 d’adaptation de ce dépôt. `roi.py` fournit de nouvelles statistiques spatiales génériques, sans classifier
 la cause d’un changement et sans produire d’incertitude statistique supposée.
 
+## Évolutions après l'extraction (v0.2.0)
+
+- **Aucun des 16 fichiers extraits n'a été modifié** : leurs empreintes correspondent toujours à `UPSTREAM.json`.
+  Ils sont réutilisés tels quels (`catalog`, `quality`, `raster._colormap`, `wavelength`, `displacement.los_cm_full`,
+  `uncertainty.robust_sigma`).
+- `cli.py` (ajout d'adaptation) : sortie forcée en UTF-8 sur les consoles Windows à page de code ancienne (le test
+  CLI échouait sur le caractère « → ») ; commandes `case-run`, `contract-schema` et `serve`.
+- Le pipeline indexe un dossier de données en affectant temporairement `catalog.DATA_DIR`, puis restaure la valeur
+  configurée : le module extrait n'est pas modifié.
+- Nouveaux modules propres à ce dépôt : `access/`, `mining/`, `api.py`, l'interface `web/`.
+- L'accès Earthdata utilise un jeton d'équipe fourni par la configuration locale (`.earthdata_token`, ignoré par Git),
+  sur instruction de l'utilisateur ; le downloader amont n'est pas utilisé ni copié.
+
 ## Ce qui n’a pas été transféré
 
 - Les interfaces `frontend/` et `frontend-v2/`, leurs composants et plugins.

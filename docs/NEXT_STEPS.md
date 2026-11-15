@@ -1,31 +1,18 @@
-# Suite : cas minier Benguerir
+# Suite
 
-Question : « Quelles zones du site présentent un changement du signal radar entre les acquisitions étudiées ? »
+L'étude de cas Benguerir est réalisée (voir `docs/SCIENTIFIC_VALIDATION.md`). Ce qui la ferait progresser, par
+ordre d'effet attendu sur le niveau de preuve :
 
-## Entrées à obtenir
-
-1. Un périmètre GeoJSON WGS84 vérifié et sourcé. Le centroïde de l’ancien événement n’est pas une frontière.
-2. Des paires GUNW comparables : même géométrie/CRID, durées proches, cohérence exploitable et baseline disponible.
-3. Les couches nécessaires aux corrections, ou un relevé explicite de ce qui manque.
-4. Une comparaison indépendante datée : images optiques, relevés du site ou observations de terrain.
-
-## Développement à effectuer
-
-- Définir un objet `MiningCase` propre au nouveau projet, sans reprendre l’énumération des quatre cas historiques.
-- Produire un raster de changement et mesurer dans l’emprise vérifiée ; ne pas reprendre la surface d’un cercle
-  de 5 km en l’étiquetant « surface de la mine ».
-- Comparer aux zones témoins et au fond de scène. Une perte générale de cohérence ne prouve pas une excavation.
-- Documenter la sensibilité et l’incertitude sans convertir arbitrairement l’une en σ.
-- Produire cartes, masque de qualité, métadonnées de source, dates et limites. Les valeurs inconnues restent
-  inconnues ; une variation mesurée nulle est une vraie observation, pas un placeholder.
-- Ajouter ensuite une API et une interface FR/EN/AR, avec mode hors ligne à partir de résultats réellement enregistrés.
-
-## Critères de validation
-
-Une démonstration de traitement sur données synthétiques n’est pas une validation de Benguerir. Pour qualifier
-un cas réel : provenance des produits, emprise vérifiée, qualité suffisante, méthode d’incertitude explicite,
-comparaison indépendante et limites doivent être disponibles. La conclusion doit pouvoir être « aucune
-détection exploitable » sans devenir « site sûr » ni « mine inactive ».
-
-Les données volumineuses restent hors Git. Seuls des résultats et images dont la diffusion est autorisée,
-accompagnés de leur provenance, pourront alimenter une future démonstration.
+1. **Vérité terrain datée** : visites ou images très haute résolution aux points proposés par l'interface
+   (« Vérifications suivantes »), calendrier d'exploitation de l'exploitant. Sans elles, la cause des changements
+   reste inconnue et aucun observable n'est « validé indépendamment ».
+2. **Périmètre 2026** : les parcelles minières cartographiées hors du polygone de 2020 sont actives. Un périmètre
+   récent et sourcé (exploitant, administration, ou cartographie optique documentée) remplacerait l'emprise OSM.
+3. **Produits validés** : relancer `case-run` quand des GUNW validés (CRID définitif, collection `NISAR_L2_GUNW_V1`)
+   couvriront le site ; comparer les résultats à ceux des produits provisoires.
+4. **Couverture optique d'automne** : aucune paire après le 9 septembre n'a de scènes Sentinel-2 claires à moins de
+   8 jours ; ajouter Landsat 8/9 ou des images commerciales datées.
+5. **LOS** : soustraire l'écran ionosphérique fourni dans les GUNW, corriger la troposphère, vérifier le signe sur un
+   point de contrôle, puis seulement construire une série temporelle sur les pixels cohérents (verses).
+6. **Rétrodiffusion GCOV** : second observable (eau, matériau remanié) pour distinguer humidification et excavation.
+7. **Accessibilité** : audit outillé (axe) et test avec lecteur d'écran.

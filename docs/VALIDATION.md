@@ -1,5 +1,8 @@
 # Validation de l'extraction — 15 novembre 2026
 
+> Rapport historique de l'extraction (v0.1.0). Pour la version actuelle : [SOFTWARE_VALIDATION.md](SOFTWARE_VALIDATION.md)
+> et [SCIENTIFIC_VALIDATION.md](SCIENTIFIC_VALIDATION.md).
+
 - **34 tests réussis** avec `python -B -m unittest discover -s tests -v`.
 - Paquet `nasa_in_mining-0.1.0-py3-none-any.whl` construit avec setuptools et installé dans un dossier de contrôle indépendant du code `src/`.
 - Imports scientifiques, ressource `palettes.json`, commande `doctor` et catalogue vide vérifiés depuis le paquet installé.

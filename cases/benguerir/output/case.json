@@ -13655,7 +13655,7 @@
    "format": "geojson",
    "path": "clusters/clusters_GUNW_T044_F018_20260617_20260629.geojson",
    "description_key": "export.clusters_geojson",
-   "sha256": "2fdb1f199fced583d8f59048656ab6e666666eb750a6a3c058ae7c9adda67647"
+   "sha256": "9791aefbc29f910cd3d9a0a0a0226e5b644fddc3a10846421770f3d48a34a551"
   },
   {
    "id": "flags_GUNW_T044_F018_20260629_20260711",
@@ -13669,7 +13669,7 @@
    "format": "geojson",
    "path": "clusters/clusters_GUNW_T044_F018_20260629_20260711.geojson",
    "description_key": "export.clusters_geojson",
-   "sha256": "1750da090aaeefdd98b4ee6a54268c23ab77726482fc2838e7dd1f68f1467cdb"
+   "sha256": "38c0964f7216df426db3c443b7377126c717bc32d39147c5606c6ec7f01d2f9b"
   },
   {
    "id": "flags_GUNW_T044_F018_20260711_20260723",
@@ -13683,7 +13683,7 @@
    "format": "geojson",
    "path": "clusters/clusters_GUNW_T044_F018_20260711_20260723.geojson",
    "description_key": "export.clusters_geojson",
-   "sha256": "978d49018153c0d65ed7dc1e9bd0562b9973f7b7a89c92cfcc22b603f45149f3"
+   "sha256": "471f15a2a18c164348afdeec78564e1273e25169d17fe0975c72083686ba3011"
   },
   {
    "id": "flags_GUNW_T044_F018_20260723_20260816",
@@ -13697,7 +13697,7 @@
    "format": "geojson",
    "path": "clusters/clusters_GUNW_T044_F018_20260723_20260816.geojson",
    "description_key": "export.clusters_geojson",
-   "sha256": "4fd3fd306c299b6d3fa902c0868dc0d4ec286da054a4218621b9034ef8991958"
+   "sha256": "ee52a3289bda4cf50eef6614bdcffb7b94c663c7a7f75d12032419c441bfb036"
   },
   {
    "id": "flags_GUNW_T044_F018_20260816_20260828",
@@ -13711,7 +13711,7 @@
    "format": "geojson",
    "path": "clusters/clusters_GUNW_T044_F018_20260816_20260828.geojson",
    "description_key": "export.clusters_geojson",
-   "sha256": "c761a35421c9f3162d803920d97c9655106519d21ca1c3fafc771bbc7b0e0fff"
+   "sha256": "a36656a8ea96d08f7041e2cd9c2dc295532ce9551e1404ee5c7fa76ba8e12104"
   },
   {
    "id": "flags_GUNW_T044_F018_20260828_20260909",
@@ -13725,7 +13725,7 @@
    "format": "geojson",
    "path": "clusters/clusters_GUNW_T044_F018_20260828_20260909.geojson",
    "description_key": "export.clusters_geojson",
-   "sha256": "105f5e3f5e846e578243722497e8e2ef019379653b3132760de76422c8156315"
+   "sha256": "1b8a8d00b8e778c8f96be9a530c235e77c975c5d8961f3043fc5cff8b1320e4c"
   },
   {
    "id": "flags_GUNW_T044_F018_20260909_20260921",
@@ -13739,7 +13739,7 @@
    "format": "geojson",
    "path": "clusters/clusters_GUNW_T044_F018_20260909_20260921.geojson",
    "description_key": "export.clusters_geojson",
-   "sha256": "3eccaef47d3634b20a84ecca7925f14545dd83da19cbda00069526a5f46bd7a7"
+   "sha256": "e31f0d055b78c40761f691ebb60d637cbb6ec97f345a513a11f45d420991dd32"
   },
   {
    "id": "flags_GUNW_T044_F018_20260921_20261003",
@@ -13753,7 +13753,7 @@
    "format": "geojson",
    "path": "clusters/clusters_GUNW_T044_F018_20260921_20261003.geojson",
    "description_key": "export.clusters_geojson",
-   "sha256": "f4af509ecba3398b2aa23d1ee037bc52a303786ea8679132d8dc01da45184a05"
+   "sha256": "df88d60992483b764e7a7d4171e38278ca38fb8b59decbafd962b806b35bbac2"
   },
   {
    "id": "flags_GUNW_T044_F018_20261003_20261015",
@@ -13767,7 +13767,7 @@
    "format": "geojson",
    "path": "clusters/clusters_GUNW_T044_F018_20261003_20261015.geojson",
    "description_key": "export.clusters_geojson",
-   "sha256": "27a51af9c37b8f1921f1402300855a2ae0bca1965b8078b8ce917989a85d1acc"
+   "sha256": "cab0bf74a44d8bb0107e1bb25770d02518e86d628ee0079423c6e46b32dc68f6"
   },
   {
    "id": "flags_GUNW_T023_F072_20260627_20260709",
@@ -13781,7 +13781,7 @@
    "format": "geojson",
    "path": "clusters/clusters_GUNW_T023_F072_20260627_20260709.geojson",
    "description_key": "export.clusters_geojson",
-   "sha256": "e731693f290b201cd81a69a5143cbfcae98db831d9cafc8cc2964cd5b5f06be8"
+   "sha256": "674bb8ce7b36dc9d9eb33242dc5f22341c693c3bb4697f6974dd3dadf73c0b16"
   },
   {
    "id": "flags_GUNW_T023_F072_20260709_20260721",
@@ -13795,7 +13795,7 @@
    "format": "geojson",
    "path": "clusters/clusters_GUNW_T023_F072_20260709_20260721.geojson",
    "description_key": "export.clusters_geojson",
-   "sha256": "d7b4fd0f08ead1de03025fa72b7a865444ef6b2a17e437843c399bd0e0f80230"
+   "sha256": "9e298ee161da87dd548616211b514c2d846b61faa20b4c22912d598e8ede22c7"
   },
   {
    "id": "flags_GUNW_T023_F072_20260721_20260814",
@@ -13809,7 +13809,7 @@
    "format": "geojson",
    "path": "clusters/clusters_GUNW_T023_F072_20260721_20260814.geojson",
    "description_key": "export.clusters_geojson",
-   "sha256": "f10374f34fa867a005b78a50636f19fcaa7895619894a491f9efa86f55f4a6a8"
+   "sha256": "08f085aafd87d289be2f6a89504b484d9e1c8b33dfa720321dd88f89735a378b"
   },
   {
    "id": "flags_GUNW_T023_F072_20260814_20260826",
@@ -13823,7 +13823,7 @@
    "format": "geojson",
    "path": "clusters/clusters_GUNW_T023_F072_20260814_20260826.geojson",
    "description_key": "export.clusters_geojson",
-   "sha256": "bb3fe4cadf6d28c4acd8cda1b930254e28c0570397f8c8b1101e7f7ecad6a847"
+   "sha256": "2e084cba13b41d1958e685fbf85b0c632196de29fecf01fd50e933f101d0a553"
   },
   {
    "id": "flags_GUNW_T023_F072_20260919_20261001",
@@ -13837,7 +13837,7 @@
    "format": "geojson",
    "path": "clusters/clusters_GUNW_T023_F072_20260919_20261001.geojson",
    "description_key": "export.clusters_geojson",
-   "sha256": "eee79ca556f9203a0514cce928bab80c2740daf11bfe5a657c854c01ef1288b5"
+   "sha256": "0fe682db0c88337bd98ab201fab228d736454a9a222b34dd3d4eddc7dceea224"
   },
   {
    "id": "flags_GUNW_T023_F072_20261001_20261013",
@@ -13851,7 +13851,7 @@
    "format": "geojson",
    "path": "clusters/clusters_GUNW_T023_F072_20261001_20261013.geojson",
    "description_key": "export.clusters_geojson",
-   "sha256": "bedb4498b18b90943a35d01c14681be24f9dc8e44361f5f1a30fee1adcfa018f"
+   "sha256": "e242208b1fe98a7f066a22eadcafca0773b1f48ecdb0d921e47f99188438c93e"
   },
   {
    "id": "recurrence_023D_F072",
@@ -13872,14 +13872,14 @@
    "format": "csv",
    "path": "exports/pairs.csv",
    "description_key": "export.pairs_csv",
-   "sha256": "7d631ed339800fd6e8206319b05cfb4e69c99abfb195492544295608e0cc20f3"
+   "sha256": "cb7c490bda5521a7512d7ff984891872ab283f42ded0d315578b80c9e8c63c0a"
   },
   {
    "id": "study_geojson",
    "format": "geojson",
    "path": "exports/study_perimeter.geojson",
    "description_key": "export.study_geojson",
-   "sha256": "55d67ccd7ad2b36b0cdb1e16610faedf628be1bf99ecca972a412f3e7aeab429"
+   "sha256": "97a6c12e5d6dcb91b67bc3b45b527a81a17514b73c0938101396a92a389a025d"
   }
  ],
  "references": [
@@ -14322,9 +14322,9 @@
   "blockers": []
  },
  "manifest": {
-  "run_id": "20261115T034249Z",
-  "created_utc": "2026-11-15T03:42:49+00:00",
-  "code_commit": "4b97b042a61babc17538702ad734ed89b9d16030",
+  "run_id": "20261115T034718Z",
+  "created_utc": "2026-11-15T03:47:18+00:00",
+  "code_commit": "9c265f7994c2aa1d82db828a578de2550b771beb",
   "code_dirty": false,
   "python": "3.12.10",
   "packages": {
@@ -14338,7 +14338,7 @@
    "matplotlib": "3.11.2",
    "pillow": "13.0.0"
   },
-  "config_sha256": "a8650a46d2a28e2f71258b7c2091262d7c323800ffc38e415f3b50a683c8105f",
+  "config_sha256": "564526ee41c9704e8afa0d33c6f66533409f4e12f01c63ae10e6eeb0f82ce346",
   "inputs": [
    {
     "path": "cases/benguerir/zones.geojson",
@@ -15239,90 +15239,90 @@
    },
    {
     "path": "clusters/clusters_GUNW_T023_F072_20260627_20260709.geojson",
-    "sha256": "e731693f290b201cd81a69a5143cbfcae98db831d9cafc8cc2964cd5b5f06be8",
+    "sha256": "674bb8ce7b36dc9d9eb33242dc5f22341c693c3bb4697f6974dd3dadf73c0b16",
     "role": "export"
    },
    {
     "path": "clusters/clusters_GUNW_T023_F072_20260709_20260721.geojson",
-    "sha256": "d7b4fd0f08ead1de03025fa72b7a865444ef6b2a17e437843c399bd0e0f80230",
+    "sha256": "9e298ee161da87dd548616211b514c2d846b61faa20b4c22912d598e8ede22c7",
     "role": "export"
    },
    {
     "path": "clusters/clusters_GUNW_T023_F072_20260721_20260814.geojson",
-    "sha256": "f10374f34fa867a005b78a50636f19fcaa7895619894a491f9efa86f55f4a6a8",
+    "sha256": "08f085aafd87d289be2f6a89504b484d9e1c8b33dfa720321dd88f89735a378b",
     "role": "export"
    },
    {
     "path": "clusters/clusters_GUNW_T023_F072_20260814_20260826.geojson",
-    "sha256": "bb3fe4cadf6d28c4acd8cda1b930254e28c0570397f8c8b1101e7f7ecad6a847",
+    "sha256": "2e084cba13b41d1958e685fbf85b0c632196de29fecf01fd50e933f101d0a553",
     "role": "export"
    },
    {
     "path": "clusters/clusters_GUNW_T023_F072_20260919_20261001.geojson",
-    "sha256": "eee79ca556f9203a0514cce928bab80c2740daf11bfe5a657c854c01ef1288b5",
+    "sha256": "0fe682db0c88337bd98ab201fab228d736454a9a222b34dd3d4eddc7dceea224",
     "role": "export"
    },
    {
     "path": "clusters/clusters_GUNW_T023_F072_20261001_20261013.geojson",
-    "sha256": "bedb4498b18b90943a35d01c14681be24f9dc8e44361f5f1a30fee1adcfa018f",
+    "sha256": "e242208b1fe98a7f066a22eadcafca0773b1f48ecdb0d921e47f99188438c93e",
     "role": "export"
    },
    {
     "path": "clusters/clusters_GUNW_T044_F018_20260617_20260629.geojson",
-    "sha256": "2fdb1f199fced583d8f59048656ab6e666666eb750a6a3c058ae7c9adda67647",
+    "sha256": "9791aefbc29f910cd3d9a0a0a0226e5b644fddc3a10846421770f3d48a34a551",
     "role": "export"
    },
    {
     "path": "clusters/clusters_GUNW_T044_F018_20260629_20260711.geojson",
-    "sha256": "1750da090aaeefdd98b4ee6a54268c23ab77726482fc2838e7dd1f68f1467cdb",
+    "sha256": "38c0964f7216df426db3c443b7377126c717bc32d39147c5606c6ec7f01d2f9b",
     "role": "export"
    },
    {
     "path": "clusters/clusters_GUNW_T044_F018_20260711_20260723.geojson",
-    "sha256": "978d49018153c0d65ed7dc1e9bd0562b9973f7b7a89c92cfcc22b603f45149f3",
+    "sha256": "471f15a2a18c164348afdeec78564e1273e25169d17fe0975c72083686ba3011",
     "role": "export"
    },
    {
     "path": "clusters/clusters_GUNW_T044_F018_20260723_20260816.geojson",
-    "sha256": "4fd3fd306c299b6d3fa902c0868dc0d4ec286da054a4218621b9034ef8991958",
+    "sha256": "ee52a3289bda4cf50eef6614bdcffb7b94c663c7a7f75d12032419c441bfb036",
     "role": "export"
    },
    {
     "path": "clusters/clusters_GUNW_T044_F018_20260816_20260828.geojson",
-    "sha256": "c761a35421c9f3162d803920d97c9655106519d21ca1c3fafc771bbc7b0e0fff",
+    "sha256": "a36656a8ea96d08f7041e2cd9c2dc295532ce9551e1404ee5c7fa76ba8e12104",
     "role": "export"
    },
    {
     "path": "clusters/clusters_GUNW_T044_F018_20260828_20260909.geojson",
-    "sha256": "105f5e3f5e846e578243722497e8e2ef019379653b3132760de76422c8156315",
+    "sha256": "1b8a8d00b8e778c8f96be9a530c235e77c975c5d8961f3043fc5cff8b1320e4c",
     "role": "export"
    },
    {
     "path": "clusters/clusters_GUNW_T044_F018_20260909_20260921.geojson",
-    "sha256": "3eccaef47d3634b20a84ecca7925f14545dd83da19cbda00069526a5f46bd7a7",
+    "sha256": "e31f0d055b78c40761f691ebb60d637cbb6ec97f345a513a11f45d420991dd32",
     "role": "export"
    },
    {
     "path": "clusters/clusters_GUNW_T044_F018_20260921_20261003.geojson",
-    "sha256": "f4af509ecba3398b2aa23d1ee037bc52a303786ea8679132d8dc01da45184a05",
+    "sha256": "df88d60992483b764e7a7d4171e38278ca38fb8b59decbafd962b806b35bbac2",
     "role": "export"
    },
    {
     "path": "clusters/clusters_GUNW_T044_F018_20261003_20261015.geojson",
-    "sha256": "27a51af9c37b8f1921f1402300855a2ae0bca1965b8078b8ce917989a85d1acc",
+    "sha256": "cab0bf74a44d8bb0107e1bb25770d02518e86d628ee0079423c6e46b32dc68f6",
     "role": "export"
    },
    {
     "path": "exports/pairs.csv",
-    "sha256": "7d631ed339800fd6e8206319b05cfb4e69c99abfb195492544295608e0cc20f3",
+    "sha256": "cb7c490bda5521a7512d7ff984891872ab283f42ded0d315578b80c9e8c63c0a",
     "role": "export"
    },
    {
     "path": "exports/study_perimeter.geojson",
-    "sha256": "55d67ccd7ad2b36b0cdb1e16610faedf628be1bf99ecca972a412f3e7aeab429",
+    "sha256": "97a6c12e5d6dcb91b67bc3b45b527a81a17514b73c0938101396a92a389a025d",
     "role": "export"
    }
   ],
-  "duration_s": 35.0
+  "duration_s": 30.3
  }
 }
