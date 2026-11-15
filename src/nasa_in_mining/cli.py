@@ -28,7 +28,7 @@ def json_safe(value):
 
 def _parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(description="Standalone NISAR mining processing; no data download is automatic.")
-    p.add_argument("--version", action="version", version="nasa-in-mining 0.1.0")
+    p.add_argument("--version", action="version", version="nasa-in-mining 0.2.0")
     sub = p.add_subparsers(dest="command", required=True)
     sub.add_parser("capabilities", help="list the extracted processing capabilities")
     sub.add_parser("doctor", help="report installed runtime dependencies")
@@ -52,10 +52,27 @@ def _parser() -> argparse.ArgumentParser:
     roi.add_argument("--unit", required=True)
     roi.add_argument("--threshold", type=float)
     roi.add_argument("--absolute", action="store_true")
+    run = sub.add_parser("case-run", parents=[common], help="run the polygon mining-case pipeline (precomputed results)")
+    run.add_argument("--case", type=Path, required=True, help="case folder holding case_config.json and zones")
+    run.add_argument("--out", type=Path, help="output folder (default: <case>/output)")
+    sch = sub.add_parser("contract-schema", help="write the MiningCase JSON schema")
+    sch.add_argument("--out", type=Path, required=True)
+    srv = sub.add_parser("serve", help="serve recorded cases and the web interface (offline capable)")
+    srv.add_argument("--cases", type=Path, default=Path("cases"))
+    srv.add_argument("--web", type=Path, default=Path("web") / "dist")
+    srv.add_argument("--host", default="127.0.0.1")
+    srv.add_argument("--port", type=int, default=8000)
     return p
 
 
 def main(argv: list[str] | None = None) -> int:
+    # JSON is written as UTF-8 even on a Windows console using a legacy code page (e.g. cp1252).
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure") and (stream.encoding or "").lower().replace("-", "") != "utf8":
+            try:
+                stream.reconfigure(encoding="utf-8")
+            except (ValueError, OSError):
+                pass
     args = _parser().parse_args(argv)
     for option, env in (("data", "MINING_DATA"), ("cache", "MINING_CACHE")):
         if getattr(args, option, None) is not None:
@@ -65,7 +82,7 @@ def main(argv: list[str] | None = None) -> int:
     exit_code = 0
     try:
         if args.command == "capabilities":
-            result = {"project": "nasa-in-mining", "version": "0.1.0", "recipes": RECIPES,
+            result = {"project": "nasa-in-mining", "version": "0.2.0", "recipes": RECIPES,
                       "helpers": ["catalog", "raster", "quality", "uncertainty", "corrections", "wavelength",
                                   "decomposition", "exposure", "polygon_statistics"],
                       "limits": ["No ore discovery, grade, production or rupture prediction.",
@@ -87,6 +104,25 @@ def main(argv: list[str] | None = None) -> int:
             from .analysis import analyze_point
             result = analyze_point(args.recipe, args.lat, args.lon, args.event)
             exit_code = 0 if result["status"] == "ok" else 2
+        elif args.command == "case-run":
+            from .mining import pipeline
+            data = args.data or Path(os.environ.get("MINING_DATA", "data"))
+            case = pipeline.run(args.case, data, args.out)
+            result = {"case_id": case.case_id, "processing_status": case.processing.status,
+                      "pairs": len(case.pairs), "pairs_ok": sum(1 for p in case.pairs if p.status == "ok"),
+                      "validation": {v.observable: v.level for v in case.validation},
+                      "output": str(args.out or args.case / "output")}
+            exit_code = 0 if case.processing.status in ("complete", "partial") else 2
+        elif args.command == "contract-schema":
+            from .mining.contract import MiningCase
+            args.out.parent.mkdir(parents=True, exist_ok=True)
+            args.out.write_text(json.dumps(MiningCase.model_json_schema(), indent=1) + "\n", encoding="utf-8")
+            result = {"written": str(args.out)}
+        elif args.command == "serve":
+            import uvicorn
+            from .api import create_app
+            uvicorn.run(create_app(args.cases, args.web), host=args.host, port=args.port)
+            return 0
         else:
             from .roi import summarize_raster
             result = summarize_raster(args.raster, args.roi, args.unit, args.threshold, args.absolute)

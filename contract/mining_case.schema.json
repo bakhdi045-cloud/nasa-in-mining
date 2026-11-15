@@ -1,0 +1,2091 @@
+{
+ "$defs": {
+  "Acquisition": {
+   "additionalProperties": false,
+   "properties": {
+    "pair_id": {
+     "title": "Pair Id",
+     "type": "string"
+    },
+    "granule_id": {
+     "title": "Granule Id",
+     "type": "string"
+    },
+    "collection": {
+     "title": "Collection",
+     "type": "string"
+    },
+    "crid": {
+     "title": "Crid",
+     "type": "string"
+    },
+    "maturity": {
+     "title": "Maturity",
+     "type": "string"
+    },
+    "geometry_id": {
+     "title": "Geometry Id",
+     "type": "string"
+    },
+    "direction": {
+     "enum": [
+      "ascending",
+      "descending"
+     ],
+     "title": "Direction",
+     "type": "string"
+    },
+    "track": {
+     "title": "Track",
+     "type": "integer"
+    },
+    "frame": {
+     "title": "Frame",
+     "type": "integer"
+    },
+    "reference_time": {
+     "title": "Reference Time",
+     "type": "string"
+    },
+    "secondary_time": {
+     "title": "Secondary Time",
+     "type": "string"
+    },
+    "span_days": {
+     "title": "Span Days",
+     "type": "integer"
+    },
+    "product_version": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Product Version"
+    },
+    "processing_datetime": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Processing Datetime"
+    },
+    "doi": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Doi"
+    },
+    "source_url": {
+     "title": "Source Url",
+     "type": "string"
+    },
+    "bytes_transferred": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Bytes Transferred"
+    },
+    "layers": {
+     "items": {
+      "$ref": "#/$defs/LayerFile"
+     },
+     "title": "Layers",
+     "type": "array"
+    },
+    "looks": {
+     "additionalProperties": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "title": "Looks",
+     "type": "object"
+    },
+    "quality": {
+     "$ref": "#/$defs/PairQuality"
+    }
+   },
+   "required": [
+    "pair_id",
+    "granule_id",
+    "collection",
+    "crid",
+    "maturity",
+    "geometry_id",
+    "direction",
+    "track",
+    "frame",
+    "reference_time",
+    "secondary_time",
+    "span_days",
+    "product_version",
+    "processing_datetime",
+    "doi",
+    "source_url",
+    "bytes_transferred",
+    "layers",
+    "looks",
+    "quality"
+   ],
+   "title": "Acquisition",
+   "type": "object"
+  },
+  "Cluster": {
+   "additionalProperties": false,
+   "properties": {
+    "id": {
+     "title": "Id",
+     "type": "integer"
+    },
+    "area_km2": {
+     "title": "Area Km2",
+     "type": "number"
+    },
+    "centroid": {
+     "maxItems": 2,
+     "minItems": 2,
+     "prefixItems": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "number"
+      }
+     ],
+     "title": "Centroid",
+     "type": "array"
+    },
+    "median_coherence": {
+     "title": "Median Coherence",
+     "type": "number"
+    },
+    "recurrence_in_other_pairs": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Recurrence In Other Pairs"
+    },
+    "optical_change_fraction": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Optical Change Fraction"
+    },
+    "optical_diagnostics": {
+     "anyOf": [
+      {
+       "additionalProperties": {
+        "anyOf": [
+         {
+          "type": "number"
+         },
+         {
+          "type": "string"
+         },
+         {
+          "type": "null"
+         }
+        ]
+       },
+       "type": "object"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Optical Diagnostics"
+    }
+   },
+   "required": [
+    "id",
+    "area_km2",
+    "centroid",
+    "median_coherence"
+   ],
+   "title": "Cluster",
+   "type": "object"
+  },
+  "CrossGeometry": {
+   "additionalProperties": false,
+   "properties": {
+    "status": {
+     "enum": [
+      "ok",
+      "unavailable"
+     ],
+     "title": "Status",
+     "type": "string"
+    },
+    "spearman_recurrence_study": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "lift_frequent_change": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "jaccard_frequent_change": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "frequent_threshold": {
+     "title": "Frequent Threshold",
+     "type": "number"
+    },
+    "reason": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Reason"
+    }
+   },
+   "required": [
+    "status",
+    "spearman_recurrence_study",
+    "lift_frequent_change",
+    "jaccard_frequent_change",
+    "frequent_threshold"
+   ],
+   "title": "CrossGeometry",
+   "type": "object"
+  },
+  "Export": {
+   "additionalProperties": false,
+   "properties": {
+    "id": {
+     "title": "Id",
+     "type": "string"
+    },
+    "format": {
+     "enum": [
+      "csv",
+      "geojson",
+      "geotiff",
+      "json"
+     ],
+     "title": "Format",
+     "type": "string"
+    },
+    "path": {
+     "title": "Path",
+     "type": "string"
+    },
+    "description_key": {
+     "title": "Description Key",
+     "type": "string"
+    },
+    "sha256": {
+     "title": "Sha256",
+     "type": "string"
+    }
+   },
+   "required": [
+    "id",
+    "format",
+    "path",
+    "description_key",
+    "sha256"
+   ],
+   "title": "Export",
+   "type": "object"
+  },
+  "FileRecord": {
+   "additionalProperties": false,
+   "properties": {
+    "path": {
+     "title": "Path",
+     "type": "string"
+    },
+    "sha256": {
+     "title": "Sha256",
+     "type": "string"
+    },
+    "role": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Role"
+    }
+   },
+   "required": [
+    "path",
+    "sha256"
+   ],
+   "title": "FileRecord",
+   "type": "object"
+  },
+  "Finding": {
+   "additionalProperties": false,
+   "properties": {
+    "id": {
+     "title": "Id",
+     "type": "string"
+    },
+    "kind": {
+     "title": "Kind",
+     "type": "string"
+    },
+    "params": {
+     "additionalProperties": {
+      "anyOf": [
+       {
+        "type": "boolean"
+       },
+       {
+        "type": "number"
+       },
+       {
+        "type": "integer"
+       },
+       {
+        "type": "string"
+       },
+       {
+        "items": {},
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "title": "Params",
+     "type": "object"
+    },
+    "evidence": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Evidence",
+     "type": "array"
+    }
+   },
+   "required": [
+    "id",
+    "kind",
+    "params",
+    "evidence"
+   ],
+   "title": "Finding",
+   "type": "object"
+  },
+  "GeometrySummary": {
+   "additionalProperties": false,
+   "properties": {
+    "geometry_id": {
+     "title": "Geometry Id",
+     "type": "string"
+    },
+    "direction": {
+     "title": "Direction",
+     "type": "string"
+    },
+    "track": {
+     "title": "Track",
+     "type": "integer"
+    },
+    "frame": {
+     "title": "Frame",
+     "type": "integer"
+    },
+    "crid": {
+     "title": "Crid",
+     "type": "string"
+    },
+    "n_pairs": {
+     "title": "N Pairs",
+     "type": "integer"
+    },
+    "n_pairs_used": {
+     "title": "N Pairs Used",
+     "type": "integer"
+    },
+    "recurrence_pairs": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Recurrence Pairs",
+     "type": "array"
+    },
+    "recurrence_layer_id": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Recurrence Layer Id"
+    },
+    "study_area_flagged_ever_km2": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "study_area_flagged_half_or_more_km2": {
+     "$ref": "#/$defs/Measurement"
+    }
+   },
+   "required": [
+    "geometry_id",
+    "direction",
+    "track",
+    "frame",
+    "crid",
+    "n_pairs",
+    "n_pairs_used",
+    "recurrence_pairs",
+    "recurrence_layer_id",
+    "study_area_flagged_ever_km2",
+    "study_area_flagged_half_or_more_km2"
+   ],
+   "title": "GeometrySummary",
+   "type": "object"
+  },
+  "Layer": {
+   "additionalProperties": false,
+   "properties": {
+    "id": {
+     "title": "Id",
+     "type": "string"
+    },
+    "kind": {
+     "enum": [
+      "observation",
+      "derived",
+      "reference",
+      "basemap",
+      "zones"
+     ],
+     "title": "Kind",
+     "type": "string"
+    },
+    "title_key": {
+     "title": "Title Key",
+     "type": "string"
+    },
+    "params": {
+     "additionalProperties": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "integer"
+       },
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "title": "Params",
+     "type": "object"
+    },
+    "url": {
+     "title": "Url",
+     "type": "string"
+    },
+    "corners": {
+     "anyOf": [
+      {
+       "items": {
+        "items": {
+         "type": "number"
+        },
+        "type": "array"
+       },
+       "type": "array"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Corners"
+    },
+    "legend": {
+     "anyOf": [
+      {
+       "$ref": "#/$defs/Legend"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null
+    },
+    "date_start": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Date Start"
+    },
+    "date_end": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Date End"
+    },
+    "source_ids": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Source Ids",
+     "type": "array"
+    },
+    "resolution_m": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Resolution M"
+    },
+    "export": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Export"
+    }
+   },
+   "required": [
+    "id",
+    "kind",
+    "title_key",
+    "url"
+   ],
+   "title": "Layer",
+   "type": "object"
+  },
+  "LayerFile": {
+   "additionalProperties": false,
+   "properties": {
+    "name": {
+     "title": "Name",
+     "type": "string"
+    },
+    "sha256": {
+     "title": "Sha256",
+     "type": "string"
+    },
+    "spacing_m": {
+     "anyOf": [
+      {
+       "items": {
+        "type": "number"
+       },
+       "type": "array"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Spacing M"
+    },
+    "units": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Units"
+    }
+   },
+   "required": [
+    "name",
+    "sha256"
+   ],
+   "title": "LayerFile",
+   "type": "object"
+  },
+  "Legend": {
+   "additionalProperties": false,
+   "properties": {
+    "kind": {
+     "enum": [
+      "continuous",
+      "categorical",
+      "rgb"
+     ],
+     "title": "Kind",
+     "type": "string"
+    },
+    "unit": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Unit"
+    },
+    "vmin": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Vmin"
+    },
+    "vmax": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Vmax"
+    },
+    "cmap": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Cmap"
+    },
+    "stops": {
+     "anyOf": [
+      {
+       "items": {
+        "type": "string"
+       },
+       "type": "array"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Stops"
+    },
+    "classes": {
+     "anyOf": [
+      {
+       "additionalProperties": {
+        "items": {
+         "type": "integer"
+        },
+        "type": "array"
+       },
+       "type": "object"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Classes"
+    },
+    "class_keys": {
+     "anyOf": [
+      {
+       "additionalProperties": {
+        "type": "string"
+       },
+       "type": "object"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Class Keys"
+    }
+   },
+   "required": [
+    "kind"
+   ],
+   "title": "Legend",
+   "type": "object"
+  },
+  "LosPair": {
+   "additionalProperties": false,
+   "properties": {
+    "pair_id": {
+     "title": "Pair Id",
+     "type": "string"
+    },
+    "status": {
+     "enum": [
+      "ok",
+      "insufficient_data",
+      "not_computed"
+     ],
+     "title": "Status",
+     "type": "string"
+    },
+    "reference": {
+     "title": "Reference",
+     "type": "string"
+    },
+    "control_sigma_cm": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "study_median_cm": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "study_p05_cm": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "study_p95_cm": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "study_coherent_fraction": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "area_beyond_3sigma_km2": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "layer_id": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Layer Id"
+    },
+    "sign_verified": {
+     "title": "Sign Verified",
+     "type": "boolean"
+    },
+    "reason": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Reason"
+    }
+   },
+   "required": [
+    "pair_id",
+    "status",
+    "reference",
+    "control_sigma_cm",
+    "study_median_cm",
+    "study_p05_cm",
+    "study_p95_cm",
+    "study_coherent_fraction",
+    "area_beyond_3sigma_km2",
+    "layer_id",
+    "sign_verified"
+   ],
+   "title": "LosPair",
+   "type": "object"
+  },
+  "Manifest": {
+   "additionalProperties": false,
+   "properties": {
+    "run_id": {
+     "title": "Run Id",
+     "type": "string"
+    },
+    "created_utc": {
+     "title": "Created Utc",
+     "type": "string"
+    },
+    "code_commit": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Code Commit"
+    },
+    "code_dirty": {
+     "anyOf": [
+      {
+       "type": "boolean"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Code Dirty"
+    },
+    "python": {
+     "title": "Python",
+     "type": "string"
+    },
+    "packages": {
+     "additionalProperties": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "title": "Packages",
+     "type": "object"
+    },
+    "config_sha256": {
+     "title": "Config Sha256",
+     "type": "string"
+    },
+    "inputs": {
+     "items": {
+      "$ref": "#/$defs/FileRecord"
+     },
+     "title": "Inputs",
+     "type": "array"
+    },
+    "outputs": {
+     "items": {
+      "$ref": "#/$defs/FileRecord"
+     },
+     "title": "Outputs",
+     "type": "array"
+    },
+    "duration_s": {
+     "title": "Duration S",
+     "type": "number"
+    }
+   },
+   "required": [
+    "run_id",
+    "created_utc",
+    "code_commit",
+    "code_dirty",
+    "python",
+    "packages",
+    "config_sha256",
+    "inputs",
+    "outputs",
+    "duration_s"
+   ],
+   "title": "Manifest",
+   "type": "object"
+  },
+  "Measurement": {
+   "additionalProperties": false,
+   "properties": {
+    "value": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Value"
+    },
+    "unit": {
+     "title": "Unit",
+     "type": "string"
+    },
+    "status": {
+     "enum": [
+      "measured",
+      "not_measured",
+      "unavailable",
+      "not_applicable"
+     ],
+     "title": "Status",
+     "type": "string"
+    },
+    "uncertainty": {
+     "anyOf": [
+      {
+       "$ref": "#/$defs/Uncertainty"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null
+    },
+    "reason": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Reason"
+    }
+   },
+   "required": [
+    "value",
+    "unit",
+    "status"
+   ],
+   "title": "Measurement",
+   "type": "object"
+  },
+  "Method": {
+   "additionalProperties": false,
+   "properties": {
+    "id": {
+     "title": "Id",
+     "type": "string"
+    },
+    "version": {
+     "title": "Version",
+     "type": "string"
+    },
+    "parameters": {
+     "additionalProperties": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "integer"
+       },
+       {
+        "type": "string"
+       },
+       {
+        "type": "boolean"
+       },
+       {
+        "items": {},
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "title": "Parameters",
+     "type": "object"
+    },
+    "reused_modules": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Reused Modules",
+     "type": "array"
+    },
+    "steps": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Steps",
+     "type": "array"
+    }
+   },
+   "required": [
+    "id",
+    "version",
+    "parameters",
+    "reused_modules",
+    "steps"
+   ],
+   "title": "Method",
+   "type": "object"
+  },
+  "NextCheck": {
+   "additionalProperties": false,
+   "properties": {
+    "id": {
+     "title": "Id",
+     "type": "string"
+    },
+    "kind": {
+     "title": "Kind",
+     "type": "string"
+    },
+    "params": {
+     "additionalProperties": {
+      "anyOf": [
+       {
+        "type": "boolean"
+       },
+       {
+        "type": "number"
+       },
+       {
+        "type": "integer"
+       },
+       {
+        "type": "string"
+       },
+       {
+        "items": {},
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "title": "Params",
+     "type": "object"
+    },
+    "because": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Because",
+     "type": "array"
+    }
+   },
+   "required": [
+    "id",
+    "kind",
+    "params",
+    "because"
+   ],
+   "title": "NextCheck",
+   "type": "object"
+  },
+  "OpticalComparison": {
+   "additionalProperties": false,
+   "properties": {
+    "status": {
+     "enum": [
+      "ok",
+      "no_scene_pair",
+      "insufficient_overlap"
+     ],
+     "title": "Status",
+     "type": "string"
+    },
+    "before_item": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Before Item"
+    },
+    "after_item": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "After Item"
+    },
+    "gap_days_before": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Gap Days Before"
+    },
+    "gap_days_after": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Gap Days After"
+    },
+    "optical_threshold": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "lift": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "p_optical_given_radar": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "p_optical_given_not_radar": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "jaccard": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "control_median_d_ndvi": {
+     "anyOf": [
+      {
+       "$ref": "#/$defs/Measurement"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null
+    },
+    "control_median_d_mndwi": {
+     "anyOf": [
+      {
+       "$ref": "#/$defs/Measurement"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null
+    },
+    "reason": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Reason"
+    }
+   },
+   "required": [
+    "status",
+    "before_item",
+    "after_item",
+    "gap_days_before",
+    "gap_days_after",
+    "optical_threshold",
+    "lift",
+    "p_optical_given_radar",
+    "p_optical_given_not_radar",
+    "jaccard"
+   ],
+   "title": "OpticalComparison",
+   "type": "object"
+  },
+  "OpticalScene": {
+   "additionalProperties": false,
+   "properties": {
+    "item_id": {
+     "title": "Item Id",
+     "type": "string"
+    },
+    "datetime": {
+     "title": "Datetime",
+     "type": "string"
+    },
+    "platform": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Platform"
+    },
+    "processing_baseline": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Processing Baseline"
+    },
+    "cloud_cover_pct": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Cloud Cover Pct"
+    },
+    "valid_fraction_window": {
+     "title": "Valid Fraction Window",
+     "type": "number"
+    }
+   },
+   "required": [
+    "item_id",
+    "datetime",
+    "platform",
+    "processing_baseline",
+    "cloud_cover_pct",
+    "valid_fraction_window"
+   ],
+   "title": "OpticalScene",
+   "type": "object"
+  },
+  "PairQuality": {
+   "additionalProperties": false,
+   "properties": {
+    "ok": {
+     "title": "Ok",
+     "type": "boolean"
+    },
+    "reasons": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Reasons",
+     "type": "array"
+    },
+    "phase_sigma_rad": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Phase Sigma Rad"
+    },
+    "coherence_median": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Coherence Median"
+    }
+   },
+   "required": [
+    "ok",
+    "reasons",
+    "phase_sigma_rad",
+    "coherence_median"
+   ],
+   "title": "PairQuality",
+   "type": "object"
+  },
+  "PairResult": {
+   "additionalProperties": false,
+   "properties": {
+    "pair_id": {
+     "title": "Pair Id",
+     "type": "string"
+    },
+    "geometry_id": {
+     "title": "Geometry Id",
+     "type": "string"
+    },
+    "reference_date": {
+     "title": "Reference Date",
+     "type": "string"
+    },
+    "secondary_date": {
+     "title": "Secondary Date",
+     "type": "string"
+    },
+    "span_days": {
+     "title": "Span Days",
+     "type": "integer"
+    },
+    "status": {
+     "enum": [
+      "ok",
+      "rejected_quality",
+      "insufficient_control",
+      "incompatible_grid"
+     ],
+     "title": "Status",
+     "type": "string"
+    },
+    "reason": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Reason"
+    },
+    "threshold": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "threshold_sensitivity": {
+     "additionalProperties": {
+      "$ref": "#/$defs/Measurement"
+     },
+     "title": "Threshold Sensitivity",
+     "type": "object"
+    },
+    "control_flag_rate": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "control_median_coherence": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "zones": {
+     "items": {
+      "$ref": "#/$defs/ZoneMetrics"
+     },
+     "title": "Zones",
+     "type": "array"
+    },
+    "study_flagged_area_sensitivity": {
+     "additionalProperties": {
+      "$ref": "#/$defs/Measurement"
+     },
+     "title": "Study Flagged Area Sensitivity",
+     "type": "object"
+    },
+    "n_clusters": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "N Clusters"
+    },
+    "clusters_shown": {
+     "items": {
+      "$ref": "#/$defs/Cluster"
+     },
+     "title": "Clusters Shown",
+     "type": "array"
+    },
+    "layer_ids": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Layer Ids",
+     "type": "array"
+    },
+    "optical": {
+     "anyOf": [
+      {
+       "$ref": "#/$defs/OpticalComparison"
+      },
+      {
+       "type": "null"
+      }
+     ]
+    }
+   },
+   "required": [
+    "pair_id",
+    "geometry_id",
+    "reference_date",
+    "secondary_date",
+    "span_days",
+    "status",
+    "threshold",
+    "threshold_sensitivity",
+    "control_flag_rate",
+    "control_median_coherence",
+    "zones",
+    "study_flagged_area_sensitivity",
+    "n_clusters",
+    "clusters_shown",
+    "layer_ids",
+    "optical"
+   ],
+   "title": "PairResult",
+   "type": "object"
+  },
+  "Processing": {
+   "additionalProperties": false,
+   "properties": {
+    "status": {
+     "enum": [
+      "complete",
+      "partial",
+      "unavailable",
+      "failed"
+     ],
+     "title": "Status",
+     "type": "string"
+    },
+    "steps": {
+     "items": {
+      "$ref": "#/$defs/Step"
+     },
+     "title": "Steps",
+     "type": "array"
+    },
+    "blockers": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Blockers",
+     "type": "array"
+    }
+   },
+   "required": [
+    "status",
+    "steps"
+   ],
+   "title": "Processing",
+   "type": "object"
+  },
+  "Reference": {
+   "additionalProperties": false,
+   "properties": {
+    "id": {
+     "title": "Id",
+     "type": "string"
+    },
+    "kind": {
+     "enum": [
+      "optical_imagery",
+      "map",
+      "documentation"
+     ],
+     "title": "Kind",
+     "type": "string"
+    },
+    "name": {
+     "title": "Name",
+     "type": "string"
+    },
+    "provider": {
+     "title": "Provider",
+     "type": "string"
+    },
+    "license": {
+     "title": "License",
+     "type": "string"
+    },
+    "url": {
+     "title": "Url",
+     "type": "string"
+    },
+    "dates": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Dates",
+     "type": "array"
+    },
+    "supports_key": {
+     "title": "Supports Key",
+     "type": "string"
+    },
+    "cannot_support_key": {
+     "title": "Cannot Support Key",
+     "type": "string"
+    }
+   },
+   "required": [
+    "id",
+    "kind",
+    "name",
+    "provider",
+    "license",
+    "url",
+    "supports_key",
+    "cannot_support_key"
+   ],
+   "title": "Reference",
+   "type": "object"
+  },
+  "Site": {
+   "additionalProperties": false,
+   "properties": {
+    "id": {
+     "title": "Id",
+     "type": "string"
+    },
+    "name": {
+     "title": "Name",
+     "type": "string"
+    },
+    "country": {
+     "title": "Country",
+     "type": "string"
+    },
+    "commodity": {
+     "title": "Commodity",
+     "type": "string"
+    },
+    "operator": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Operator"
+    },
+    "centroid": {
+     "maxItems": 2,
+     "minItems": 2,
+     "prefixItems": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "number"
+      }
+     ],
+     "title": "Centroid",
+     "type": "array"
+    },
+    "description_key": {
+     "title": "Description Key",
+     "type": "string"
+    }
+   },
+   "required": [
+    "id",
+    "name",
+    "country",
+    "commodity",
+    "centroid",
+    "description_key"
+   ],
+   "title": "Site",
+   "type": "object"
+  },
+  "Step": {
+   "additionalProperties": false,
+   "properties": {
+    "name": {
+     "title": "Name",
+     "type": "string"
+    },
+    "status": {
+     "enum": [
+      "done",
+      "skipped",
+      "failed",
+      "unavailable"
+     ],
+     "title": "Status",
+     "type": "string"
+    },
+    "message": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Message"
+    }
+   },
+   "required": [
+    "name",
+    "status"
+   ],
+   "title": "Step",
+   "type": "object"
+  },
+  "Uncertainty": {
+   "additionalProperties": false,
+   "properties": {
+    "kind": {
+     "enum": [
+      "not_estimated",
+      "sensitivity_range",
+      "empirical_sigma",
+      "not_applicable"
+     ],
+     "title": "Kind",
+     "type": "string"
+    },
+    "value": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Value"
+    },
+    "low": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Low"
+    },
+    "high": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "High"
+    },
+    "method": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Method"
+    }
+   },
+   "required": [
+    "kind"
+   ],
+   "title": "Uncertainty",
+   "type": "object"
+  },
+  "ValidationItem": {
+   "additionalProperties": false,
+   "properties": {
+    "observable": {
+     "title": "Observable",
+     "type": "string"
+    },
+    "level": {
+     "enum": [
+      "not_computed",
+      "computed",
+      "internally_consistent",
+      "consistent_with_independent_source",
+      "independently_validated"
+     ],
+     "title": "Level",
+     "type": "string"
+    },
+    "evidence_keys": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Evidence Keys",
+     "type": "array"
+    },
+    "missing_keys": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Missing Keys",
+     "type": "array"
+    }
+   },
+   "required": [
+    "observable",
+    "level",
+    "evidence_keys",
+    "missing_keys"
+   ],
+   "title": "ValidationItem",
+   "type": "object"
+  },
+  "Zone": {
+   "additionalProperties": false,
+   "properties": {
+    "id": {
+     "title": "Id",
+     "type": "string"
+    },
+    "role": {
+     "enum": [
+      "study_perimeter",
+      "control_ring",
+      "mapped_mining_outside_perimeter",
+      "exclusion"
+     ],
+     "title": "Role",
+     "type": "string"
+    },
+    "area_km2": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Area Km2"
+    },
+    "source": {
+     "title": "Source",
+     "type": "string"
+    },
+    "source_date": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Source Date"
+    },
+    "license": {
+     "title": "License",
+     "type": "string"
+    },
+    "attribution": {
+     "title": "Attribution",
+     "type": "string"
+    },
+    "nature": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Nature"
+    }
+   },
+   "required": [
+    "id",
+    "role",
+    "area_km2",
+    "source",
+    "source_date",
+    "license",
+    "attribution"
+   ],
+   "title": "Zone",
+   "type": "object"
+  },
+  "ZoneMetrics": {
+   "additionalProperties": false,
+   "properties": {
+    "zone_id": {
+     "title": "Zone Id",
+     "type": "string"
+    },
+    "zone_area_km2": {
+     "title": "Zone Area Km2",
+     "type": "number"
+    },
+    "observable_area_km2": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "observable_fraction": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "flagged_area_km2": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "flagged_fraction_of_observable": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "median_coherence": {
+     "$ref": "#/$defs/Measurement"
+    }
+   },
+   "required": [
+    "zone_id",
+    "zone_area_km2",
+    "observable_area_km2",
+    "observable_fraction",
+    "flagged_area_km2",
+    "flagged_fraction_of_observable",
+    "median_coherence"
+   ],
+   "title": "ZoneMetrics",
+   "type": "object"
+  }
+ },
+ "additionalProperties": false,
+ "properties": {
+  "schema_version": {
+   "const": "1.0",
+   "default": "1.0",
+   "title": "Schema Version",
+   "type": "string"
+  },
+  "case_id": {
+   "title": "Case Id",
+   "type": "string"
+  },
+  "data_nature": {
+   "enum": [
+    "real",
+    "synthetic"
+   ],
+   "title": "Data Nature",
+   "type": "string"
+  },
+  "question_key": {
+   "title": "Question Key",
+   "type": "string"
+  },
+  "user_key": {
+   "title": "User Key",
+   "type": "string"
+  },
+  "site": {
+   "$ref": "#/$defs/Site"
+  },
+  "zones": {
+   "items": {
+    "$ref": "#/$defs/Zone"
+   },
+   "title": "Zones",
+   "type": "array"
+  },
+  "zones_url": {
+   "title": "Zones Url",
+   "type": "string"
+  },
+  "acquisitions": {
+   "items": {
+    "$ref": "#/$defs/Acquisition"
+   },
+   "title": "Acquisitions",
+   "type": "array"
+  },
+  "optical_scenes": {
+   "items": {
+    "$ref": "#/$defs/OpticalScene"
+   },
+   "title": "Optical Scenes",
+   "type": "array"
+  },
+  "method": {
+   "$ref": "#/$defs/Method"
+  },
+  "pairs": {
+   "items": {
+    "$ref": "#/$defs/PairResult"
+   },
+   "title": "Pairs",
+   "type": "array"
+  },
+  "geometries": {
+   "items": {
+    "$ref": "#/$defs/GeometrySummary"
+   },
+   "title": "Geometries",
+   "type": "array"
+  },
+  "cross_geometry": {
+   "$ref": "#/$defs/CrossGeometry"
+  },
+  "los": {
+   "items": {
+    "$ref": "#/$defs/LosPair"
+   },
+   "title": "Los",
+   "type": "array"
+  },
+  "layers": {
+   "items": {
+    "$ref": "#/$defs/Layer"
+   },
+   "title": "Layers",
+   "type": "array"
+  },
+  "exports": {
+   "items": {
+    "$ref": "#/$defs/Export"
+   },
+   "title": "Exports",
+   "type": "array"
+  },
+  "references": {
+   "items": {
+    "$ref": "#/$defs/Reference"
+   },
+   "title": "References",
+   "type": "array"
+  },
+  "validation": {
+   "items": {
+    "$ref": "#/$defs/ValidationItem"
+   },
+   "title": "Validation",
+   "type": "array"
+  },
+  "findings": {
+   "items": {
+    "$ref": "#/$defs/Finding"
+   },
+   "title": "Findings",
+   "type": "array"
+  },
+  "next_checks": {
+   "items": {
+    "$ref": "#/$defs/NextCheck"
+   },
+   "title": "Next Checks",
+   "type": "array"
+  },
+  "limits": {
+   "items": {
+    "type": "string"
+   },
+   "title": "Limits",
+   "type": "array"
+  },
+  "processing": {
+   "$ref": "#/$defs/Processing"
+  },
+  "manifest": {
+   "anyOf": [
+    {
+     "$ref": "#/$defs/Manifest"
+    },
+    {
+     "type": "null"
+    }
+   ]
+  }
+ },
+ "required": [
+  "case_id",
+  "data_nature",
+  "question_key",
+  "user_key",
+  "site",
+  "zones",
+  "zones_url",
+  "acquisitions",
+  "optical_scenes",
+  "method",
+  "pairs",
+  "geometries",
+  "cross_geometry",
+  "los",
+  "layers",
+  "exports",
+  "references",
+  "validation",
+  "findings",
+  "next_checks",
+  "limits",
+  "processing",
+  "manifest"
+ ],
+ "title": "MiningCase",
+ "type": "object"
+}
