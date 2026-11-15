@@ -124,3 +124,47 @@ réversibles ont été prises sans arbitrage ; celles qui en ont demandé un son
 | 2026-11-15 | DEC-08 | Filtre nuages de tuile relevé de 10 % à 60 % (validité mesurée dans la fenêtre) et écart maximal 6 → 8 jours : 10 paires comparables au lieu de 6. |
 | 2026-11-15 | DEC-08 | Ajout des diagnostics optiques après observation d'une zone d'humidification récurrente. |
 | 2026-11-15 | DEC-02 | Parcelles hors périmètre analysées séparément ; vérification « mettre à jour le périmètre » ajoutée. |
+
+## Itération 2 (robustesse)
+
+### DEC-12 — Observable : faible cohérence relative au témoin
+Le détecteur compare chaque pixel au témoin de la même paire ; il ne mesure pas de baisse du même pixel. « Baisse » et
+« perte supplémentaire » sont réservées à une comparaison temporelle explicitement calculée (non faite).
+
+### DEC-13 — Calibration et évaluation séparées, intervalles par blocs
+Damier de blocs de 1 km dans chaque témoin : quantile sur une moitié, taux sur l'autre. Bootstrap par blocs de 1 km
+(500 m et 2 km en sensibilité) d'après l'autocorrélation mesurée (0,02 à 1 km). Le profil 1 % est conservé comme
+profil historique ; 0,5 % et 5 % sont toujours publiés. Constat : à 5 %, le périmètre ne dépasse plus le témoin.
+
+### DEC-14 — Témoins multiples documentés
+Anneau 1–4 km (principal), anneau 2–4 km, anneau « sol nu » et anneau « cultures » (WorldCover 2021). Le périmètre est
+à 66 % « sol nu » contre 12 % dans l'anneau : le témoin « sol nu » est le plus comparable ; il donne un écart plus fort.
+
+### DEC-15 — Radiométrie Sentinel-2 et masque
+Réflectance = DN/10000 (vérifié contre Planetary Computer : écart de 1000 DN). SCL 2 exclu, SCL 7 douteux (en
+sensibilité). Couverture claire mesurée dans les zones, sans filtre de nuages de tuile.
+
+### DEC-16 — Comparaisons optiques stricte et exploratoire séparées
+Stricte ≤ 3 jours (test conservateur, pas une garantie de simultanéité), seule utilisée par les critères ;
+exploratoire ≤ 8 jours, affichée à part. Toujours avec table 2 × 2, proportions absolues, Jaccard et IC.
+
+### DEC-17 — Critères de niveau de preuve fixés avant l'exécution réelle
+« Recoupé entre orbites » : ≥ 3 fenêtres appariées avec IC du rapport > 1 ; « associé à une observation
+indépendante » : en plus ≥ 3 comparaisons strictes avec IC > 1 ; « validé » : impossible sans terrain (refusé par le
+contrat). Résultat : 5/3 et 3/3, atteint au minimum.
+
+### DEC-18 — Contrôles qualité séparés et masque produit
+Le contrôle de cohérence lit le masque NISAR (chiffres de sous-fauchée) : l'acquisition du 2026-09-07 est déclarée
+invalide par le produit, ce qui écarte deux paires. Le contrôle de phase hérité ne sert qu'à la LOS.
+
+### DEC-19 — Exécutions isolées et publication vérifiée
+Chaque exécution écrit dans `runs/<id>/`, vérifie contrat, fichiers et empreintes, puis remplace `output/`. Les caches
+NISAR et Sentinel-2 ne sont réutilisés qu'avec les mêmes paramètres et des empreintes intactes.
+
+### DEC-20 — Démonstration versionnée
+Les aperçus de cohérence (64 niveaux, environ 0,6 Mo chacun) sont versionnés : le cas publié (environ 14 Mo)
+fonctionne après clonage, sans `data/` ni jeton.
+
+| Date | Décisions | Changement |
+|---|---|---|
+| 2026-11-15 | DEC-12 à DEC-20 | itération de robustesse ; conclusions v1 corrigées (voir docs/COMPARISON_V1_V2.md) |

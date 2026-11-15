@@ -1,88 +1,85 @@
-# Validation scientifique — cas Benguerir, juin–octobre 2026
+# Validation scientifique v2 — Benguerir, juin–octobre 2026
 
-Rapport distinct de la validation logicielle. Source des chiffres : `cases/benguerir/output/case.json`
-(exécution 20261115T034718Z, commit 9c265f7) et `exports/pairs.csv`.
+Niveau de présentation : **étude exploratoire calculée, avec associations entre observations et limites explicites.**
+Source : `cases/benguerir/output/case.json` (exécution 20261115T150945Z, code `ec59393`). Tableaux complets produits par
+script : [generated/v2_tables.md](generated/v2_tables.md). Comparaison avec la v1 : [COMPARISON_V1_V2.md](COMPARISON_V1_V2.md).
 
-## Niveau atteint par observable
+## Niveau par observable
 
-| Observable | Niveau | Ce qui le soutient | Ce qui manque |
+| Observable | Niveau | Critères (fixés avant l'exécution) | Manque |
 |---|---|---|---|
-| Localisation des pertes de cohérence | **concordant avec une source indépendante** | exécution reproductible ; contrôle qualité ; accord ascendant/descendant (Spearman 0,61) ; concordance Sentinel-2 (×7,7 à ×64) | vérité terrain datée ; produits NISAR validés |
-| Déplacement LOS | **calculé** | bruit estimé dans le témoin | signe vérifié localement ; GNSS/nivellement ; corrections ionosphère/troposphère |
-| Cause des changements | **non calculé** | — | terrain, calendrier d'exploitation |
+| Localisation des faibles cohérences | **associé à une observation indépendante** | fenêtres appariées entre orbites avec IC > 1 : 5 (requis 3) ; comparaisons optiques strictes avec IC > 1 : **3 (requis 3)** | terrain daté, produits validés, périmètre récent |
+| Déplacement LOS | calculé | interprétation reportée | signe, GNSS/nivellement, corrections atmosphériques |
+| Cause | non calculé | — | terrain, calendrier d'exploitation |
 
-Aucune grandeur n'est « validée indépendamment ». La concordance optique soutient **où** la surface a changé ; elle
-ne valide ni la valeur de cohérence, ni le seuil, ni une quelconque LOS.
+Le second critère est atteint au minimum : avec une seule comparaison stricte de moins, le niveau serait « recoupé
+entre orbites ». Une association entre capteurs n'est pas une validation et ne donne pas de précision de détection.
 
-## Résultats calculés
+## Résultats, avec leurs incertitudes
 
-15 paires analysées sur 17 (deux paires descendantes, 26 août → 19 septembre, écartées : cohérence médiane ≈ 0,01
-et phase plate sur tout le cadre ; ces dates restent **non observées**). Le périmètre est entièrement observable
-(fraction 1,0) sur toutes les paires retenues.
+**Couverture.** 15 paires analysées sur 17. Les paires 26 août → 7 sept. et 7 → 19 sept. (descendantes) sont écartées :
+le masque du produit déclare invalide l'acquisition du 2026-09-07 sur toute la zone. Ces fenêtres restent non observées.
+Le périmètre est entièrement observable dans les 15 paires.
 
-| Paire | Orbite | Jours | Seuil τ | Signalé périmètre | Part | Témoin 1–2 km | Témoin 2–4 km | Parcelles hors périmètre | Concordance S2 |
-|---|---|---|---|---|---|---|---|---|---|
-| 17 juin → 29 juin | 044A | 12 | 0,317 | 1,040 km² | 2,63 % | 0,77 % | 1,09 % | 2,01 % | ×64,1 |
-| 29 juin → 11 juil. | 044A | 12 | 0,311 | 1,028 km² | 2,60 % | 0,64 % | 1,14 % | 2,29 % | ×48,7 |
-| 11 juil. → 23 juil. | 044A | 12 | 0,331 | 1,143 km² | 2,89 % | 0,68 % | 1,12 % | 1,88 % | ×58,2 |
-| 23 juil. → 16 août | 044A | 24 | 0,292 | 1,262 km² | 3,19 % | 0,81 % | 1,07 % | 2,53 % | ×15,1 |
-| 16 août → 28 août | 044A | 12 | 0,343 | 1,032 km² | 2,61 % | 0,64 % | 1,14 % | 2,21 % | ×8,0 |
-| 28 août → 9 sept. | 044A | 12 | 0,323 | 1,101 km² | 2,78 % | 0,63 % | 1,15 % | 2,81 % | ×7,7 |
-| 9 sept. → 21 sept. | 044A | 12 | 0,314 | 1,040 km² | 2,63 % | 0,46 % | 1,21 % | 4,24 % | pas de scène |
-| 21 sept. → 3 oct. | 044A | 12 | 0,326 | 1,174 km² | 2,97 % | 0,58 % | 1,17 % | 3,62 % | pas de scène |
-| 3 oct. → 15 oct. | 044A | 12 | 0,277 | 0,964 km² | 2,44 % | 0,80 % | 1,08 % | 1,72 % | pas de scène |
-| 27 juin → 9 juil. | 023D | 12 | 0,236 | 0,474 km² | 1,20 % | 0,34 % | 1,26 % | 1,22 % | ×50,9 |
-| 9 juil. → 21 juil. | 023D | 12 | 0,243 | 0,592 km² | 1,50 % | 0,25 % | 1,30 % | 1,02 % | ×46,8 |
-| 21 juil. → 14 août | 023D | 24 | 0,223 | 0,644 km² | 1,63 % | 0,36 % | 1,25 % | 0,95 % | ×13,6 |
-| 14 août → 26 août | 023D | 12 | 0,241 | 0,490 km² | 1,24 % | 0,29 % | 1,28 % | 0,87 % | ×8,3 |
-| 26 août → 7 sept. | 023D | 12 | — | écartée | — | — | — | — | — |
-| 7 sept. → 19 sept. | 023D | 12 | — | écartée | — | — | — | — | — |
-| 19 sept. → 1ᵉʳ oct. | 023D | 12 | 0,254 | 0,702 km² | 1,78 % | 0,35 % | 1,26 % | 2,24 % | pas de scène |
-| 1ᵉʳ oct. → 13 oct. | 023D | 12 | 0,197 | 0,476 km² | 1,20 % | 0,56 % | 1,17 % | 0,85 % | pas de scène |
+**Périmètre contre témoin (profil principal).** Dans les 13 paires de 12 jours, la part du périmètre sous le seuil
+(1,2 à 3,1 %) dépasse le taux du témoin évalué hors calibration (0,9 à 1,6 %) : rapport de 1,18 à 2,63 (médiane
+1,99). L'intervalle à 95 % par blocs n'est entièrement au-dessus de 1 que pour **2 paires sur 13**. Les 2 paires de
+24 jours sont résumées à part (rapports 2,78 [1,25 ; 5,47] et 1,68 [0,58 ; 3,72]).
 
-Taux du témoin : 1,0 % par construction. Sensibilité (quantiles 0,5 % et 5 %) dans `case.json`.
+**Sensibilité au seuil.** Au quantile 0,5 %, 13 paires sur 13 dépassent le témoin (rapport médian 2,67) ; au quantile
+5 %, **aucune** (0,84). L'excès du périmètre se limite donc aux cohérences les plus basses ; il ne caractérise pas
+l'ensemble du périmètre. Recouvrement médian des zones : 0,74 avec 0,5 %, 0,54 avec 5 %.
 
-Répétition (paires de 12 jours) : orbite ascendante, 2,73 km² du périmètre signalés au moins une fois et 1,04 km²
-dans au moins la moitié des 8 paires ; orbite descendante, 1,43 km² et 0,39 km² sur 5 paires.
+**Sensibilité au témoin.** Au quantile 1 % : anneau 13/13 (médiane 1,99), anneau 2–4 km 13/13 (1,85), sol nu 13/13
+(2,38), cultures 11/13 (1,81). Le périmètre est à 66 % « sol nu » (WorldCover 2021) contre 12 % pour l'anneau : le
+témoin « sol nu » est le plus comparable en occupation du sol, et il donne un écart plus grand, pas plus petit.
 
-## Lecture proportionnée
+**Anneaux et parcelles.** Le taux de l'anneau 1–2 km (médiane 0,62 %) est plus faible que celui de l'anneau 2–4 km
+(1,27 %) dans 13 paires sur 13 ; les deux anneaux diffèrent en occupation du sol. Les parcelles OSM 2020 hors périmètre
+sont plus souvent sous le seuil que le témoin dans 10 paires sur 13 ; leur statut est inconnu.
 
-1. **Le périmètre change plus que son environnement** dans les 15 paires (1,2 à 3,2 fois le taux du témoin). La part
-   signalée est faible (1,2–3,2 % de 39,5 km², soit 0,47–1,26 km² par fenêtre) : l'activité de surface détectable
-   est localisée, ce qui est attendu pour une exploitation par bandes.
-2. **Les deux orbites désignent les mêmes secteurs** (Spearman 0,61 ; concordance ×51 pour les pixels fréquemment
-   signalés ; Jaccard 0,32). Elles diffèrent en niveau : l'orbite descendante (soir) a des seuils plus bas
-   (0,20–0,25 contre 0,28–0,34) et signale moitié moins de surface ; l'heure et la géométrie de visée suffisent à
-   expliquer cet écart, qui n'est pas interprété comme un changement d'activité.
-3. **Sentinel-2 confirme la localisation** : un pixel signalé est 7,7 à 64 fois plus souvent un pixel de changement
-   optique (médiane ×31) ; la concordance est plus faible en août (×7,7–8,3), sans explication établie.
-4. **Une part importante du signal n'est pas de l'excavation** : la zone la plus récurrente (0,25–0,46 km² près de
-   32,215 N, 7,807 O), signalée dans 16 paires sur les deux orbites, a une signature optique d'humidification ou
-   d'assèchement dans 5 des 10 paires comparées (ΔMNDWI de ±0,3 à ±0,5), compatible avec un bassin ou une aire
-   d'épandage humide. Une perte de cohérence n'y signifie pas un front de taille.
-5. **Pas de débordement au contact du polygone** (taux 1–2 km inférieur au taux 2–4 km, qui comprend des cultures),
-   **mais** les parcelles minières cartographiées en 2020 hors polygone sont signalées au-dessus du témoin dans
-   12 paires sur 15 (jusqu'à 4,2 %) : le polygone de 2020 sous-estime l'emprise active.
-6. **LOS** : bruit du témoin de 0,36 à 6,8 cm selon la paire ; percentiles 5–95 du périmètre dans ±5,7 cm. Aucun
-   mouvement n'est distingué du bruit à l'échelle d'une paire.
+**Orbites.** 5 fenêtres de 12 jours appariées (10,6 jours de recouvrement chacune ; 3 paires ascendantes sans partenaire) :
+rapports 36 à 49, intervalles tous au-dessus de 1, Jaccard 0,26 à 0,40 (médiane 0,35). Les deux orbites désignent
+les mêmes secteurs, sans les recouvrir entièrement.
 
-## Explications alternatives
+**Sentinel-2.** 41 scènes lues (recherche complète), 26 utilisables. Comparaison stricte possible pour 3 paires :
 
-Examinées dans [METHOD.md](METHOD.md) : décorrélation de scène (non : médiane du témoin 0,67–0,78, ΔMNDWI du témoin
-−0,035 à +0,021), végétation (non relevée), humidité (oui pour la zone principale), défaut de produit (deux paires
-écartées), limite de périmètre (activité hors polygone), géométrie de visée (accord des deux orbites).
+| Paire | Scènes | P(optique \| radar) | P(optique \| ailleurs) | Rapport [IC 95 %] | Jaccard |
+|---|---|---|---|---|---|
+| 17 → 29 juin (asc.) | 14 juin / 29 juin | 10,0 % | 0,15 % | 66 [38 ; 153] | 0,095 |
+| 16 → 28 août (asc.) | 13 août / 28 août | 77,3 % | 9,7 % | 8,0 [6,0 ; 9,9] | 0,172 |
+| 14 → 26 août (desc.) | 13 août / 28 août | 87,6 % | 10,6 % | 8,3 [6,8 ; 10,2] | 0,094 |
 
-## Critère de passage D3
+La part des changements optiques du périmètre qui tombe dans les pixels radar signalés est de 18 % (médiane) : le
+radar signale une petite partie de ce que l'optique voit changer, et la plus grande partie de ce qu'il signale change
+aussi optiquement en août, beaucoup moins en juin. Aucune comparaison stricte n'est possible après le 9 septembre :
+scènes nuageuses aux dates radar (par exemple 2 et 7 sept., 27 sept., 2 et 4 oct., tous < 90 % clairs dans le
+périmètre). La comparaison exploratoire (≤ 8 jours, 10 paires) est publiée à part et n'entre pas dans les critères.
+
+**Répétition.** Ascendante : 8 paires de 12 jours, 2,84 km² sous le seuil au moins une fois, 1,09 km² dans au moins la
+moitié des paires (0,93 km² sur paires sans acquisition commune). Descendante : 5 paires, 1,43 / 0,39 / 0,43 km².
+Le recouvrement des paires voisines n'est pas nettement supérieur à celui des paires à deux pas (0,43 / 0,37 et
+0,28 / 0,19) ; un effet d'acquisition partagée ne peut pas être exclu pour l'orbite descendante (rapport 1,49).
+
+**Zone à vérifier.** Une seule zone remplit le critère : Z1, 0,306 km², 32,2156 N 7,8072 O, dans le périmètre,
+« sol nu » ; sous le seuil dans 8 paires sur 8 (asc.) et 5 sur 5 (desc.) ; changement optique sur 94 % de la zone dans
+les 3 comparaisons strictes, avec une signature dominante d'humidification ou d'assèchement (hypothèse spectrale,
+réflectance corrigée). Hypothèses alternatives : remaniement de surface, humidité, bruit/géométrie, acquisition partagée.
+
+**LOS.** σ du témoin de 0,36 à 6,84 cm ; centiles 5–95 du périmètre dans ±3σ pour les 15 paires. Non interprétée.
+
+## Distinction des incertitudes
+
+- *Statistique* : intervalles par blocs (1 km ; 500 m et 2 km en sensibilité), dans chaque valeur concernée.
+- *Seuil* : trois quantiles. *Témoin* : quatre témoins. *Périmètre* : ±1 pixel et parcelles 2020.
+- Non estimées : incertitude de la date d'un changement à l'intérieur d'une fenêtre ; erreurs de WorldCover 2021 ;
+  précision géométrique du polygone OSM ; justesse des hypothèses spectrales.
+
+## Critère de passage D3 (v2)
 
 | Critère | État |
 |---|---|
-| Exécution reproductible | **satisfait** (deux exécutions identiques, manifeste, empreintes) |
-| Critères de qualité documentés | **satisfait** (masque produit, contrôle hérité, témoin minimal, grilles identiques) |
-| Comparaison indépendante | **partiel** : 10 paires sur 15 ; aucune après le 9 septembre faute de scènes claires |
-| Conclusions proportionnées | **satisfait** : localisation concordante ; cause, volume et LOS non conclus |
-
-## Ce qui permettrait d'aller plus loin
-
-Observation de terrain ou calendrier d'exploitation datés ; images très haute résolution aux points proposés ;
-GUNW validés (CRID définitif) ; correction ionosphérique (couche fournie) et troposphérique pour la LOS ; point de
-contrôle GNSS pour le signe ; périmètre 2026 documenté.
+| Exécution reproductible | satisfait (deux exécutions : 102 sorties identiques) |
+| Qualité documentée | satisfait (masque produit, contrôle de cohérence séparé du contrôle de phase, intégrité des fichiers) |
+| Comparaison indépendante | partielle : 3 comparaisons strictes, aucune après le 9 septembre |
+| Conclusions proportionnées | satisfait : excès faible et limité aux plus basses cohérences ; association, pas validation |

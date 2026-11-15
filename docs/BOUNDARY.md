@@ -40,3 +40,22 @@ Fichier : [`cases/benguerir/zones.geojson`](../cases/benguerir/zones.geojson), p
 Satisfait pour la question D0 : source, date, méthode, droits et limites documentés ; couverture radar confirmée par
 téléchargement réel (17 paires, 100 % de la surface du périmètre observable sur chaque paire retenue). Non satisfait
 pour un usage réglementaire : aucune limite officielle n'a été obtenue.
+
+## Mise à jour v2 (15 novembre 2026)
+
+**Versions de périmètre conservées** (`perimeter_versions` dans `case.json`) :
+
+| Version | Usage | Surface (pixels 20 m) |
+|---|---|---|
+| OSM way 638354631 v3 (2020-02-10) | principale | voir `case.json` |
+| moins un pixel de 20 m | sensibilité (placement de la limite) | idem |
+| plus un pixel de 20 m | sensibilité | idem |
+| plus parcelles OSM 2020 | sensibilité ; sémantique des parcelles non confirmée | idem |
+
+Le périmètre n'est **pas agrandi** pour englober les zones signalées par le radar.
+
+**Recherche d'une emprise récente indépendante** : l'élément OSM est toujours à la version 3 du 2020-02-10 (API OSM
+interrogée le 2026-11-15). Aucune limite récente publiée et réutilisable n'a été trouvée. Pistes, à documenter avant
+usage : cartographie optique datée de 2026 indépendante des signalements radar (photo-interprétation de Sentinel-2 ou
+d'images très haute résolution, avec protocole et date), ou limite fournie par l'exploitant ou l'administration.
+ESA WorldCover 2021 sert seulement à stratifier les témoins : il ne délimite pas la mine.

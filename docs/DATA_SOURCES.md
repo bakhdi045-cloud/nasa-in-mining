@@ -4,6 +4,29 @@ Inventaires complets (date de recherche, emprise, granules) : [`cases/benguerir/
 On distingue trois états : **présent au catalogue** (CMR), **téléchargé** (octets lus, empreintes SHA-256) et
 **exploitable** (contrôle qualité et grilles compatibles).
 
+## Mise à jour v2 (15 novembre 2026)
+
+- **Recherches complètes** : CMR paginé (`CMR-Search-After`, contrôle `CMR-Hits`) et STAC paginé (liens `next`,
+  contrôle `numberMatched`), avec déduplication ; l'enregistrement de complétude est dans chaque inventaire.
+  Nouvelle interrogation datée du 2026-11-15 : toujours **aucun GUNW validé (`NISAR_L2_GUNW_V1`) ni BETA** sur le
+  site ; 3 GCOV validés (P05036, 25 oct.–6 nov.) existent mais concernent un autre observable (étape conditionnelle).
+- **NISAR** : les 17 GUNW provisoires ont été recadrés de nouveau avec l'extracteur v2 (clé de cache : emprise,
+  couches, version d'extracteur ; empreintes de tous les fichiers y compris `radar_geometry.npz` ; description du
+  masque conservée ; publication atomique après vérification). Aucun bit d'anomalie RSLC n'est présent dans la fenêtre.
+  Le masque des paires du 26 août → 7 sept. et du 7 → 19 sept. déclare invalide l'acquisition du 2026-09-07 (chiffre
+  de sous-fauchée 0) : elles sont écartées pour cette raison.
+- **Sentinel-2 — radiométrie vérifiée** : sur la scène S2B du 2026-08-28 (fenêtre de 200 × 200 pixels, bande B02),
+  DN Earth Search = DN Planetary Computer − 1000 exactement ; Planetary Computer conservant le DN ESA, le décalage BOA
+  est déjà appliqué dans les COG Earth Search. **Réflectance = DN / 10000** ; l'`offset` −0,1 des métadonnées
+  `raster:bands` n'est pas appliqué. La v1 l'appliquait (biais de −0,1).
+- **Sentinel-2 — masque** : SCL stocké à part (`scl.tif`) ; clairs 4, 5, 6 ; 7 douteux (sensibilité) ; 0, 1, 2, 3,
+  8, 9, 10, 11 exclus. 10 m moyennés 2 × 2 en excluant les cellules touchant une absence de données.
+- **Sentinel-2 — scènes** : aucun filtre de nuages de tuile ; 83 items trouvés sur l'emprise (41 sur la tuile 29SPR,
+  les autres sur 29SNR, mêmes prises de vue) ; 41 lues ; 26 utilisables selon la couverture claire mesurée dans le
+  périmètre (≥ 90 %) et le témoin (≥ 80 %). Liste complète : [generated/v2_tables.md](generated/v2_tables.md).
+- **ESA WorldCover 2021 v200** (tuile N30W009, CC BY 4.0) lu sur la grille 20 m (classe majoritaire) pour les témoins
+  d'occupation du sol comparable.
+
 ## Comparaison des données candidates (D2)
 
 | Données | Couverture du site (2026-06 → 11) | Niveau / couches | Géométrie, résolution | Version | Volume, accès | Décision |
@@ -13,7 +36,7 @@ On distingue trois états : **présent au catalogue** (CMR), **téléchargé** (
 | NISAR L2 GCOV (provisoire et V1) | 19 + 3 (P05036, 25 oct.–6 nov.) | rétrodiffusion HH/HV 20 m | mêmes géométries | P05023 / P05036 | 5–6 Go/produit | non retenu : autre observable |
 | NISAR L3 SME2 provisoire | 19 | humidité du sol régionale | grille grossière | P05023 | ~100 Mo | non retenu : échelle régionale |
 | NISAR GOFF | aucun granule | — | — | — | — | indisponible |
-| Sentinel-2 L2A (Copernicus, Earth Search) | 36 scènes tuile 29SPR (nuages tuile < 60 %) | réflectance de surface 10/20 m, SCL | UTM 29N, grille 20 m alignée sur NISAR | baselines 05.12 puis 05.13 (à partir du 22 sept.) | COG publics, sans identifiant | **référence indépendante** |
+| Sentinel-2 L2A (Copernicus, Earth Search) | 41 scènes tuile 29SPR (v2, sans filtre de tuile ; 26 utilisables) | réflectance de surface 10/20 m, SCL | UTM 29N, grille 20 m alignée sur NISAR | baselines 05.12 puis 05.13 (à partir du 22 sept.) | COG publics, sans identifiant | **référence indépendante** |
 
 ## Produits NISAR retenus
 
@@ -61,7 +84,7 @@ dépliée est utilisée sans soustraction ionosphérique/troposphérique (limite
 ## Référence indépendante : Sentinel-2 L2A
 
 - Catalogue STAC : `https://earth-search.aws.element84.com/v1`, collection `sentinel-2-l2a`, tuile MGRS 29SPR.
-- Réflectance = DN × 0,0001 − 0,1 (métadonnées `raster:bands` de chaque item) ; pixels valides : classes SCL 2, 4, 5, 6, 7.
+- v1 : réflectance = DN × 0,0001 − 0,1 et SCL 2, 4, 5, 6, 7 valides — **corrigé en v2** (voir ci-dessus).
 - Bandes B02, B03, B04, B08 (10 m moyennés 2 × 2) et B11, B12 (20 m), sur la grille 20 m de NISAR.
 - Scènes utilisées pour la comparaison : S2C 2026-06-14, S2A 06-26, S2B 06-29, S2C 07-04, S2C 07-14, S2A 07-16,
   S2B 07-29, S2C 08-13, S2B 08-18, S2A 08-25, S2B 08-28, S2C 09-12 (baseline 05.12). Fonds de carte : S2C 2026-06-04
@@ -83,6 +106,6 @@ OpenStreetMap (ODbL) : voir [BOUNDARY.md](BOUNDARY.md).
 .\.venv\Scripts\python.exe -m nasa_in_mining case-run --case cases\benguerir --data data
 ```
 
-Les données lues (≈ 540 Mo, dont 53 Mo NISAR) restent dans `data/`, ignoré par Git. Le jeton Earthdata se place dans la variable
+Les données lues (≈ 700 Mo en v2, dont 53 Mo NISAR) restent dans `data/`, ignoré par Git. Le jeton Earthdata se place dans la variable
 `EARTHDATA_TOKEN` ou le fichier `.earthdata_token` (ignoré par Git) ; il n'est jamais écrit dans les journaux ni
 dans les sorties.

@@ -1,64 +1,59 @@
-# Validation logicielle — 15 novembre 2026
+# Validation logicielle v2 — 15 novembre 2026
 
-Ce rapport porte sur le fonctionnement du logiciel. Il ne dit rien de la justesse scientifique des résultats :
-voir [SCIENTIFIC_VALIDATION.md](SCIENTIFIC_VALIDATION.md).
-
-Environnement : Windows 10, Python 3.12.10 (`.venv` propre au dépôt), Node 24.11.1. NASA_SAR n'a été ni importé
-ni modifié ; ses 16 fichiers extraits gardent les empreintes de `UPSTREAM.json` (vérifié).
+Rapport distinct de la validation scientifique ([SCIENTIFIC_VALIDATION.md](SCIENTIFIC_VALIDATION.md)).
+Environnement : Windows 10, Python 3.12.10 (`.venv` du dépôt), Node 24.11.1, Chromium Playwright. NASA_SAR n'est
+ni importé ni modifié ; les 16 fichiers extraits gardent les empreintes de `UPSTREAM.json`.
 
 ## Résultats
 
 | Contrôle | Commande | Résultat |
 |---|---|---|
-| Tests Python (extraction + cas minier) | `.\.venv\Scripts\python.exe -B -m unittest discover -s tests` | **56 réussis** (34 initiaux + 22 nouveaux) |
-| Typage frontend | `npm run typecheck` (dans `web/`) | aucune erreur |
-| Tests frontend (Vitest, jsdom) | `npm test` | **11 réussis** |
-| Construction | `npm run build` | réussie (MapLibre 1,1 Mo, application 0,32 Mo, worker local) |
-| Parcours navigateur (Playwright, Chromium) | `npm run e2e` | **2 réussis** : bureau 1440 × 900 et mobile 390 × 844 |
-| Reproductibilité | deux exécutions de `case-run` (commits 4b97b04 puis 9c265f7) | rasters, PNG, GeoJSON, CSV et toutes les valeurs de `case.json` identiques ; seuls l'identifiant d'exécution, le commit, la durée et les empreintes des fichiers texte (fin de ligne CRLF → LF) diffèrent |
-| Empreintes des sorties | relecture de `manifest.outputs` | 93/93 conformes |
+| Tests Python | `.\.venv\Scripts\python.exe -B -m unittest discover -s tests` | voir tableau final ci-dessous |
+| Tableaux de documentation à jour | `python scripts/report_tables.py --check` | inclus dans les tests Python |
+| Types TypeScript ↔ schéma | `npm run contract` + test Vitest | identiques |
+| Tests unitaires interface | `npm test` (Vitest) | 14 réussis |
+| Typage, construction | `npm run typecheck`, `npm run build` | aucune erreur |
+| Parcours navigateur | `npm run e2e` (Playwright, bureau 1440 × 900 et mobile 390 × 844) | 10 réussis |
+| Accessibilité | axe dans le parcours, FR/EN/AR, deux largeurs | aucune violation sérieuse ou critique |
+| Reproductibilité | deux exécutions réelles (20261115T145514Z et 20261115T150945Z) | 102 fichiers de sortie identiques ; contenu du cas identique hors manifeste |
+| Intégrité | empreintes recalculées à la lecture (218 entrées) et vérifiées avant publication (102 sorties) | conformes |
+| Démarrage depuis une copie propre | voir § ci-dessous | voir § ci-dessous |
 
-## Ce que couvrent les tests
+## Défauts corrigés et tests associés
 
-**Polygone et surfaces** — surface signalée exacte (0,25 km² = 625 pixels de 20 m) sur données synthétiques ;
-recoupement automatique avec `roi.summarize_raster` à chaque paire réelle (l'exécution échoue en cas d'écart) ;
-tests hérités de surfaces projetées et géodésiques.
+| Défaut v1 | Test v2 |
+|---|---|
+| Taux du témoin mesuré sur ses propres pixels de calibration | `test_calibration_and_evaluation_are_disjoint` |
+| Pixels traités comme indépendants | `test_block_bootstrap_needs_enough_blocks` |
+| Zones « identiques » par proximité de centroïdes | `test_neighbouring_zone_is_not_the_same_zone` |
+| Rapport infini ou absent présenté comme nombre | `test_contingency_keeps_absolute_counts`, `test_every_quantile_and_profile_is_reported` |
+| Niveau de preuve promu sur un rapport médian | `test_large_optical_ratio_without_interval_support_does_not_raise_the_level` |
+| Direction « anneau intérieur plus faible » écrite d'avance | `test_ring_direction_follows_the_data` (+ test Vitest des gabarits) |
+| Fenêtres de 24 jours mélangées | `test_24_day_pairs_are_summarised_separately` |
+| LOS déclarée « au niveau du bruit » sans calcul | `test_los_statement_follows_the_values` |
+| Motif de rejet imprécis | `test_coherence_qc_reports_its_real_reason`, `test_flat_phase_alone_does_not_reject_coherence` |
+| Fichier corrompu ou modifié non détecté | `test_corrupt_input_stops_the_run`, `test_modified_crop_is_detected` |
+| Cache réutilisé avec d'autres paramètres | `test_sentinel2_cache_requires_same_parameters` |
+| Anciens fichiers mélangés à une nouvelle exécution | `test_new_run_never_reuses_old_files` |
+| Publication malgré un fichier manquant | `test_missing_referenced_file_blocks_publication`, `test_recorded_case_and_every_referenced_file` (aperçus de cohérence inclus) |
+| `processing.status` dépendant de la seule présence de scènes | `test_status_reflects_missing_optional_steps` |
+| Contrat permissif (NaN, fraction > 1, IC inversé) | `ContractRules` (Python) et validation ajv + règles sémantiques (Vitest) |
+| Validation sans terrain | `test_never_validated_without_field_truth` |
+| Focus perdu, page active derrière le panneau | test Vitest focus/inert et parcours clavier Playwright (3 langues) |
+| Erreurs de carte silencieuses | annonce `role="alert"` (inspection) |
+| Carte absente de l'impression | test Playwright « print view keeps a static map » |
 
-**Nodata et zéro** — pixels non observés exclus et comptés à part (fraction observée 0,99 attendue et obtenue) ;
-paire sans changement → surface signalée **mesurée égale à 0** ; cohérence mesurée 0,0 → signalée, pas « manquante » ;
-zone entièrement non observée → `null` avec raison ; mesure `null` déclarée « mesurée » refusée par le contrat.
+## Mode hors ligne (définition)
 
-**Grilles incompatibles** — une couche de forme différente donne `incompatible_grid`, sans rééchantillonnage.
-
-**Données insuffisantes** — témoin < 2 000 pixels → `insufficient_control` ; paire à phase plate → `rejected_quality` ;
-aucun produit → cas `unavailable` valide, avec la limite « l'absence de données n'est pas une absence de changement ».
-
-**Contrat API/frontend** — schéma JSON versionné identique au modèle ; le cas réel enregistré satisfait le contrat ;
-`GET /api/cases/{id}` renvoie exactement le fichier ; erreurs JSON explicites (`case_not_found`, `file_not_found`,
-`contract_violation`), traversée de chemin refusée ; côté interface, contrôle `schema_version`, parité des clés
-FR/EN/AR et présence d'une traduction pour chaque clé du cas réel.
-
-**Interface** — la surface signalée affichée égale la valeur de `case.json` (unitaire et navigateur) ; la chaîne de
-provenance s'ouvre et se ferme au clavier (Échap) ; un point du graphique se sélectionne au clavier ; mesures absentes
-affichées « non mesuré » avec raison ; état « aucune observation » ; erreur d'API expliquée ; repli sans WebGL.
-
-**Hors ligne** — le parcours e2e bloque toute requête qui ne vise pas le service local : aucune n'a été émise
-(polices, worker MapLibre, fond Sentinel-2 et couches sont servis localement). Le fond OpenStreetMap n'est chargé
-que si l'utilisateur le choisit.
-
-## Inspection visuelle
-
-Captures examinées (dossier local `.playwright-mcp/`, non versionné) : anglais 1440 px, français 1280 et 820 px,
-arabe 390 px (RTL : titre, navigation, carte, légendes). Pas de défilement horizontal de page à 390 px (mesuré).
-Corrections faites après inspection : carte trop petite sur mobile, attribution qui masquait la carte, contraste
-des signalements (cyan sur fond Sentinel-2 désaturé), ajustement de la carte à la fenêtre d'étude.
+L'application et le serveur local (`python -m nasa_in_mining serve`) fonctionnent sans accès Internet : l'API lit les
+résultats publiés dans `cases/*/output/` ; polices, worker MapLibre, fonds Sentinel-2 datés et couches sont servis
+localement. Le fond OpenStreetMap n'est chargé que sur choix explicite. Les parcours Playwright bloquent toute requête
+hors du service local et vérifient qu'aucune n'est émise. Recalculer l'étude, en revanche, demande les données
+(`data/`) et, pour NISAR, un jeton Earthdata.
 
 ## Limites connues
 
-- Les aperçus de cohérence (`coh_*.png`, 12 Mo) ne sont pas versionnés : sur une copie sans données, l'interface
-  signale « image de couche absente » pour cette seule couche.
-- Accessibilité vérifiée par structure (rôles, libellés, focus visible, clavier) et inspection, pas par un audit
-  outillé (axe) ni par un lecteur d'écran.
-- Les PDF imprimés ne sont pas testés automatiquement ; la feuille de style d'impression masque la carte (les
-  couches restent téléchargeables) et développe les tableaux.
-- Le build MapLibre dépasse 1 Mo ; pas de découpage supplémentaire.
+- Audit axe automatisé seulement ; pas de test avec lecteur d'écran.
+- Le rendu PDF d'impression n'est pas comparé à une référence ; le test vérifie la présence de la carte statique,
+  de la légende, des sources et des limites.
+- Les exécutions locales (`runs/`) ne sont pas versionnées ; seule l'exécution publiée l'est.

@@ -356,5 +356,17 @@ class Api(unittest.TestCase):
         self.assertEqual((r.status_code, r.json()["error"]), (500, "contract_violation"))
 
 
+
+class Documentation(unittest.TestCase):
+    def test_result_tables_match_the_recorded_case(self):
+        import subprocess
+        import sys
+        if not (ROOT / "cases" / "benguerir" / "output" / "case.json").exists():
+            self.skipTest("no recorded case")
+        r = subprocess.run([sys.executable, str(ROOT / "scripts" / "report_tables.py"), "--check"], cwd=ROOT,
+                           capture_output=True, text=True)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+
+
 if __name__ == "__main__":
     unittest.main()

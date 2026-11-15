@@ -1,6 +1,6 @@
 # Feuille de route décisionnelle — NASA in Mining
 
-Version 2 — 15 novembre 2026 (v1 : plan initial ; v2 : états après exécution de D0–D6). Ce document est tenu à jour à chaque jalon. Les choix importants et leur
+Version 3 — 15 novembre 2026 (v1 : plan initial ; v2 : états après D0–D6 ; v3 : itération de robustesse, section finale). Ce document est tenu à jour à chaque jalon. Les choix importants et leur
 historique sont consignés dans [DECISIONS.md](DECISIONS.md).
 
 Il ne s'agit pas d'un calendrier. Chaque ligne décrit une décision, les preuves qui la fondent, le critère qui
@@ -103,3 +103,30 @@ chaque valeur, et les limites sont visibles dans l'interface (étape 4).
 | D3 | seulement 6 paires comparables avec le filtre nuages de tuile à 10 % | validité mesurée dans la fenêtre, écart 8 jours : 10 paires |
 | D3b | bruit LOS du même ordre que les valeurs du périmètre | LOS non interprétée |
 | D2 | accès Earthdata absent localement | jeton d'équipe NASA_SAR utilisé sur arbitrage de l'utilisateur |
+
+## Itération 2 — robustesse scientifique, reproductibilité, interface
+
+Branche `feature/benguerir-robustness-v2`, référence v1 = commit `1a15171`. Décisions de cadrage prises par
+l'utilisateur : Benguerir reste une étude exploratoire ; Python/FastAPI/React conservés ; P0 fiabilité, P1 interface
+et hors ligne ; GCOV et interprétation LOS reportés ; aucun objectif d'augmenter les chiffres. Comparaison chiffrée :
+[docs/COMPARISON_V1_V2.md](docs/COMPARISON_V1_V2.md).
+
+| ID | Décision | Preuves | Critère de passage | Dépendances | Repli | État |
+|---|---|---|---|---|---|---|
+| R1 (P0) | Observable renommé « faible cohérence relative au témoin » ; équivalences 1/0 retirées ; contributions expliquées | relecture des textes v1 (FR/EN/AR) | aucun texte ne parle de « perte » ou de « surface identique » sans calcul temporel | — | — | **franchi** |
+| R2 (P0) | Seuil calibré sur une moitié du témoin, évalué sur l'autre ; 3 quantiles × 4 témoins ; bootstrap par blocs de 1 km justifié par l'autocorrélation | autocorrélation 0,02 à 1 km ; sorties v2 | chaque paire porte taux évalué, IC, sensibilités ; aucune optimisation du seuil | WorldCover (témoins d'occupation du sol) | anneau seul si WorldCover absent | **franchi** — l'excès ne tient qu'aux quantiles ≤ 1 % |
+| R3 (P0) | Sentinel-2 : radiométrie vérifiée (DN/10000), SCL 2 exclu / 7 douteux, recherche complète paginée, couverture mesurée dans les zones, stricte ≤ 3 j séparée de l'exploratoire ≤ 8 j | comparaison Earth Search / Planetary Computer (écart 1000 DN) ; 83 items, 41 scènes 29SPR | tables 2 × 2, proportions, IC, Jaccard publiés ; absence de comparaison motivée par critères | accès public Earth Search | — | **franchi**, 3 comparaisons strictes seulement |
+| R4 (P0) | 12 et 24 jours séparés ; orbites comparées sur fenêtres appariées ; répétition avec observations, lacunes, paires disjointes ; zones appariées par recouvrement | sorties v2 | aucune synthèse ne mélange 12 et 24 j ; aucune ligne ne traverse une lacune | — | — | **franchi** |
+| R5 (P0) | Contrôle de cohérence séparé du contrôle de phase ; masque NISAR vérifié par produit ; manifeste haché à la lecture ; caches à clé ; exécution dans `runs/` publiée après vérification ; contrat 2.0 durci ; types TS générés ; validation à l'exécution | 218 entrées / 102 sorties vérifiées ; tests corrompu / obsolète / manquant | deux exécutions identiques ; publication refusée si un fichier manque | — | — | **franchi** |
+| R6 (P0) | Conclusions générées par règles ; niveau de preuve à critères fixés d'avance ; tests contradictoires | `findings.py`, `FindingRules` | aucune promotion sur rapport médian ; maturité produit ≠ validation | R2–R4 | — | **franchi** ; « associé à une observation indépendante » atteint au minimum (3/3) |
+| R7 (P1) | Démonstration complète après clonage : aperçus de cohérence versionnés (64 niveaux) ; tous les fichiers référencés vérifiés | test `test_recorded_case_and_every_referenced_file` ; copie propre | l'application démarre sans `data/` ni jeton, sans requête externe | R5 | — | voir `docs/SOFTWARE_VALIDATION.md` |
+| R8 (P1) | Lecture des preuves : dates radar/optiques, périmètre daté, sensibilités, proportions absolues, limites près des résultats, URL partageable, fonds datés, fiches par zone | parcours navigateur | un lecteur suit chaque chiffre jusqu'à sa paire et ses fichiers | R1–R6 | tableaux si WebGL absent | **franchi** |
+| R9 (P1) | Accessibilité et impression : axe et clavier en 3 langues, focus piégé et rendu, `inert`, erreurs de carte annoncées, carte statique imprimée | 10 parcours Playwright | aucune violation axe sérieuse ou critique | R8 | — | **franchi** (pas de test lecteur d'écran) |
+| R10 (P2) | Collections validées réinterrogées (aucun GUNW validé) ; versions de périmètre conservées ; aucune extension d'emprise ; fiches de vérification ; GCOV et LOS documentés comme étapes conditionnelles | inventaires du 2026-11-15 ; `docs/NEXT_STEPS.md` | rien n'est traité avant la clôture de P0 | données futures | — | **préparé** |
+
+### Décision de présentation (v2)
+
+L'étude se présente comme **étude exploratoire calculée, avec associations entre observations et limites
+explicites**. Le logiciel, la reproductibilité et l'accessibilité automatisée satisfont leurs critères ; la validation
+scientifique ne les satisfait pas (pas de terrain, produits provisoires, 3 comparaisons strictes), et l'interface le dit
+en tête de page.
