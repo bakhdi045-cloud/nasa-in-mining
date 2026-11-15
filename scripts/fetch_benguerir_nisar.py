@@ -57,7 +57,7 @@ def main() -> None:
         (inv_dir / f"{coll}.json").write_text(json.dumps(
             {"collection": coll, "searched_utc": searched, "bbox_wgs84": wgs, "n": len(grans),
              "note": "catalogue presence only; download and usability are recorded separately",
-             "granules": [g.to_dict() for g in grans]}, indent=1), encoding="utf-8")
+             "granules": [g.to_dict() for g in grans]}, indent=1), encoding="utf-8", newline="\n")
         print(f"{coll}: {len(grans)} granules", flush=True)
         if coll.startswith("NISAR_L2_GUNW"):
             gunw += grans
@@ -75,7 +75,7 @@ def main() -> None:
             log.append({"granule_id": g.granule_id, "status": "failed", "error": f"{type(exc).__name__}: {exc}"})
             print("FAILED", g.granule_id, type(exc).__name__, exc, flush=True)
     (inv_dir / "gunw_extraction_log.json").write_text(json.dumps(
-        {"run_utc": searched, "window_utm": utm, "epsg": EPSG, "items": log}, indent=1), encoding="utf-8")
+        {"run_utc": searched, "window_utm": utm, "epsg": EPSG, "items": log}, indent=1), encoding="utf-8", newline="\n")
 
 
 if __name__ == "__main__":

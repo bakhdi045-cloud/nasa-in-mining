@@ -130,8 +130,8 @@ def write_csv(path: Path, rows: list[dict]) -> str:
     keys: list[str] = []
     for r in rows:
         keys += [k for k in r if k not in keys]
-    with open(path, "w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=keys)
+    with open(path, "w", newline="", encoding="utf-8") as f:     # LF line ends: hashes match a Git checkout
+        w = csv.DictWriter(f, fieldnames=keys, lineterminator="\n")
         w.writeheader()
         for r in rows:
             w.writerow({k: ("" if r.get(k) is None else r.get(k)) for k in keys})
@@ -140,5 +140,5 @@ def write_csv(path: Path, rows: list[dict]) -> str:
 
 def write_json(path: Path, data) -> str:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=1, allow_nan=False), encoding="utf-8")
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=1, allow_nan=False), encoding="utf-8", newline="\n")
     return sha256(path)

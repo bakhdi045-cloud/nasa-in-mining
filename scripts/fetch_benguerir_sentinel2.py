@@ -38,7 +38,7 @@ def main() -> None:
     out.write_text(json.dumps({"catalogue": sentinel2.STAC, "collection": "sentinel-2-l2a", "tile": TILE,
                                "searched_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
                                "period": [START, END], "max_cloud_pct": MAX_CLOUD, "window_utm": utm,
-                               "items": log}, indent=1), encoding="utf-8")
+                               "items": log}, indent=1), encoding="utf-8", newline="\n")
 
 
 if __name__ == "__main__":
