@@ -8,7 +8,7 @@ ni importé ni modifié ; les 16 fichiers extraits gardent les empreintes de `UP
 
 | Contrôle | Commande | Résultat |
 |---|---|---|
-| Tests Python | `.\.venv\Scripts\python.exe -B -m unittest discover -s tests` | voir tableau final ci-dessous |
+| Tests Python | `.\.venv\Scripts\python.exe -B -m unittest discover -s tests` | **71 réussis** (34 hérités, 37 nouveaux) |
 | Tableaux de documentation à jour | `python scripts/report_tables.py --check` | inclus dans les tests Python |
 | Types TypeScript ↔ schéma | `npm run contract` + test Vitest | identiques |
 | Tests unitaires interface | `npm test` (Vitest) | 14 réussis |
@@ -17,7 +17,7 @@ ni importé ni modifié ; les 16 fichiers extraits gardent les empreintes de `UP
 | Accessibilité | axe dans le parcours, FR/EN/AR, deux largeurs | aucune violation sérieuse ou critique |
 | Reproductibilité | deux exécutions réelles (20261115T145514Z et 20261115T150945Z) | 102 fichiers de sortie identiques ; contenu du cas identique hors manifeste |
 | Intégrité | empreintes recalculées à la lecture (218 entrées) et vérifiées avant publication (102 sorties) | conformes |
-| Démarrage depuis une copie propre | voir § ci-dessous | voir § ci-dessous |
+| Démarrage depuis une copie propre | `git clone` de la branche (commit eec51d8), nouvel environnement, sans `data/` ni jeton | 71 tests Python, 14 Vitest, construction et 10 parcours Playwright réussis ; aucune requête externe |
 
 ## Défauts corrigés et tests associés
 
