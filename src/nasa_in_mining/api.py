@@ -132,7 +132,7 @@ def create_app(cases_root: str | Path | None = None, web_dist: str | Path | None
             candidate = (dist / full).resolve()
             if full and dist in candidate.parents and candidate.is_file():
                 return FileResponse(candidate)
-            return FileResponse(dist / "index.html")
+            return FileResponse(dist / "index.html", headers={"Cache-Control": "no-cache"})   # always pick up a rebuilt interface
 
     return app
 

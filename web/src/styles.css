@@ -297,3 +297,7 @@ html { scroll-behavior: smooth; }
   .presentation, .inline-limits { break-inside: avoid; }
   .dossier { break-inside: avoid; }
 }
+
+/* numbers with units and intervals read left to right inside Arabic text */
+[dir="rtl"] .value__num, [dir="rtl"] .value__ci, [dir="rtl"] td, [dir="rtl"] .legend__ticks span { unicode-bidi: isolate; }
+[dir="rtl"] .value__num, [dir="rtl"] .value__ci { direction: ltr; }
