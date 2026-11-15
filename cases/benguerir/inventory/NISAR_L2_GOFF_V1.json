@@ -1,0 +1,13 @@
+{
+ "collection": "NISAR_L2_GOFF_V1",
+ "searched_utc": "2026-11-15T02:48:01+00:00",
+ "bbox_wgs84": [
+  -7.913499502600662,
+  32.164121536460875,
+  -7.741689447311278,
+  32.34798962039192
+ ],
+ "n": 0,
+ "note": "catalogue presence only; download and usability are recorded separately",
+ "granules": []
+}

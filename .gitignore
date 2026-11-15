@@ -17,3 +17,12 @@ outputs/
 *.npz
 *.zip
 !tests/fixtures/
+# web
+web/node_modules/
+web/dist/
+web/test-results/
+web/playwright-report/
+.playwright-mcp/
+# regenerated locally from the cropped products (about 0.8 MB each); other case outputs are versioned
+cases/*/output/layers/coh_*.png
+!cases/*/output/rasters/*.tif

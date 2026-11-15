@@ -1,0 +1,59 @@
+{
+ "collection": "NISAR_L2_GCOV_V1",
+ "searched_utc": "2026-11-15T02:48:01+00:00",
+ "bbox_wgs84": [
+  -7.913499502600662,
+  32.164121536460875,
+  -7.741689447311278,
+  32.34798962039192
+ ],
+ "n": 3,
+ "note": "catalogue presence only; download and usability are recorded separately",
+ "granules": [
+  {
+   "collection": "NISAR_L2_GCOV_V1",
+   "concept_id": "G4406084628-ASF",
+   "granule_id": "NISAR_L2_PR_GCOV_034_023_D_072_4005_DHDH_A_20261025T191958_20261025T192033_P05036_N_F_J_001",
+   "time_start": "2026-10-25T19:19:58.000Z",
+   "time_end": "2026-10-25T19:20:33.999Z",
+   "updated": "2026-11-09T02:50:57.474Z",
+   "size_mb": 5834.772025108337,
+   "data_url": "https://nisar.asf.earthdatacloud.nasa.gov/NISAR/NISAR_L2_GCOV_V1/NISAR_L2_PR_GCOV_034_023_D_072_4005_DHDH_A_20261025T191958_20261025T192033_P05036_N_F_J_001/NISAR_L2_PR_GCOV_034_023_D_072_4005_DHDH_A_20261025T191958_20261025T192033_P05036_N_F_J_001.h5",
+   "footprint": [
+    [
+     "34.10233 -9.07391 31.98175 -9.78339 31.33 -7.1886 33.43822 -6.43762 34.10233 -9.07391"
+    ]
+   ]
+  },
+  {
+   "collection": "NISAR_L2_GCOV_V1",
+   "concept_id": "G4407437430-ASF",
+   "granule_id": "NISAR_L2_PR_GCOV_034_044_A_018_4005_DHDH_A_20261027T054640_20261027T054715_P05036_N_F_J_001",
+   "time_start": "2026-10-27T05:46:40.000Z",
+   "time_end": "2026-10-27T05:47:15.999Z",
+   "updated": "2026-11-10T11:22:56.546Z",
+   "size_mb": 5974.59123134613,
+   "data_url": "https://nisar.asf.earthdatacloud.nasa.gov/NISAR/NISAR_L2_GCOV_V1/NISAR_L2_PR_GCOV_034_044_A_018_4005_DHDH_A_20261027T054640_20261027T054715_P05036_N_F_J_001/NISAR_L2_PR_GCOV_034_044_A_018_4005_DHDH_A_20261027T054640_20261027T054715_P05036_N_F_J_001.h5",
+   "footprint": [
+    [
+     "31.9147 -6.24691 34.04359 -6.92155 33.38242 -9.5481 31.27662 -8.78819 31.9147 -6.24691"
+    ]
+   ]
+  },
+  {
+   "collection": "NISAR_L2_GCOV_V1",
+   "concept_id": "G4408178338-ASF",
+   "granule_id": "NISAR_L2_PR_GCOV_035_023_D_072_4005_DHDH_A_20261106T191958_20261106T192028_P05036_N_F_J_001",
+   "time_start": "2026-11-06T19:19:58.000Z",
+   "time_end": "2026-11-06T19:20:28.999Z",
+   "updated": "2026-11-11T06:26:36.802Z",
+   "size_mb": 4987.9650411605835,
+   "data_url": "https://nisar.asf.earthdatacloud.nasa.gov/NISAR/NISAR_L2_GCOV_V1/NISAR_L2_PR_GCOV_035_023_D_072_4005_DHDH_A_20261106T191958_20261106T192028_P05036_N_F_J_001/NISAR_L2_PR_GCOV_035_023_D_072_4005_DHDH_A_20261106T191958_20261106T192028_P05036_N_F_J_001.h5",
+   "footprint": [
+    [
+     "34.12221 -9.05592 32.29649 -9.66931 31.6465 -7.08304 33.46027 -6.42888 34.12221 -9.05592"
+    ]
+   ]
+  }
+ ]
+}

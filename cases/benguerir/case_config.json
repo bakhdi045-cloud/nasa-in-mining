@@ -1,0 +1,76 @@
+{
+  "case_id": "benguerir-2026-coherence",
+  "data_nature": "real",
+  "site": {
+    "id": "benguerir",
+    "name": "Benguerir (Ben Guerir) phosphate mine",
+    "country": "MA",
+    "commodity": "phosphate",
+    "operator": null,
+    "centroid": [-7.8275, 32.2560],
+    "description_key": "site.benguerir"
+  },
+  "zones_file": "zones.geojson",
+  "epsg": 32629,
+  "radar": {
+    "level": "GUNW",
+    "crid": "P05023",
+    "coherence_layer": "wrappedInterferogram_HH_coherenceMagnitude.tif",
+    "mask_layer": "wrappedInterferogram_mask.tif"
+  },
+  "method": {
+    "control_quantile": 0.01,
+    "sensitivity_quantiles": [0.005, 0.05],
+    "min_cluster_km2": 0.01,
+    "clusters_shown": 12,
+    "recurrence_span_days": 12,
+    "frequent_threshold": 0.5
+  },
+  "optical": {
+    "dir": "S2",
+    "max_gap_days": 8,
+    "min_valid_fraction": 0.9,
+    "quantile": 0.99
+  },
+  "los": {
+    "coherence_min": 0.3,
+    "sigma_factor": 3,
+    "min_control_pixels": 500,
+    "display_limit_cm": 3
+  },
+  "references": [
+    {
+      "id": "sentinel2-l2a",
+      "kind": "optical_imagery",
+      "name": "Sentinel-2 L2A, tile 29SPR (Copernicus)",
+      "provider": "ESA / Copernicus; distributed by Earth Search (Element 84, AWS Open Data)",
+      "license": "Copernicus Sentinel data terms: free, full and open; attribution 'Contains modified Copernicus Sentinel data 2026'",
+      "url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a",
+      "dates": [],
+      "supports_key": "reference.s2.supports",
+      "cannot_support_key": "reference.s2.cannot"
+    },
+    {
+      "id": "osm-quarry",
+      "kind": "map",
+      "name": "OpenStreetMap way 638354631 (landuse=quarry)",
+      "provider": "OpenStreetMap contributors",
+      "license": "ODbL-1.0",
+      "url": "https://www.openstreetmap.org/way/638354631",
+      "dates": ["2018-10-26", "2020-02-07", "2020-02-10"],
+      "supports_key": "reference.osm.supports",
+      "cannot_support_key": "reference.osm.cannot"
+    },
+    {
+      "id": "nisar-gunw-spec",
+      "kind": "documentation",
+      "name": "NISAR L2 GUNW product (Provisional V1), DOI 10.5067/NIL2GUNW-P1",
+      "provider": "NASA JPL / ASF DAAC",
+      "license": "NASA open data policy",
+      "url": "https://doi.org/10.5067/NIL2GUNW-P1",
+      "dates": [],
+      "supports_key": "reference.nisar.supports",
+      "cannot_support_key": "reference.nisar.cannot"
+    }
+  ]
+}
