@@ -1,5 +1,5 @@
 {
-  "case_id": "benguerir-2026-coherence",
+  "case_id": "benguerir-2026-low-coherence",
   "data_nature": "real",
   "site": {
     "id": "benguerir",
@@ -7,7 +7,10 @@
     "country": "MA",
     "commodity": "phosphate",
     "operator": null,
-    "centroid": [-7.8275, 32.2560],
+    "centroid": [
+      -7.8275,
+      32.256
+    ],
     "description_key": "site.benguerir"
   },
   "zones_file": "zones.geojson",
@@ -19,17 +22,38 @@
     "mask_layer": "wrappedInterferogram_mask.tif"
   },
   "method": {
-    "control_quantile": 0.01,
-    "sensitivity_quantiles": [0.005, 0.05],
+    "quantiles": [
+      0.005,
+      0.01,
+      0.05
+    ],
+    "main_quantile": 0.01,
+    "calibration_block_m": 1000,
+    "block_m": 1000,
+    "block_sizes_m": [
+      500,
+      1000,
+      2000
+    ],
+    "min_median_coherence": 0.15,
+    "min_valid_fraction": 0.5,
     "min_cluster_km2": 0.01,
     "clusters_shown": 12,
     "recurrence_span_days": 12,
-    "frequent_threshold": 0.5
+    "min_observed_pairs": 3,
+    "zone_overlap_min": 0.5,
+    "min_overlap_days": 6,
+    "coherence_preview_levels": 64,
+    "max_dossiers": 10,
+    "block_justification": "Median autocorrelation of the flag indicator in the control ring (v2 run, 15 pairs): 0.37 at 20 m, 0.12 at 100 m, 0.07 at 250 m, 0.04 at 500 m, 0.02 at 1 km and 2 km. Blocks of 1 km keep the correlation between neighbouring blocks near 0.02; 500 m and 2 km are reported as sensitivity. The study perimeter holds about 40 blocks of 1 km and 10 blocks of 2 km, so 2 km intervals are less reliable."
   },
   "optical": {
     "dir": "S2",
-    "max_gap_days": 8,
-    "min_valid_fraction": 0.9,
+    "strict_gap_days": 3,
+    "exploratory_gap_days": 8,
+    "min_clear_study": 0.9,
+    "min_clear_control": 0.8,
+    "min_joint_fraction": 0.8,
     "quantile": 0.99
   },
   "los": {
@@ -44,7 +68,7 @@
       "kind": "optical_imagery",
       "name": "Sentinel-2 L2A, tile 29SPR (Copernicus)",
       "provider": "ESA / Copernicus; distributed by Earth Search (Element 84, AWS Open Data)",
-      "license": "Copernicus Sentinel data terms: free, full and open; attribution 'Contains modified Copernicus Sentinel data 2026'",
+      "license": "Copernicus Sentinel data terms: free, full and open; 'Contains modified Copernicus Sentinel data 2026'",
       "url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a",
       "dates": [],
       "supports_key": "reference.s2.supports",
@@ -57,7 +81,11 @@
       "provider": "OpenStreetMap contributors",
       "license": "ODbL-1.0",
       "url": "https://www.openstreetmap.org/way/638354631",
-      "dates": ["2018-10-26", "2020-02-07", "2020-02-10"],
+      "dates": [
+        "2018-10-26",
+        "2020-02-07",
+        "2020-02-10"
+      ],
       "supports_key": "reference.osm.supports",
       "cannot_support_key": "reference.osm.cannot"
     },
@@ -71,6 +99,19 @@
       "dates": [],
       "supports_key": "reference.nisar.supports",
       "cannot_support_key": "reference.nisar.cannot"
+    },
+    {
+      "id": "esa-worldcover",
+      "kind": "land_cover",
+      "name": "ESA WorldCover 10 m 2021 v200 (tile N30W009)",
+      "provider": "ESA WorldCover consortium",
+      "license": "CC BY 4.0",
+      "url": "https://esa-worldcover.org/en",
+      "dates": [
+        "2021"
+      ],
+      "supports_key": "reference.worldcover.supports",
+      "cannot_support_key": "reference.worldcover.cannot"
     }
   ]
 }

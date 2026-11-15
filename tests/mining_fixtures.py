@@ -6,6 +6,7 @@ constant 0.8, so the control 1 % quantile equals 0.8 and only pixels set lower a
 """
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 import shutil
@@ -68,17 +69,23 @@ def _product(data: Path, a: str, b: str, coh20: np.ndarray, mask20: np.ndarray, 
     s.write_tif(folder / "unwrappedInterferogram_HH_coherenceMagnitude.tif", np.full((N80, N80), 0.8, "float32"), t80, f"EPSG:{EPSG}")
     s.write_tif(folder / "unwrappedInterferogram_HH_connectedComponents.tif", np.ones((N80, N80), "uint16"), t80, f"EPSG:{EPSG}")
     np.savez_compressed(folder / "radar_geometry.npz", centerFrequency=s.FREQ)
-    files = {p.name: {"sha256": "0" * 64, "spacing_m": [20.0, -20.0], "units": "1"} for p in folder.glob("*.tif")}
+    sha = lambda f: hashlib.sha256(f.read_bytes()).hexdigest()  # noqa: E731
+    mask_desc = ("SYNTHETIC. Bits 0-7 represent subswath encoding (water, reference, secondary digits). "
+                 "Bits 8-15 represent bitwise anomaly flags for the secondary RSLC.")
+    files = {f.name: {"sha256": sha(f), "spacing_m": [20.0, -20.0], "units": "1",
+                      "description": mask_desc if "mask" in f.name else "synthetic"} for f in folder.glob("*.tif")}
     (folder / "provenance.json").write_text(json.dumps({
         "granule_id": folder.name, "source_url": f"https://example.invalid/SYNTHETIC/{folder.name}.h5",
         "layers": files, "identification": {"productVersion": "synthetic", "referenceZeroDopplerStartTime": f"{a[:4]}-{a[4:6]}-{a[6:]}T05:38:52",
                                              "secondaryZeroDopplerStartTime": f"{b[:4]}-{b[4:6]}-{b[6:]}T05:38:52"},
-        "processing": {"wrapped_azimuth_looks": 6, "wrapped_range_looks": 5}, "bytes_transferred": 0}), encoding="utf-8")
+        "processing": {"wrapped_azimuth_looks": 6, "wrapped_range_looks": 5}, "bytes_transferred": 0,
+        "files": {**{k: v["sha256"] for k, v in files.items()}, "radar_geometry.npz": sha(folder / "radar_geometry.npz")}}),
+        encoding="utf-8")
     (folder / "_DONE").write_text("{}", encoding="utf-8")
     return folder
 
 
-def write_data(data: Path, incompatible: bool = False, rejected: bool = False) -> Path:
+def write_data(data: Path, incompatible: bool = False, rejected: bool = False, flat_phase_only: bool = False) -> Path:
     if data.exists():
         shutil.rmtree(data)
     for i, (a, b) in enumerate(DATES):
@@ -89,6 +96,8 @@ def write_data(data: Path, incompatible: bool = False, rejected: bool = False) -
         if i == 2:
             coh[CHANGE_ROWS, CHANGE_COLS] = 0.0           # a measured zero coherence, not missing data
         coh[NODATA_ROWS, NODATA_COLS] = np.nan            # not observed in every pair
-        _product(data, a, b, coh, mask, flat=rejected and i == 0,
+        if rejected and i == 0:
+            coh[:] = 0.01                                  # a defective product: near-zero coherence everywhere
+        _product(data, a, b, coh, mask, flat=(rejected or flat_phase_only) and i == 0,
                  shape20=(N20 + 5, N20) if incompatible and i == 2 else None)
     return data

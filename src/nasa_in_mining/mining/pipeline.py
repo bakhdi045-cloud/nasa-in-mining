@@ -312,6 +312,10 @@ def run(case_dir: Path, data_dir: Path, repo_root: Path | None = None, publish: 
         log(p.folder / "radar_geometry.npz", role="radar_geometry", declared=prov["files"]["radar_geometry.npz"])
         coh, cgrid = _read(coh_path)
         mask, mgrid = _read(mask_path)
+        grid_ok = _same_grid(cgrid, grid) and _same_grid(mgrid, grid)
+        if not grid_ok:                       # never resampled: compared on the analysis grid or not at all
+            coh = np.full(grid["shape"], np.nan, "float32")
+            mask = np.zeros(grid["shape"], "uint32")
         coh = coh.astype("float32")
         base_valid = cc.mask_valid(mask) & np.isfinite(coh)
         anomaly = cc.anomaly_flags(mask) & base_valid
@@ -319,15 +323,25 @@ def run(case_dir: Path, data_dir: Path, repo_root: Path | None = None, publish: 
         analysed = Z["study"] | Z["control"]
         vfrac = float(valid[analysed].mean())
         med = float(np.median(coh[valid & analysed])) if (valid & analysed).any() else None
+        low = mask.astype("int64") & 0xFF
+        sec_bad = float(((low % 10) == 0)[analysed].mean())
+        ref_bad = float((((low // 10) % 10) == 0)[analysed].mean())
+        water = float((((low // 100) % 10) != 0)[analysed].mean())
+        all_coh = coh[analysed & np.isfinite(coh)]
         reasons = []
-        if med is None or med < mcfg["min_median_coherence"]:
-            reasons.append(f"median coherence {med if med is not None else float('nan'):.2f} below "
-                           f"{mcfg['min_median_coherence']} in the analysed zones")
-        if vfrac < mcfg["min_valid_fraction"]:
+        if ref_bad >= 0.5:
+            reasons.append(f"product mask: reference acquisition ({_date(p.ref)}) marked invalid on {ref_bad:.0%} of the analysed zones")
+        if sec_bad >= 0.5:
+            reasons.append(f"product mask: secondary acquisition ({_date(p.sec)}) marked invalid on {sec_bad:.0%} of the analysed zones")
+        if vfrac < mcfg["min_valid_fraction"] and not reasons:
             reasons.append(f"valid fraction {vfrac:.2f} below {mcfg['min_valid_fraction']} in the analysed zones")
+        if med is not None and med < mcfg["min_median_coherence"]:
+            reasons.append(f"median coherence {med:.2f} below {mcfg['min_median_coherence']} in the analysed zones")
         coh_qc = QualityCheck(ok=not reasons, reasons=reasons,
                               metrics={"median_coherence_zones": None if med is None else round(med, 4),
-                                       "valid_fraction_zones": round(vfrac, 4),
+                                       "median_coherence_unmasked": None if not all_coh.size else round(float(np.median(all_coh)), 4),
+                                       "valid_fraction_zones": round(vfrac, 4), "reference_invalid_fraction": round(ref_bad, 4),
+                                       "secondary_invalid_fraction": round(sec_bad, 4), "water_fraction": round(water, 4),
                                        "anomaly_pixels_zones": int(anomaly[analysed].sum())})
         q = quality.check(p)
         phase_qc = QualityCheck(ok=q["ok"], reasons=q["reasons"],
@@ -348,9 +362,10 @@ def run(case_dir: Path, data_dir: Path, repo_root: Path | None = None, publish: 
                     secondary_date=_date(p.sec), span_days=p.span_days)
         empty = dict(main=None, zones=[], profiles=[], statistical=absent("fraction", "pair not analysed", "not_measured"),
                      perimeter_sensitivity={}, zone_stability={}, n_clusters=None, clusters_shown=[], layer_ids=[], optical=[])
-        if not (_same_grid(cgrid, grid) and _same_grid(mgrid, grid)):
+        if not grid_ok:
             pairs.append(PairResult(**base, **empty, status="incompatible_grid",
                                     reasons=["coherence or mask grid differs from the analysis grid (no resampling)"]))
+            los_pairs.append(_los_not(p.id, phase_qc.ok, "incompatible grid"))
             continue
         if not coh_qc.ok:
             pairs.append(PairResult(**base, **empty, status="rejected_coherence_qc", reasons=coh_qc.reasons))
@@ -375,7 +390,7 @@ def run(case_dir: Path, data_dir: Path, repo_root: Path | None = None, publish: 
                     study_flagged_area_km2=measured(s["flagged_area_km2"], "km2"),
                     study_flagged_fraction=measured(s["flagged_fraction_of_observable"], "fraction"),
                     ratio_to_evaluation_rate=maybe(ratio, "ratio", "zero flag rate in the evaluation part of the control"),
-                    exceeds_control=None if ratio is None else bool(s["flagged_fraction_of_observable"] > r["evaluation_rate"])))
+                    exceeds_control=bool(s["flagged_fraction_of_observable"] > r["evaluation_rate"])))
         if main_profile not in flags_by:
             pairs.append(PairResult(**base, **empty, status="insufficient_control",
                                     reasons=["too few valid pixels in the calibration or evaluation part of the ring control"]))

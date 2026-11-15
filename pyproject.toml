@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nasa-in-mining"
-version = "0.2.0"
+version = "0.3.0"
 description = "NISAR observation of mining sites: polygon coherence-change case study, API and web interface"
 readme = "README.md"
 requires-python = ">=3.10"

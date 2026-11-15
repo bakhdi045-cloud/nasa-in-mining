@@ -408,6 +408,12 @@ class ValidationItem(Strict):
     evidence_keys: list[str]
     missing_keys: list[str]
 
+    @model_validator(mode="after")
+    def _field_truth(self):
+        if self.level == "independently_validated" and "evidence.field_truth" not in self.evidence_keys:
+            raise ValueError("independent validation requires recorded field truth")
+        return self
+
 
 class Finding(Strict):
     id: str

@@ -28,7 +28,7 @@ def json_safe(value):
 
 def _parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(description="Standalone NISAR mining processing; no data download is automatic.")
-    p.add_argument("--version", action="version", version="nasa-in-mining 0.2.0")
+    p.add_argument("--version", action="version", version="nasa-in-mining 0.3.0")
     sub = p.add_subparsers(dest="command", required=True)
     sub.add_parser("capabilities", help="list the extracted processing capabilities")
     sub.add_parser("doctor", help="report installed runtime dependencies")
@@ -54,7 +54,8 @@ def _parser() -> argparse.ArgumentParser:
     roi.add_argument("--absolute", action="store_true")
     run = sub.add_parser("case-run", parents=[common], help="run the polygon mining-case pipeline (precomputed results)")
     run.add_argument("--case", type=Path, required=True, help="case folder holding case_config.json and zones")
-    run.add_argument("--out", type=Path, help="output folder (default: <case>/output)")
+    run.add_argument("--no-publish", action="store_true",
+                     help="keep the verified run in <case>/runs/<run_id>/ without publishing it to <case>/output")
     sch = sub.add_parser("contract-schema", help="write the MiningCase JSON schema")
     sch.add_argument("--out", type=Path, required=True)
     srv = sub.add_parser("serve", help="serve recorded cases and the web interface (offline capable)")
@@ -82,7 +83,7 @@ def main(argv: list[str] | None = None) -> int:
     exit_code = 0
     try:
         if args.command == "capabilities":
-            result = {"project": "nasa-in-mining", "version": "0.2.0", "recipes": RECIPES,
+            result = {"project": "nasa-in-mining", "version": "0.3.0", "recipes": RECIPES,
                       "helpers": ["catalog", "raster", "quality", "uncertainty", "corrections", "wavelength",
                                   "decomposition", "exposure", "polygon_statistics"],
                       "limits": ["No ore discovery, grade, production or rupture prediction.",
@@ -107,11 +108,12 @@ def main(argv: list[str] | None = None) -> int:
         elif args.command == "case-run":
             from .mining import pipeline
             data = args.data or Path(os.environ.get("MINING_DATA", "data"))
-            case = pipeline.run(args.case, data, args.out)
+            case = pipeline.run(args.case, data, publish=not args.no_publish)
             result = {"case_id": case.case_id, "processing_status": case.processing.status,
                       "pairs": len(case.pairs), "pairs_ok": sum(1 for p in case.pairs if p.status == "ok"),
                       "validation": {v.observable: v.level for v in case.validation},
-                      "output": str(args.out or args.case / "output")}
+                      "run_id": case.run_id, "run_folder": str(args.case / "runs" / case.run_id),
+                      "published": not args.no_publish}
             exit_code = 0 if case.processing.status in ("complete", "partial") else 2
         elif args.command == "contract-schema":
             from .mining.contract import MiningCase

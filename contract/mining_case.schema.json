@@ -66,6 +66,28 @@
      ],
      "title": "Product Version"
     },
+    "product_specification_version": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Product Specification Version"
+    },
+    "software_version": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Software Version"
+    },
     "processing_datetime": {
      "anyOf": [
       {
@@ -124,8 +146,11 @@
      "title": "Looks",
      "type": "object"
     },
-    "quality": {
-     "$ref": "#/$defs/PairQuality"
+    "coherence_qc": {
+     "$ref": "#/$defs/QualityCheck"
+    },
+    "phase_qc": {
+     "$ref": "#/$defs/QualityCheck"
     }
    },
    "required": [
@@ -142,13 +167,16 @@
     "secondary_time",
     "span_days",
     "product_version",
+    "product_specification_version",
+    "software_version",
     "processing_datetime",
     "doi",
     "source_url",
     "bytes_transferred",
     "layers",
     "looks",
-    "quality"
+    "coherence_qc",
+    "phase_qc"
    ],
    "title": "Acquisition",
    "type": "object"
@@ -182,54 +210,41 @@
      "title": "Median Coherence",
      "type": "number"
     },
-    "recurrence_in_other_pairs": {
+    "pairs_same_geometry_overlapping": {
      "anyOf": [
       {
-       "type": "number"
+       "type": "integer"
       },
       {
        "type": "null"
       }
      ],
      "default": null,
-     "title": "Recurrence In Other Pairs"
+     "title": "Pairs Same Geometry Overlapping"
     },
-    "optical_change_fraction": {
+    "pairs_same_geometry_observed": {
      "anyOf": [
       {
-       "type": "number"
+       "type": "integer"
       },
       {
        "type": "null"
       }
      ],
      "default": null,
-     "title": "Optical Change Fraction"
+     "title": "Pairs Same Geometry Observed"
     },
-    "optical_diagnostics": {
+    "retained_at_lower_quantile": {
      "anyOf": [
       {
-       "additionalProperties": {
-        "anyOf": [
-         {
-          "type": "number"
-         },
-         {
-          "type": "string"
-         },
-         {
-          "type": "null"
-         }
-        ]
-       },
-       "type": "object"
+       "type": "boolean"
       },
       {
        "type": "null"
       }
      ],
      "default": null,
-     "title": "Optical Diagnostics"
+     "title": "Retained At Lower Quantile"
     }
    },
    "required": [
@@ -239,6 +254,48 @@
     "median_coherence"
    ],
    "title": "Cluster",
+   "type": "object"
+  },
+  "ControlDef": {
+   "additionalProperties": false,
+   "properties": {
+    "id": {
+     "title": "Id",
+     "type": "string"
+    },
+    "label_key": {
+     "title": "Label Key",
+     "type": "string"
+    },
+    "description": {
+     "title": "Description",
+     "type": "string"
+    },
+    "pixels": {
+     "title": "Pixels",
+     "type": "integer"
+    },
+    "area_km2": {
+     "title": "Area Km2",
+     "type": "number"
+    },
+    "landcover_share": {
+     "additionalProperties": {
+      "type": "number"
+     },
+     "title": "Landcover Share",
+     "type": "object"
+    }
+   },
+   "required": [
+    "id",
+    "label_key",
+    "description",
+    "pixels",
+    "area_km2",
+    "landcover_share"
+   ],
+   "title": "ControlDef",
    "type": "object"
   },
   "CrossGeometry": {
@@ -252,18 +309,26 @@
      "title": "Status",
      "type": "string"
     },
-    "spearman_recurrence_study": {
-     "$ref": "#/$defs/Measurement"
+    "rule": {
+     "title": "Rule",
+     "type": "string"
     },
-    "lift_frequent_change": {
-     "$ref": "#/$defs/Measurement"
+    "matches": {
+     "items": {
+      "$ref": "#/$defs/WindowMatch"
+     },
+     "title": "Matches",
+     "type": "array"
     },
-    "jaccard_frequent_change": {
-     "$ref": "#/$defs/Measurement"
+    "unmatched": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Unmatched",
+     "type": "array"
     },
-    "frequent_threshold": {
-     "title": "Frequent Threshold",
-     "type": "number"
+    "median_jaccard": {
+     "$ref": "#/$defs/Measurement"
     },
     "reason": {
      "anyOf": [
@@ -280,12 +345,123 @@
    },
    "required": [
     "status",
-    "spearman_recurrence_study",
-    "lift_frequent_change",
-    "jaccard_frequent_change",
-    "frequent_threshold"
+    "rule",
+    "matches",
+    "unmatched",
+    "median_jaccard"
    ],
    "title": "CrossGeometry",
+   "type": "object"
+  },
+  "Dossier": {
+   "additionalProperties": false,
+   "description": "Verification sheet for one zone: what was observed, what supports it, what else could explain it.",
+   "properties": {
+    "id": {
+     "title": "Id",
+     "type": "string"
+    },
+    "centroid": {
+     "maxItems": 2,
+     "minItems": 2,
+     "prefixItems": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "number"
+      }
+     ],
+     "title": "Centroid",
+     "type": "array"
+    },
+    "area_km2": {
+     "title": "Area Km2",
+     "type": "number"
+    },
+    "zone": {
+     "title": "Zone",
+     "type": "string"
+    },
+    "landcover": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Landcover"
+    },
+    "observation": {
+     "additionalProperties": {
+      "anyOf": [
+       {
+        "type": "boolean"
+       },
+       {
+        "type": "integer"
+       },
+       {
+        "type": "number"
+       },
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "title": "Observation",
+     "type": "object"
+    },
+    "evidence": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Evidence",
+     "type": "array"
+    },
+    "alternative_keys": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Alternative Keys",
+     "type": "array"
+    },
+    "to_collect_keys": {
+     "items": {
+      "type": "string"
+     },
+     "title": "To Collect Keys",
+     "type": "array"
+    },
+    "dates": {
+     "items": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array"
+     },
+     "title": "Dates",
+     "type": "array"
+    }
+   },
+   "required": [
+    "id",
+    "centroid",
+    "area_km2",
+    "zone",
+    "landcover",
+    "observation",
+    "evidence",
+    "alternative_keys",
+    "to_collect_keys",
+    "dates"
+   ],
+   "title": "Dossier",
    "type": "object"
   },
   "Export": {
@@ -300,7 +476,8 @@
       "csv",
       "geojson",
       "geotiff",
-      "json"
+      "json",
+      "markdown"
      ],
      "title": "Format",
      "type": "string"
@@ -340,6 +517,10 @@
      "type": "string"
     },
     "role": {
+     "title": "Role",
+     "type": "string"
+    },
+    "declared_sha256": {
      "anyOf": [
       {
        "type": "string"
@@ -349,12 +530,13 @@
       }
      ],
      "default": null,
-     "title": "Role"
+     "title": "Declared Sha256"
     }
    },
    "required": [
     "path",
-    "sha256"
+    "sha256",
+    "role"
    ],
    "title": "FileRecord",
    "type": "object"
@@ -377,10 +559,10 @@
         "type": "boolean"
        },
        {
-        "type": "number"
+        "type": "integer"
        },
        {
-        "type": "integer"
+        "type": "number"
        },
        {
         "type": "string"
@@ -402,6 +584,13 @@
       "type": "string"
      },
      "title": "Evidence",
+     "type": "array"
+    },
+    "limit_keys": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Limit Keys",
      "type": "array"
     }
    },
@@ -441,33 +630,16 @@
      "title": "N Pairs",
      "type": "integer"
     },
-    "n_pairs_used": {
-     "title": "N Pairs Used",
+    "n_pairs_analysed": {
+     "title": "N Pairs Analysed",
      "type": "integer"
     },
-    "recurrence_pairs": {
+    "recurrence": {
      "items": {
-      "type": "string"
+      "$ref": "#/$defs/Recurrence"
      },
-     "title": "Recurrence Pairs",
+     "title": "Recurrence",
      "type": "array"
-    },
-    "recurrence_layer_id": {
-     "anyOf": [
-      {
-       "type": "string"
-      },
-      {
-       "type": "null"
-      }
-     ],
-     "title": "Recurrence Layer Id"
-    },
-    "study_area_flagged_ever_km2": {
-     "$ref": "#/$defs/Measurement"
-    },
-    "study_area_flagged_half_or_more_km2": {
-     "$ref": "#/$defs/Measurement"
     }
    },
    "required": [
@@ -477,11 +649,8 @@
     "frame",
     "crid",
     "n_pairs",
-    "n_pairs_used",
-    "recurrence_pairs",
-    "recurrence_layer_id",
-    "study_area_flagged_ever_km2",
-    "study_area_flagged_half_or_more_km2"
+    "n_pairs_analysed",
+    "recurrence"
    ],
    "title": "GeometrySummary",
    "type": "object"
@@ -498,8 +667,7 @@
       "observation",
       "derived",
       "reference",
-      "basemap",
-      "zones"
+      "basemap"
      ],
      "title": "Kind",
      "type": "string"
@@ -512,13 +680,16 @@
      "additionalProperties": {
       "anyOf": [
        {
-        "type": "string"
+        "type": "boolean"
        },
        {
         "type": "integer"
        },
        {
         "type": "number"
+       },
+       {
+        "type": "string"
        },
        {
         "type": "null"
@@ -533,33 +704,17 @@
      "type": "string"
     },
     "corners": {
-     "anyOf": [
-      {
-       "items": {
-        "items": {
-         "type": "number"
-        },
-        "type": "array"
-       },
-       "type": "array"
+     "items": {
+      "items": {
+       "type": "number"
       },
-      {
-       "type": "null"
-      }
-     ],
-     "default": null,
-     "title": "Corners"
+      "type": "array"
+     },
+     "title": "Corners",
+     "type": "array"
     },
     "legend": {
-     "anyOf": [
-      {
-       "$ref": "#/$defs/Legend"
-      },
-      {
-       "type": "null"
-      }
-     ],
-     "default": null
+     "$ref": "#/$defs/Legend"
     },
     "date_start": {
      "anyOf": [
@@ -615,13 +770,27 @@
      ],
      "default": null,
      "title": "Export"
+    },
+    "display_note_key": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Display Note Key"
     }
    },
    "required": [
     "id",
     "kind",
     "title_key",
-    "url"
+    "url",
+    "corners",
+    "legend"
    ],
    "title": "Layer",
    "type": "object"
@@ -747,6 +916,18 @@
      "default": null,
      "title": "Stops"
     },
+    "levels": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Levels"
+    },
     "classes": {
      "anyOf": [
       {
@@ -796,21 +977,18 @@
     },
     "status": {
      "enum": [
-      "ok",
-      "insufficient_data",
-      "not_computed"
+      "computed",
+      "not_computed",
+      "insufficient_data"
      ],
      "title": "Status",
      "type": "string"
     },
-    "reference": {
-     "title": "Reference",
-     "type": "string"
+    "phase_qc_ok": {
+     "title": "Phase Qc Ok",
+     "type": "boolean"
     },
     "control_sigma_cm": {
-     "$ref": "#/$defs/Measurement"
-    },
-    "study_median_cm": {
      "$ref": "#/$defs/Measurement"
     },
     "study_p05_cm": {
@@ -819,11 +997,16 @@
     "study_p95_cm": {
      "$ref": "#/$defs/Measurement"
     },
-    "study_coherent_fraction": {
-     "$ref": "#/$defs/Measurement"
-    },
-    "area_beyond_3sigma_km2": {
-     "$ref": "#/$defs/Measurement"
+    "within_3sigma": {
+     "anyOf": [
+      {
+       "type": "boolean"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Within 3Sigma"
     },
     "layer_id": {
      "anyOf": [
@@ -838,6 +1021,12 @@
     },
     "sign_verified": {
      "title": "Sign Verified",
+     "type": "boolean"
+    },
+    "interpreted": {
+     "const": false,
+     "default": false,
+     "title": "Interpreted",
      "type": "boolean"
     },
     "reason": {
@@ -856,13 +1045,11 @@
    "required": [
     "pair_id",
     "status",
-    "reference",
+    "phase_qc_ok",
     "control_sigma_cm",
-    "study_median_cm",
     "study_p05_cm",
     "study_p95_cm",
-    "study_coherent_fraction",
-    "area_beyond_3sigma_km2",
+    "within_3sigma",
     "layer_id",
     "sign_verified"
    ],
@@ -1029,20 +1216,24 @@
      "title": "Version",
      "type": "string"
     },
+    "observable_key": {
+     "title": "Observable Key",
+     "type": "string"
+    },
     "parameters": {
      "additionalProperties": {
       "anyOf": [
        {
-        "type": "number"
+        "type": "boolean"
        },
        {
         "type": "integer"
        },
        {
-        "type": "string"
+        "type": "number"
        },
        {
-        "type": "boolean"
+        "type": "string"
        },
        {
         "items": {},
@@ -1055,6 +1246,17 @@
      },
      "title": "Parameters",
      "type": "object"
+    },
+    "controls": {
+     "items": {
+      "$ref": "#/$defs/ControlDef"
+     },
+     "title": "Controls",
+     "type": "array"
+    },
+    "main_profile": {
+     "title": "Main Profile",
+     "type": "string"
     },
     "reused_modules": {
      "items": {
@@ -1069,14 +1271,37 @@
      },
      "title": "Steps",
      "type": "array"
+    },
+    "autocorrelation": {
+     "additionalProperties": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "title": "Autocorrelation",
+     "type": "object"
+    },
+    "block_size_justification": {
+     "title": "Block Size Justification",
+     "type": "string"
     }
    },
    "required": [
     "id",
     "version",
+    "observable_key",
     "parameters",
+    "controls",
+    "main_profile",
     "reused_modules",
-    "steps"
+    "steps",
+    "autocorrelation",
+    "block_size_justification"
    ],
    "title": "Method",
    "type": "object"
@@ -1099,10 +1324,10 @@
         "type": "boolean"
        },
        {
-        "type": "number"
+        "type": "integer"
        },
        {
-        "type": "integer"
+        "type": "number"
        },
        {
         "type": "string"
@@ -1139,6 +1364,18 @@
   "OpticalComparison": {
    "additionalProperties": false,
    "properties": {
+    "mode": {
+     "enum": [
+      "strict",
+      "exploratory"
+     ],
+     "title": "Mode",
+     "type": "string"
+    },
+    "max_gap_days": {
+     "title": "Max Gap Days",
+     "type": "number"
+    },
     "status": {
      "enum": [
       "ok",
@@ -1147,87 +1384,6 @@
      ],
      "title": "Status",
      "type": "string"
-    },
-    "before_item": {
-     "anyOf": [
-      {
-       "type": "string"
-      },
-      {
-       "type": "null"
-      }
-     ],
-     "title": "Before Item"
-    },
-    "after_item": {
-     "anyOf": [
-      {
-       "type": "string"
-      },
-      {
-       "type": "null"
-      }
-     ],
-     "title": "After Item"
-    },
-    "gap_days_before": {
-     "anyOf": [
-      {
-       "type": "number"
-      },
-      {
-       "type": "null"
-      }
-     ],
-     "title": "Gap Days Before"
-    },
-    "gap_days_after": {
-     "anyOf": [
-      {
-       "type": "number"
-      },
-      {
-       "type": "null"
-      }
-     ],
-     "title": "Gap Days After"
-    },
-    "optical_threshold": {
-     "$ref": "#/$defs/Measurement"
-    },
-    "lift": {
-     "$ref": "#/$defs/Measurement"
-    },
-    "p_optical_given_radar": {
-     "$ref": "#/$defs/Measurement"
-    },
-    "p_optical_given_not_radar": {
-     "$ref": "#/$defs/Measurement"
-    },
-    "jaccard": {
-     "$ref": "#/$defs/Measurement"
-    },
-    "control_median_d_ndvi": {
-     "anyOf": [
-      {
-       "$ref": "#/$defs/Measurement"
-      },
-      {
-       "type": "null"
-      }
-     ],
-     "default": null
-    },
-    "control_median_d_mndwi": {
-     "anyOf": [
-      {
-       "$ref": "#/$defs/Measurement"
-      },
-      {
-       "type": "null"
-      }
-     ],
-     "default": null
     },
     "reason": {
      "anyOf": [
@@ -1240,19 +1396,173 @@
      ],
      "default": null,
      "title": "Reason"
+    },
+    "before_item": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Before Item"
+    },
+    "before_datetime": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Before Datetime"
+    },
+    "after_item": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "After Item"
+    },
+    "after_datetime": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "After Datetime"
+    },
+    "gap_days_before": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Gap Days Before"
+    },
+    "gap_days_after": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Gap Days After"
+    },
+    "radar_window": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Radar Window",
+     "type": "array"
+    },
+    "optical_window": {
+     "anyOf": [
+      {
+       "items": {
+        "type": "string"
+       },
+       "type": "array"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Optical Window"
+    },
+    "joint_observable_fraction": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "optical_threshold": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "table": {
+     "anyOf": [
+      {
+       "additionalProperties": {
+        "type": "integer"
+       },
+       "type": "object"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Table"
+    },
+    "p_optical_given_radar": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "p_optical_given_not_radar": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "association_ratio": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "jaccard": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "share_of_optical_change_in_radar_flags": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "ratio_with_unclassified_scl": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "control_median_d_mndwi": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "spectral_hypotheses": {
+     "anyOf": [
+      {
+       "additionalProperties": {
+        "type": "integer"
+       },
+       "type": "object"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Spectral Hypotheses"
     }
    },
    "required": [
+    "mode",
+    "max_gap_days",
     "status",
-    "before_item",
-    "after_item",
-    "gap_days_before",
-    "gap_days_after",
+    "radar_window",
+    "joint_observable_fraction",
     "optical_threshold",
-    "lift",
     "p_optical_given_radar",
     "p_optical_given_not_radar",
-    "jaccard"
+    "association_ratio",
+    "jaccard",
+    "share_of_optical_change_in_radar_flags",
+    "ratio_with_unclassified_scl",
+    "control_median_d_mndwi"
    ],
    "title": "OpticalComparison",
    "type": "object"
@@ -1290,7 +1600,7 @@
      ],
      "title": "Processing Baseline"
     },
-    "cloud_cover_pct": {
+    "cloud_cover_pct_tile": {
      "anyOf": [
       {
        "type": "number"
@@ -1299,11 +1609,35 @@
        "type": "null"
       }
      ],
-     "title": "Cloud Cover Pct"
+     "title": "Cloud Cover Pct Tile"
     },
-    "valid_fraction_window": {
-     "title": "Valid Fraction Window",
+    "clear_fraction_study": {
+     "title": "Clear Fraction Study",
      "type": "number"
+    },
+    "clear_fraction_control": {
+     "title": "Clear Fraction Control",
+     "type": "number"
+    },
+    "doubtful_fraction_study": {
+     "title": "Doubtful Fraction Study",
+     "type": "number"
+    },
+    "usable": {
+     "title": "Usable",
+     "type": "boolean"
+    },
+    "reason": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Reason"
     }
    },
    "required": [
@@ -1311,56 +1645,13 @@
     "datetime",
     "platform",
     "processing_baseline",
-    "cloud_cover_pct",
-    "valid_fraction_window"
+    "cloud_cover_pct_tile",
+    "clear_fraction_study",
+    "clear_fraction_control",
+    "doubtful_fraction_study",
+    "usable"
    ],
    "title": "OpticalScene",
-   "type": "object"
-  },
-  "PairQuality": {
-   "additionalProperties": false,
-   "properties": {
-    "ok": {
-     "title": "Ok",
-     "type": "boolean"
-    },
-    "reasons": {
-     "items": {
-      "type": "string"
-     },
-     "title": "Reasons",
-     "type": "array"
-    },
-    "phase_sigma_rad": {
-     "anyOf": [
-      {
-       "type": "number"
-      },
-      {
-       "type": "null"
-      }
-     ],
-     "title": "Phase Sigma Rad"
-    },
-    "coherence_median": {
-     "anyOf": [
-      {
-       "type": "number"
-      },
-      {
-       "type": "null"
-      }
-     ],
-     "title": "Coherence Median"
-    }
-   },
-   "required": [
-    "ok",
-    "reasons",
-    "phase_sigma_rad",
-    "coherence_median"
-   ],
-   "title": "PairQuality",
    "type": "object"
   },
   "PairResult": {
@@ -1372,6 +1663,14 @@
     },
     "geometry_id": {
      "title": "Geometry Id",
+     "type": "string"
+    },
+    "direction": {
+     "enum": [
+      "ascending",
+      "descending"
+     ],
+     "title": "Direction",
      "type": "string"
     },
     "reference_date": {
@@ -1389,40 +1688,29 @@
     "status": {
      "enum": [
       "ok",
-      "rejected_quality",
+      "rejected_coherence_qc",
       "insufficient_control",
       "incompatible_grid"
      ],
      "title": "Status",
      "type": "string"
     },
-    "reason": {
+    "reasons": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Reasons",
+     "type": "array"
+    },
+    "main": {
      "anyOf": [
       {
-       "type": "string"
+       "$ref": "#/$defs/ZoneMetrics"
       },
       {
        "type": "null"
       }
-     ],
-     "default": null,
-     "title": "Reason"
-    },
-    "threshold": {
-     "$ref": "#/$defs/Measurement"
-    },
-    "threshold_sensitivity": {
-     "additionalProperties": {
-      "$ref": "#/$defs/Measurement"
-     },
-     "title": "Threshold Sensitivity",
-     "type": "object"
-    },
-    "control_flag_rate": {
-     "$ref": "#/$defs/Measurement"
-    },
-    "control_median_coherence": {
-     "$ref": "#/$defs/Measurement"
+     ]
     },
     "zones": {
      "items": {
@@ -1431,11 +1719,28 @@
      "title": "Zones",
      "type": "array"
     },
-    "study_flagged_area_sensitivity": {
+    "profiles": {
+     "items": {
+      "$ref": "#/$defs/Profile"
+     },
+     "title": "Profiles",
+     "type": "array"
+    },
+    "statistical": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "perimeter_sensitivity": {
      "additionalProperties": {
       "$ref": "#/$defs/Measurement"
      },
-     "title": "Study Flagged Area Sensitivity",
+     "title": "Perimeter Sensitivity",
+     "type": "object"
+    },
+    "zone_stability": {
+     "additionalProperties": {
+      "$ref": "#/$defs/Measurement"
+     },
+     "title": "Zone Stability",
      "type": "object"
     },
     "n_clusters": {
@@ -1464,35 +1769,90 @@
      "type": "array"
     },
     "optical": {
-     "anyOf": [
-      {
-       "$ref": "#/$defs/OpticalComparison"
-      },
-      {
-       "type": "null"
-      }
-     ]
+     "items": {
+      "$ref": "#/$defs/OpticalComparison"
+     },
+     "title": "Optical",
+     "type": "array"
     }
    },
    "required": [
     "pair_id",
     "geometry_id",
+    "direction",
     "reference_date",
     "secondary_date",
     "span_days",
     "status",
-    "threshold",
-    "threshold_sensitivity",
-    "control_flag_rate",
-    "control_median_coherence",
+    "reasons",
+    "main",
     "zones",
-    "study_flagged_area_sensitivity",
+    "profiles",
+    "statistical",
+    "perimeter_sensitivity",
+    "zone_stability",
     "n_clusters",
     "clusters_shown",
     "layer_ids",
     "optical"
    ],
    "title": "PairResult",
+   "type": "object"
+  },
+  "PerimeterVersion": {
+   "additionalProperties": false,
+   "properties": {
+    "id": {
+     "title": "Id",
+     "type": "string"
+    },
+    "label": {
+     "title": "Label",
+     "type": "string"
+    },
+    "source": {
+     "title": "Source",
+     "type": "string"
+    },
+    "source_date": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Source Date"
+    },
+    "area_km2": {
+     "title": "Area Km2",
+     "type": "number"
+    },
+    "used_as": {
+     "enum": [
+      "main",
+      "sensitivity",
+      "context"
+     ],
+     "title": "Used As",
+     "type": "string"
+    },
+    "note": {
+     "title": "Note",
+     "type": "string"
+    }
+   },
+   "required": [
+    "id",
+    "label",
+    "source",
+    "source_date",
+    "area_km2",
+    "used_as",
+    "note"
+   ],
+   "title": "PerimeterVersion",
    "type": "object"
   },
   "Processing": {
@@ -1506,6 +1866,10 @@
       "failed"
      ],
      "title": "Status",
+     "type": "string"
+    },
+    "rule": {
+     "title": "Rule",
      "type": "string"
     },
     "steps": {
@@ -1525,9 +1889,231 @@
    },
    "required": [
     "status",
+    "rule",
     "steps"
    ],
    "title": "Processing",
+   "type": "object"
+  },
+  "Profile": {
+   "additionalProperties": false,
+   "description": "Result of one (control, quantile) profile for one pair.",
+   "properties": {
+    "id": {
+     "title": "Id",
+     "type": "string"
+    },
+    "control_id": {
+     "title": "Control Id",
+     "type": "string"
+    },
+    "quantile": {
+     "title": "Quantile",
+     "type": "number"
+    },
+    "threshold": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "calibration_rate": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "evaluation_rate": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "study_flagged_area_km2": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "study_flagged_fraction": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "ratio_to_evaluation_rate": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "exceeds_control": {
+     "anyOf": [
+      {
+       "type": "boolean"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Exceeds Control"
+    }
+   },
+   "required": [
+    "id",
+    "control_id",
+    "quantile",
+    "threshold",
+    "calibration_rate",
+    "evaluation_rate",
+    "study_flagged_area_km2",
+    "study_flagged_fraction",
+    "ratio_to_evaluation_rate",
+    "exceeds_control"
+   ],
+   "title": "Profile",
+   "type": "object"
+  },
+  "QualityCheck": {
+   "additionalProperties": false,
+   "properties": {
+    "ok": {
+     "title": "Ok",
+     "type": "boolean"
+    },
+    "reasons": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Reasons",
+     "type": "array"
+    },
+    "metrics": {
+     "additionalProperties": {
+      "anyOf": [
+       {
+        "type": "boolean"
+       },
+       {
+        "type": "integer"
+       },
+       {
+        "type": "number"
+       },
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "title": "Metrics",
+     "type": "object"
+    }
+   },
+   "required": [
+    "ok",
+    "reasons",
+    "metrics"
+   ],
+   "title": "QualityCheck",
+   "type": "object"
+  },
+  "Recurrence": {
+   "additionalProperties": false,
+   "properties": {
+    "geometry_id": {
+     "title": "Geometry Id",
+     "type": "string"
+    },
+    "span_days": {
+     "title": "Span Days",
+     "type": "integer"
+    },
+    "pair_ids": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Pair Ids",
+     "type": "array"
+    },
+    "gaps": {
+     "items": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array"
+     },
+     "title": "Gaps",
+     "type": "array"
+    },
+    "layer_id": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Layer Id"
+    },
+    "count_layer_id": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Count Layer Id"
+    },
+    "observed_pairs_min": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Observed Pairs Min"
+    },
+    "observed_pairs_max": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Observed Pairs Max"
+    },
+    "flagged_ever_km2": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "flagged_half_or_more_km2": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "disjoint_pairs": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Disjoint Pairs",
+     "type": "array"
+    },
+    "flagged_half_or_more_disjoint_km2": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "jaccard_adjacent_pairs": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "jaccard_pairs_two_apart": {
+     "$ref": "#/$defs/Measurement"
+    }
+   },
+   "required": [
+    "geometry_id",
+    "span_days",
+    "pair_ids",
+    "gaps",
+    "layer_id",
+    "count_layer_id",
+    "observed_pairs_min",
+    "observed_pairs_max",
+    "flagged_ever_km2",
+    "flagged_half_or_more_km2",
+    "disjoint_pairs",
+    "flagged_half_or_more_disjoint_km2",
+    "jaccard_adjacent_pairs",
+    "jaccard_pairs_two_apart"
+   ],
+   "title": "Recurrence",
    "type": "object"
   },
   "Reference": {
@@ -1541,6 +2127,7 @@
      "enum": [
       "optical_imagery",
       "map",
+      "land_cover",
       "documentation"
      ],
      "title": "Kind",
@@ -1659,12 +2246,17 @@
      "title": "Name",
      "type": "string"
     },
+    "required": {
+     "title": "Required",
+     "type": "boolean"
+    },
     "status": {
      "enum": [
       "done",
       "skipped",
       "failed",
-      "unavailable"
+      "unavailable",
+      "partial"
      ],
      "title": "Status",
      "type": "string"
@@ -1684,6 +2276,7 @@
    },
    "required": [
     "name",
+    "required",
     "status"
    ],
    "title": "Step",
@@ -1691,28 +2284,16 @@
   },
   "Uncertainty": {
    "additionalProperties": false,
+   "description": "Statistical uncertainty of one measured value.",
    "properties": {
     "kind": {
      "enum": [
       "not_estimated",
-      "sensitivity_range",
-      "empirical_sigma",
-      "not_applicable"
+      "block_bootstrap_interval",
+      "empirical_sigma"
      ],
      "title": "Kind",
      "type": "string"
-    },
-    "value": {
-     "anyOf": [
-      {
-       "type": "number"
-      },
-      {
-       "type": "null"
-      }
-     ],
-     "default": null,
-     "title": "Value"
     },
     "low": {
      "anyOf": [
@@ -1738,6 +2319,30 @@
      "default": null,
      "title": "High"
     },
+    "value": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Value"
+    },
+    "level": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Level"
+    },
     "method": {
      "anyOf": [
       {
@@ -1749,6 +2354,48 @@
      ],
      "default": null,
      "title": "Method"
+    },
+    "block_m": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Block M"
+    },
+    "n_blocks": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "N Blocks"
+    },
+    "block_size_sensitivity": {
+     "anyOf": [
+      {
+       "additionalProperties": {
+        "items": {
+         "type": "number"
+        },
+        "type": "array"
+       },
+       "type": "object"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Block Size Sensitivity"
     }
    },
    "required": [
@@ -1768,12 +2415,19 @@
      "enum": [
       "not_computed",
       "computed",
-      "internally_consistent",
-      "consistent_with_independent_source",
+      "internally_cross_checked",
+      "associated_with_independent_observation",
       "independently_validated"
      ],
      "title": "Level",
      "type": "string"
+    },
+    "criteria": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Criteria",
+     "type": "array"
     },
     "evidence_keys": {
      "items": {
@@ -1793,10 +2447,55 @@
    "required": [
     "observable",
     "level",
+    "criteria",
     "evidence_keys",
     "missing_keys"
    ],
    "title": "ValidationItem",
+   "type": "object"
+  },
+  "WindowMatch": {
+   "additionalProperties": false,
+   "properties": {
+    "pair_a": {
+     "title": "Pair A",
+     "type": "string"
+    },
+    "pair_b": {
+     "title": "Pair B",
+     "type": "string"
+    },
+    "overlap_days": {
+     "title": "Overlap Days",
+     "type": "number"
+    },
+    "table": {
+     "additionalProperties": {
+      "type": "integer"
+     },
+     "title": "Table",
+     "type": "object"
+    },
+    "association_ratio": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "jaccard": {
+     "$ref": "#/$defs/Measurement"
+    },
+    "p_b_given_a": {
+     "$ref": "#/$defs/Measurement"
+    }
+   },
+   "required": [
+    "pair_a",
+    "pair_b",
+    "overlap_days",
+    "table",
+    "association_ratio",
+    "jaccard",
+    "p_b_given_a"
+   ],
+   "title": "WindowMatch",
    "type": "object"
   },
   "Zone": {
@@ -1895,7 +2594,7 @@
     "flagged_area_km2": {
      "$ref": "#/$defs/Measurement"
     },
-    "flagged_fraction_of_observable": {
+    "flagged_fraction": {
      "$ref": "#/$defs/Measurement"
     },
     "median_coherence": {
@@ -1908,7 +2607,7 @@
     "observable_area_km2",
     "observable_fraction",
     "flagged_area_km2",
-    "flagged_fraction_of_observable",
+    "flagged_fraction",
     "median_coherence"
    ],
    "title": "ZoneMetrics",
@@ -1918,13 +2617,17 @@
  "additionalProperties": false,
  "properties": {
   "schema_version": {
-   "const": "1.0",
-   "default": "1.0",
+   "const": "2.0",
+   "default": "2.0",
    "title": "Schema Version",
    "type": "string"
   },
   "case_id": {
    "title": "Case Id",
+   "type": "string"
+  },
+  "run_id": {
+   "title": "Run Id",
    "type": "string"
   },
   "data_nature": {
@@ -1933,6 +2636,10 @@
     "synthetic"
    ],
    "title": "Data Nature",
+   "type": "string"
+  },
+  "presentation_level_key": {
+   "title": "Presentation Level Key",
    "type": "string"
   },
   "question_key": {
@@ -1953,6 +2660,13 @@
    "title": "Zones",
    "type": "array"
   },
+  "perimeter_versions": {
+   "items": {
+    "$ref": "#/$defs/PerimeterVersion"
+   },
+   "title": "Perimeter Versions",
+   "type": "array"
+  },
   "zones_url": {
    "title": "Zones Url",
    "type": "string"
@@ -1970,6 +2684,29 @@
    },
    "title": "Optical Scenes",
    "type": "array"
+  },
+  "optical_search": {
+   "additionalProperties": {
+    "anyOf": [
+     {
+      "type": "boolean"
+     },
+     {
+      "type": "integer"
+     },
+     {
+      "type": "number"
+     },
+     {
+      "type": "string"
+     },
+     {
+      "type": "null"
+     }
+    ]
+   },
+   "title": "Optical Search",
+   "type": "object"
   },
   "method": {
    "$ref": "#/$defs/Method"
@@ -2033,6 +2770,13 @@
    "title": "Findings",
    "type": "array"
   },
+  "dossiers": {
+   "items": {
+    "$ref": "#/$defs/Dossier"
+   },
+   "title": "Dossiers",
+   "type": "array"
+  },
   "next_checks": {
    "items": {
     "$ref": "#/$defs/NextCheck"
@@ -2063,14 +2807,18 @@
  },
  "required": [
   "case_id",
+  "run_id",
   "data_nature",
+  "presentation_level_key",
   "question_key",
   "user_key",
   "site",
   "zones",
+  "perimeter_versions",
   "zones_url",
   "acquisitions",
   "optical_scenes",
+  "optical_search",
   "method",
   "pairs",
   "geometries",
@@ -2081,6 +2829,7 @@
   "references",
   "validation",
   "findings",
+  "dossiers",
   "next_checks",
   "limits",
   "processing",
