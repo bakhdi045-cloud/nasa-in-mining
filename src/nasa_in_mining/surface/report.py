@@ -48,6 +48,10 @@ STRATA_FR = {"flagged_study": "signalées dans le périmètre", "unflagged_study
              "unflagged_control": "non signalées dans le témoin", "not_observable": "non observables"}
 MISSING_FR = {"annotations_filled_by_an_independent_person": "annotations renseignées par une personne indépendante",
               "annotation_meta": "fichier de métadonnées de l'annotation (relecteur, méthode, droits)"}
+REASON_FR = {"outside_acquisition": "hors de l'acquisition", "not_fully_focused": "non focalisé (masque produit)", "instrument_anomaly": "anomalie instrumentale",
+             "invalid_value": "valeur invalide", "near_noise_floor": "proche du plancher de bruit", "insufficient_subpixel_coverage": "sous-pixels insuffisants",
+             "date_not_available": "date non disponible", "incompatible_grid": "grille incompatible", "insufficient_coverage": "couverture insuffisante"}
+MODE_FR = {"strict": "stricte (≤ 3 j)", "exploratory": "exploratoire (≤ 8 j)"}
 LAYER_FR = {"layer.quality": "Qualité : raisons de non-observation", "layer.delta_db": "Δγ⁰ HH (dB)", "layer.flags_temporal": "Signalement par rapport à la référence temporelle"}
 
 
@@ -76,7 +80,7 @@ def write(folder: Path, s: SurfaceStudy) -> str:
           "Incertitude de position : non estimée. Les installations, excavations, verses et bassins ne sont pas séparés.</p>"]
     h += ["<h2>2. Dates et qualité</h2><table><tr><th>Géométrie</th><th>Lot</th><th>Collection / CRID</th><th>Dates utilisables</th><th>Dates rejetées</th><th>Lacunes</th></tr>"]
     for bt in s.batches:
-        rej = [a.time_utc[:10] + " (" + ", ".join(a.reasons) + ")" for a in s.acquisitions if a.status == "rejected" and a.geometry_id == bt.geometry_id and a.crid == bt.crid]
+        rej = [a.time_utc[:10] + " (" + ", ".join(REASON_FR.get(r, r) for r in a.reasons) + ")" for a in s.acquisitions if a.status == "rejected" and a.geometry_id == bt.geometry_id and a.crid == bt.crid]
         gaps = "; ".join(f"{g['between'][0]} → {g['between'][1]} ({g['span_days']} j{', lacune instrument documentée' if g['documented_instrument_gap'] else ''})" for g in bt.gaps) or "—"
         h.append(f"<tr><td>{e(bt.geometry_id)} {e(bt.direction)}</td><td>{e(bt.role)}</td><td>{e(bt.collection)} / {e(bt.crid)}</td>"
                  f"<td>{bt.n_usable}/{bt.n_acquisitions}</td><td>{e('; '.join(rej)) or '—'}</td><td>{e(gaps)}</td></tr>")
@@ -112,7 +116,7 @@ def write(folder: Path, s: SurfaceStudy) -> str:
                      f"[{_f(g.get('ci_low'), 2)} ; {_f(g.get('ci_high'), 2)}].</p>")
     h += ["<h2>4. Comparaison indépendante</h2>"]
     for ev in s.evidence.optical:
-        h.append(f"<p><b>Optique {e(ev.mode)}</b> : {ev.n_radar_comparisons} comparaisons radar, <b>{ev.n_unique_optical_pairs} couple(s) Sentinel-2 distinct(s)</b>, "
+        h.append(f"<p><b>Optique {e(MODE_FR[ev.mode])}</b> : {ev.n_radar_comparisons} comparaisons radar, <b>{ev.n_unique_optical_pairs} couple(s) Sentinel-2 distinct(s)</b>, "
                  f"{ev.n_groups_ci_above_1} dont l'intervalle du rapport dépasse 1. Les comparaisons qui partagent les deux mêmes scènes forment un seul appui temporel.</p>")
         if ev.groups:
             h.append("<table><tr><th>Groupe</th><th>Avant</th><th>Après</th><th>Fenêtres radar</th></tr>" + "".join(
