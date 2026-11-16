@@ -1,0 +1,99 @@
+{
+  "study_id": "benguerir-surface-study-2026",
+  "data_nature": "real",
+  "site": {
+    "id": "benguerir",
+    "name": "OCP Benguerir phosphate mine",
+    "country": "MA",
+    "commodity": "phosphate",
+    "operator": "OCP Group",
+    "centroid": [-7.8275, 32.256],
+    "description_key": "site.benguerir"
+  },
+  "epsg": 32629,
+  "zones_file": "zones.geojson",
+  "protocol_file": "protocol.json",
+  "boundary_dir": "boundary",
+  "gcov_dir": "GCOV",
+  "batches": [
+    {"id": "asc_T044_F018_P05023", "role": "main", "collection": "NISAR_L2_GCOV_PROVISIONAL_V1", "crid": "P05023", "track": 44, "frame": 18, "direction": "ascending"},
+    {"id": "desc_T023_F072_P05023", "role": "main", "collection": "NISAR_L2_GCOV_PROVISIONAL_V1", "crid": "P05023", "track": 23, "frame": 72, "direction": "descending"},
+    {"id": "desc_T023_F072_P05036", "role": "extension", "collection": "NISAR_L2_GCOV_V1", "crid": "P05036", "track": 23, "frame": 72, "direction": "descending"}
+  ],
+  "development_windows": [
+    ["ascending", "2026-06-17", "2026-06-29"],
+    ["ascending", "2026-08-16", "2026-08-28"]
+  ],
+  "optical": {
+    "dir": "S2",
+    "strict_gap_days": 3,
+    "exploratory_gap_days": 8,
+    "min_clear_study": 0.9,
+    "min_clear_control": 0.8,
+    "min_joint_fraction": 0.8,
+    "quantile": 0.99
+  },
+  "v2_case": "cases/benguerir/output/case.json",
+  "v2_verification_zones": "cases/benguerir/output/exports/verification_zones.geojson",
+  "annotation_dir": "annotations",
+  "reference_per_stratum": 40,
+  "sampling_seed": 20261116,
+  "zones_new_max": 5,
+  "min_zone_cluster_cells": 25,
+  "elevated_ratio": 2.0,
+  "elevated_min_cells": 10,
+  "references": [
+    {
+      "id": "nisar-gcov",
+      "kind": "documentation",
+      "name": "NISAR L2 GCOV (collections NISAR_L2_GCOV_PROVISIONAL_V1 and NISAR_L2_GCOV_V1; product DOIs are recorded per granule)",
+      "provider": "NASA JPL / ASF DAAC",
+      "license": "NASA open data policy",
+      "url": "https://nisar-docs.asf.alaska.edu/gcov/",
+      "dates": [],
+      "supports_key": "reference.gcov.supports",
+      "cannot_support_key": "reference.gcov.cannot"
+    },
+    {
+      "id": "sentinel2-l2a",
+      "kind": "optical_imagery",
+      "name": "Sentinel-2 L2A, tile 29SPR (Copernicus)",
+      "provider": "ESA / Copernicus; distributed by Earth Search (Element 84, AWS Open Data)",
+      "license": "Copernicus Sentinel data terms: free, full and open",
+      "url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a",
+      "dates": [],
+      "supports_key": "reference.s2.supports",
+      "cannot_support_key": "reference.s2.cannot"
+    },
+    {
+      "id": "osm-quarry",
+      "kind": "map",
+      "name": "OpenStreetMap way 638354631 (landuse=quarry), 2020",
+      "provider": "OpenStreetMap contributors",
+      "license": "ODbL-1.0",
+      "url": "https://www.openstreetmap.org/way/638354631",
+      "dates": ["2020-02-10"],
+      "supports_key": "reference.osm.supports",
+      "cannot_support_key": "reference.osm.cannot"
+    },
+    {
+      "id": "esa-worldcover",
+      "kind": "land_cover",
+      "name": "ESA WorldCover 10 m 2021 v200 (tile N30W009)",
+      "provider": "ESA WorldCover consortium",
+      "license": "CC BY 4.0",
+      "url": "https://esa-worldcover.org/en",
+      "dates": ["2021"],
+      "supports_key": "reference.worldcover.supports",
+      "cannot_support_key": "reference.worldcover.cannot"
+    }
+  ],
+  "external_sources": [
+    {"id": "asf_release_notes", "title": "NISAR release notes (data maturity, CRID, calibration before 2026-11-12)", "url": "https://hyp3-docs.asf.alaska.edu/nisar-docs/release-notes/"},
+    {"id": "asf_known_issues", "title": "NISAR known issues (instrument data gap 2026-07-27 to 2026-08-10)", "url": "https://hyp3-docs.asf.alaska.edu/nisar-docs/nisar-known-issues/"},
+    {"id": "asf_gcov", "title": "NISAR GCOV product guide", "url": "https://nisar-docs.asf.alaska.edu/gcov/"},
+    {"id": "opera_rtc", "title": "OPERA RTC-S1 guide (NASA/JPL product derived from ESA/Copernicus Sentinel-1; C-band, not used here)", "url": "https://hyp3-docs.asf.alaska.edu/guides/opera_rtc_product_guide/"},
+    {"id": "ocp", "title": "OCP: industrial operations, Gantour site (Benguerir, Living Lab with UM6P)", "url": "https://www.ocpgroup.ma/fr/nos-activites/operations-industrielles"},
+    {"id": "challenge_resources", "title": "Space Apps challenge Resources tab (not retrievable during this work: TLS certificate error; its content is not known)", "url": "https://www.spaceappschallenge.org/2026/challenges/dancing-with-the-sars/?tab=resources"}
+  ]
+}

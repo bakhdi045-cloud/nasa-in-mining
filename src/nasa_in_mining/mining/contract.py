@@ -576,7 +576,7 @@ class Manifest(Strict):
 
 class Export(Strict):
     id: str
-    format: Literal["csv", "geojson", "geotiff", "json", "markdown"]
+    format: Literal["csv", "geojson", "geotiff", "json", "markdown", "html"]
     path: str
     description_key: str
     sha256: str

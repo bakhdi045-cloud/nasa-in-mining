@@ -15,25 +15,28 @@ def _ci_low(m) -> float | None:
     return u.low if (u is not None and u.kind == "block_bootstrap_interval") else None
 
 
+def group_comparisons(mode: str, items: list) -> OpticalEvidence:
+    """items: (id of the radar pair or window, OpticalComparison). Counted per distinct (before, after) scene pair."""
+    okc = [(i, c) for i, c in items if c.mode == mode and c.status == "ok" and c.before_item and c.after_item]
+    attempted = sum(1 for _, c in items if c.mode == mode)
+    groups: dict[tuple[str, str], list] = {}
+    for i, c in okc:
+        groups.setdefault((c.before_item, c.after_item), []).append((i, c))
+    glist = []
+    for n, ((b, a), grp) in enumerate(sorted(groups.items(), key=lambda kv: kv[1][0][1].before_datetime or ""), 1):
+        c0 = grp[0][1]
+        glist.append(OpticalGroup(group_id=f"O{n}_{mode}", before_item=b, after_item=a,
+                                  before_datetime=c0.before_datetime, after_datetime=c0.after_datetime,
+                                  pair_ids=[i for i, _ in grp],
+                                  n_ci_above_1=sum(1 for _, c in grp if (_ci_low(c.association_ratio) or 0) > 1)))
+    return OpticalEvidence(mode=mode, n_radar_comparisons=len(okc), n_attempted=attempted,
+                           n_unique_optical_pairs=len(glist),
+                           n_groups_ci_above_1=sum(1 for g in glist if g.n_ci_above_1 > 0), groups=glist)
+
+
 def optical_evidence(pairs: list[PairResult]) -> list[OpticalEvidence]:
-    out = []
-    for mode in ("strict", "exploratory"):
-        comps = [(p, c) for p in pairs if p.status == "ok" for c in p.optical if c.mode == mode]
-        okc = [(p, c) for p, c in comps if c.status == "ok" and c.before_item and c.after_item]
-        groups: dict[tuple[str, str], list] = {}
-        for p, c in okc:
-            groups.setdefault((c.before_item, c.after_item), []).append((p, c))
-        glist = []
-        for i, ((b, a), items) in enumerate(sorted(groups.items(), key=lambda kv: kv[1][0][1].before_datetime or ""), 1):
-            c0 = items[0][1]
-            glist.append(OpticalGroup(group_id=f"O{i}_{mode}", before_item=b, after_item=a,
-                                      before_datetime=c0.before_datetime, after_datetime=c0.after_datetime,
-                                      pair_ids=[p.pair_id for p, _ in items],
-                                      n_ci_above_1=sum(1 for _, c in items if (_ci_low(c.association_ratio) or 0) > 1)))
-        out.append(OpticalEvidence(mode=mode, n_radar_comparisons=len(okc), n_attempted=len(comps),
-                                   n_unique_optical_pairs=len(glist),
-                                   n_groups_ci_above_1=sum(1 for g in glist if g.n_ci_above_1 > 0), groups=glist))
-    return out
+    return [group_comparisons(mode, [(p.pair_id, c) for p in pairs if p.status == "ok" for c in p.optical])
+            for mode in ("strict", "exploratory")]
 
 
 def build(pairs: list[PairResult], references=None, derived_at_read: bool = False) -> EvidenceSummary:
