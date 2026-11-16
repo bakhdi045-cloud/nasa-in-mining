@@ -8,7 +8,6 @@ need a person and their evidence, and stay `pending` until they are filled in `b
 """
 from __future__ import annotations
 
-from datetime import datetime, timezone
 import json
 from pathlib import Path
 
@@ -132,7 +131,6 @@ def build(zones_path: Path, out_dir: Path, wc_path: Path | None, s2_stack: Path 
         "context_zone": "rings 1-2 km and 2-4 km are kept as context and comparators; 1-4 km is an analysis convention, not an influence boundary",
         "needed_for_next_state": {
             "remote_sensing_reviewed": ["need.contemporary_imagery", "need.reviewer", "need.digitised_limits"],
-            "operator_confirmed": ["need.operator_written_confirmation"]},
-        "built_utc": datetime.now(timezone.utc).isoformat(timespec="seconds")}
+            "operator_confirmed": ["need.operator_written_confirmation"]}}
     (out_dir / "boundary_review.json").write_text(json.dumps(review, indent=1, ensure_ascii=False), encoding="utf-8", newline="\n")
     return review

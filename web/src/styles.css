@@ -314,3 +314,5 @@ html { scroll-behavior: smooth; }
 .filelink { margin-inline-end: 0.5rem; }
 .conclusions th[scope="row"] { text-align: start; font-weight: 600; }
 .classes { padding-inline-start: 1.1rem; }
+
+.step .tag { white-space: normal; overflow-wrap: anywhere; }

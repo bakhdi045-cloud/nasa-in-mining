@@ -175,7 +175,7 @@ export function StudyView({ data, run }: { data: SurfaceStudy; run?: string }) {
             {w.pols.some((x) => x.pol === "HV") ? <p className="small muted">{t("s.hv.note")}</p> : null}
           </>
         ) : null}
-        <div className="table-wrap">
+        <div className="table-wrap" tabIndex={0} role="region" aria-label={t("s.table")}>
           <table className="pairs">
             <caption className="sr-only">{t("sstep.changes")}</caption>
             <thead><tr><th scope="col">{t("s.col.window")}</th><th scope="col">{t("s.col.orbit")}</th><th scope="col">{t("s.col.span")}</th><th scope="col">{t("s.col.study")}</th><th scope="col">{t("s.col.diff")}</th>
@@ -202,7 +202,7 @@ export function StudyView({ data, run }: { data: SurfaceStudy; run?: string }) {
 
       <Section id="quality" n={3}>
         <p className="lede">{t("s.quality.lede")}</p>
-        <div className="table-wrap">
+        <div className="table-wrap" tabIndex={0} role="region" aria-label={t("s.table")}>
           <table>
             <caption className="sr-only">{t("sstep.quality")}</caption>
             <thead><tr><th scope="col">{t("s.q.batch")}</th><th scope="col">{t("s.q.crid")}</th><th scope="col">{t("s.q.usable")}</th><th scope="col">{t("s.q.rejected")}</th><th scope="col">{t("s.q.gaps")}</th></tr></thead>
@@ -224,7 +224,7 @@ export function StudyView({ data, run }: { data: SurfaceStudy; run?: string }) {
         {w ? (
           <>
             <h3>{t("s.q.window")} — {windowLabel(w, f)}</h3>
-            <div className="table-wrap">
+            <div className="table-wrap" tabIndex={0} role="region" aria-label={t("s.table")}>
               <table>
                 <thead><tr><th scope="col">{t("s.q.zone")}</th><th scope="col">{t("s.q.observed")}</th>{reasonKeys.filter((k) => qrows.some((q) => (q.reasons[k].value ?? 0) > 0)).map((k) => <th key={k} scope="col">{t(`quality.${k}`)}</th>)}</tr></thead>
                 <tbody>
@@ -239,7 +239,7 @@ export function StudyView({ data, run }: { data: SurfaceStudy; run?: string }) {
         ) : null}
         <details>
           <summary>{t("s.q.caveats")}</summary>
-          <div className="table-wrap"><table>
+          <div className="table-wrap" tabIndex={0} role="region" aria-label={t("s.table")}><table>
             <thead><tr><th scope="col">{t("s.col.window")}</th><th scope="col">{t("s.q.look")}</th><th scope="col">{t("s.q.looks")}</th><th scope="col">{t("s.q.incidence")}</th><th scope="col">{t("s.q.caveats")}</th></tr></thead>
             <tbody>{data.acquisitions.map((a) => (
               <tr key={a.acquisition_id}><td>{a.acquisition_id}</td><td>{Object.entries(a.noise_floor_db).map(([k, m]) => `${k} ${formatMeasurement(m as Meas, "num1", f, t)} dB`).join(" · ")}</td>
@@ -257,7 +257,7 @@ export function StudyView({ data, run }: { data: SurfaceStudy; run?: string }) {
             <div key={mode}>
               <p><b>{t("s.cmp.optical", { mode, n_radar: e.n_radar_comparisons, n_pairs: e.n_unique_optical_pairs, n_ci: e.n_groups_ci_above_1 })}</b></p>
               {e.groups.length ? (
-                <div className="table-wrap"><table>
+                <div className="table-wrap" tabIndex={0} role="region" aria-label={t("s.table")}><table>
                   <thead><tr><th scope="col">{t("s.cmp.group")}</th><th scope="col">{t("s.cmp.before")}</th><th scope="col">{t("s.cmp.after")}</th><th scope="col">{t("s.cmp.windows")}</th><th scope="col">{t("s.cmp.ci")}</th></tr></thead>
                   <tbody>{e.groups.map((g) => <tr key={g.group_id}><td>{g.group_id}</td><td>{f.date(g.before_datetime)}</td><td>{f.date(g.after_datetime)}</td><td className="small">{g.pair_ids.map((id) => id.replace(/^GCOV_/, "").replace(/_P0\d+$/, "")).join(", ")}</td><td>{g.n_ci_above_1}</td></tr>)}</tbody>
                 </table></div>
@@ -292,7 +292,7 @@ export function StudyView({ data, run }: { data: SurfaceStudy; run?: string }) {
 
       <Section id="conclusion" n={5}>
         <p className="lede">{t("s.conc.lede")}</p>
-        <div className="table-wrap">
+        <div className="table-wrap" tabIndex={0} role="region" aria-label={t("s.table")}>
           <table className="conclusions">
             <caption className="sr-only">{t("sstep.conclusion")}</caption>
             <thead><tr><th scope="col">{t("s.conc.zone")}</th><th scope="col">{t("s.conc.area")}</th><th scope="col">{t("s.conc.radar")}</th><th scope="col">{t("s.conc.optical")}</th><th scope="col">{t("s.conc.cause")}</th></tr></thead>

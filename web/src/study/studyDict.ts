@@ -100,7 +100,7 @@ export const studyFr: Dict = {
   "alt.vegetation_or_crop": "végétation ou culture", "alt.surface_roughness": "rugosité de surface", "alt.operations": "opérations minières (non documentées ici)", "alt.instrument": "calibration ou instrument",
   "collect.dated_imagery": "imagerie datée du site", "collect.operations_calendar": "calendrier des opérations", "collect.rain_irrigation": "pluie et arrosage", "collect.site_observation": "observation de terrain datée",
   "s.conc.not_claimed": "Non déduit de ces résultats : minerai, teneur, volume, production, danger de digue, vitesse annuelle, déplacement vertical.",
-  "s.limits": "Limites", "s.sources": "Sources", "s.files": "Fichiers de l'étude", "s.report": "Rapport imprimable",
+  "s.table": "Tableau (défilable au clavier)", "s.limits": "Limites", "s.sources": "Sources", "s.files": "Fichiers de l'étude", "s.report": "Rapport imprimable",
   "limit.gcov_provisional": "Produits GCOV provisoires (CRID P05023) : la collection validée ne couvre pas la période principale.",
   "limit.calibration_before_2026_11_12": "Environ 30 % des données de certains modes acquises avant le 12 nov. 2026 ont des résidus radiométriques d'environ 1 dB ; le RCID n'est pas indiqué dans les métadonnées du produit (le nom 4005 / DHDH est cohérent avec une famille de modes concernée) : l'applicabilité n'a pas pu être vérifiée. Les valeurs absolues peuvent être décalées ; la soustraction du témoin en annule une partie.",
   "limit.no_noise_correction": "Le produit n'applique pas la correction du bruit : les pixels proches du plancher de bruit sont exclus, surtout en HV.",
@@ -114,6 +114,10 @@ export const studyFr: Dict = {
   "limit.p05036_separate": "La période du 25 octobre au 6 novembre (CRID P05036) est analysée séparément et n'est jamais mêlée à P05023 ni à l'autre orbite.",
   "limit.instrument_gap": "Aucune donnée n'a été collectée par la plateforme du 27 juillet au 10 août 2026 : la lacune reste visible et n'est pas interpolée.",
   "limit.not_ore_or_hazard": "Ni minerai, ni teneur, ni volume, ni production, ni danger de digue, ni vitesse annuelle, ni déplacement vertical ne sont déduits de ces résultats.",
+  "export.delta_geotiff": "Δγ⁰ HH en dB (GeoTIFF entier 16 bits, pas de 0,05 dB, échelle dans le fichier)", "export.quality_geotiff": "Raisons de non-observation par pixel (GeoTIFF, champ de bits)",
+  "export.windows_csv": "Fenêtres : statistiques par couple (CSV)", "export.quality_csv": "Part des cellules par raison de non-observation (CSV)", "export.acquisitions_csv": "Acquisitions GCOV et statut (CSV)",
+  "export.optical_groups_csv": "Comparaisons comptées par couple optique distinct (CSV)", "export.verification_zones": "Zones à vérifier (GeoJSON)", "export.boundary": "Dossier du périmètre : contour et revue",
+  "export.reference_sampling": "Plan d'échantillonnage des références (analyste, avec les strates)", "export.reference_units": "Unités à annoter, sans résultat radar (GeoJSON)", "export.reference_template": "Modèle d'annotation (CSV)", "export.reference_readme": "Consignes d'annotation en aveugle",
   "export.report_html": "Rapport imprimable (HTML)", "s.status.loading": "Chargement de l'étude de surface…",
 };
 
@@ -205,7 +209,7 @@ export const studyEn: Dict = {
   "alt.vegetation_or_crop": "vegetation or crops", "alt.surface_roughness": "surface roughness", "alt.operations": "mining operations (not documented here)", "alt.instrument": "calibration or instrument",
   "collect.dated_imagery": "dated imagery of the site", "collect.operations_calendar": "operations calendar", "collect.rain_irrigation": "rain and watering", "collect.site_observation": "dated field observation",
   "s.conc.not_claimed": "Not inferred from these results: ore, grade, volume, production, dam hazard, annual velocity, vertical displacement.",
-  "s.limits": "Limits", "s.sources": "Sources", "s.files": "Study files", "s.report": "Printable report",
+  "s.table": "Table (keyboard scrollable)", "s.limits": "Limits", "s.sources": "Sources", "s.files": "Study files", "s.report": "Printable report",
   "limit.gcov_provisional": "Provisional GCOV products (CRID P05023): the validated collection does not cover the main period.",
   "limit.calibration_before_2026_11_12": "About 30 % of the data of some modes acquired before 12 Nov 2026 have radiometric residuals of about 1 dB; the RCID is not stated in the product metadata (the 4005 / DHDH name is consistent with an affected mode family): applicability could not be verified. Absolute values may be offset; subtracting the control cancels part of it.",
   "limit.no_noise_correction": "The product does not apply noise correction: pixels near the noise floor are excluded, mostly in HV.",
@@ -219,6 +223,10 @@ export const studyEn: Dict = {
   "limit.p05036_separate": "The 25 October–6 November period (CRID P05036) is analysed separately and never mixed with P05023 or the other orbit.",
   "limit.instrument_gap": "No data were collected by the platform from 27 July to 10 August 2026: the gap stays visible and is not interpolated.",
   "limit.not_ore_or_hazard": "No ore, grade, volume, production, dam hazard, annual velocity or vertical displacement is inferred from these results.",
+  "export.delta_geotiff": "Δγ⁰ HH in dB (16-bit integer GeoTIFF, 0.05 dB steps, scale stored in the file)", "export.quality_geotiff": "Reasons for non-observation per pixel (GeoTIFF, bit field)",
+  "export.windows_csv": "Windows: statistics per pair (CSV)", "export.quality_csv": "Share of cells per reason for non-observation (CSV)", "export.acquisitions_csv": "GCOV acquisitions and status (CSV)",
+  "export.optical_groups_csv": "Comparisons counted per distinct optical pair (CSV)", "export.verification_zones": "Zones to verify (GeoJSON)", "export.boundary": "Outline dossier: boundary and review",
+  "export.reference_sampling": "Reference sampling frame (analyst file, with the strata)", "export.reference_units": "Units to annotate, without radar results (GeoJSON)", "export.reference_template": "Annotation template (CSV)", "export.reference_readme": "Blind annotation instructions",
   "export.report_html": "Printable report (HTML)", "s.status.loading": "Loading the surface study…",
 };
 
@@ -310,7 +318,7 @@ export const studyAr: Dict = {
   "alt.vegetation_or_crop": "نباتات أو محاصيل", "alt.surface_roughness": "خشونة السطح", "alt.operations": "عمليات التعدين (غير موثَّقة هنا)", "alt.instrument": "المعايرة أو الجهاز",
   "collect.dated_imagery": "صور مؤرَّخة للموقع", "collect.operations_calendar": "جدول العمليات", "collect.rain_irrigation": "الأمطار والسقي", "collect.site_observation": "ملاحظة ميدانية مؤرَّخة",
   "s.conc.not_claimed": "لا يُستنتج من هذه النتائج: الخام، العيار، الحجم، الإنتاج، خطر السدّ، السرعة السنوية، الإزاحة الرأسية.",
-  "s.limits": "الحدود", "s.sources": "المصادر", "s.files": "ملفات الدراسة", "s.report": "التقرير القابل للطباعة",
+  "s.table": "جدول (قابل للتمرير بلوحة المفاتيح)", "s.limits": "الحدود", "s.sources": "المصادر", "s.files": "ملفات الدراسة", "s.report": "التقرير القابل للطباعة",
   "limit.gcov_provisional": "منتجات GCOV مؤقتة (CRID P05023): المجموعة المصادَق عليها لا تغطي الفترة الرئيسية.",
   "limit.calibration_before_2026_11_12": "نحو 30 % من بيانات بعض الأنماط المكتسبة قبل 12 نوفمبر 2026 لها بواقٍ راديومترية نحو 1 dB؛ لا يرد RCID في البيانات الوصفية للمنتج (اسم 4005 / DHDH يتوافق مع عائلة أنماط متأثرة): تعذّر التحقق من الانطباق. قد تكون القيم المطلقة مزاحة؛ وطرح الشاهد يلغي جزءًا منها.",
   "limit.no_noise_correction": "لا يطبّق المنتج تصحيح الضجيج: تُستبعد البكسلات القريبة من أرضية الضجيج، خاصة في HV.",
@@ -324,5 +332,9 @@ export const studyAr: Dict = {
   "limit.p05036_separate": "تُحلَّل فترة 25 أكتوبر–6 نوفمبر (CRID P05036) على حدة ولا تُخلط بـP05023 ولا بالمدار الآخر.",
   "limit.instrument_gap": "لم تجمع المنصة أي بيانات من 27 يوليو إلى 10 أغسطس 2026: تبقى الفجوة ظاهرة ولا تُستكمل.",
   "limit.not_ore_or_hazard": "لا يُستنتج من هذه النتائج خام ولا عيار ولا حجم ولا إنتاج ولا خطر سدّ ولا سرعة سنوية ولا إزاحة رأسية.",
+  "export.delta_geotiff": "Δγ⁰ HH بوحدة dB (GeoTIFF بأعداد صحيحة 16 بت، خطوة 0.05 dB، والمقياس مخزَّن في الملف)", "export.quality_geotiff": "أسباب عدم الرصد لكل بكسل (GeoTIFF، حقل بتات)",
+  "export.windows_csv": "النوافذ: إحصاءات لكل زوج (CSV)", "export.quality_csv": "حصة الخلايا لكل سبب عدم رصد (CSV)", "export.acquisitions_csv": "اكتسابات GCOV وحالتها (CSV)",
+  "export.optical_groups_csv": "مقارنات محسوبة لكل زوج بصري متمايز (CSV)", "export.verification_zones": "مناطق للتحقق (GeoJSON)", "export.boundary": "ملف الحدّ: الخط والمراجعة",
+  "export.reference_sampling": "خطة معاينة المراجع (ملف المحلّل، مع الطبقات)", "export.reference_units": "وحدات للوسم دون نتائج رادارية (GeoJSON)", "export.reference_template": "قالب الوسم (CSV)", "export.reference_readme": "تعليمات الوسم الأعمى",
   "export.report_html": "التقرير القابل للطباعة (HTML)", "s.status.loading": "جارٍ تحميل دراسة السطح…",
 };
