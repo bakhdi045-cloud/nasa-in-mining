@@ -482,7 +482,8 @@ def run(case_dir: Path, data_dir: Path, repo_root: Path | None = None, publish: 
 
         # layers
         lid_c, lid_f = f"coh_{p.id}", f"flags_{p.id}"
-        info = export.png_continuous(out_dir / "layers" / f"{lid_c}.png", coh, grid["transform"], epsg, "magma", 0.0, 1.0,
+        # the scientific preview shows only pixels that passed the product mask and the anomaly flags (same pixels as the statistics)
+        info = export.png_continuous(out_dir / "layers" / f"{lid_c}.png", np.where(valid, coh, np.nan), grid["transform"], epsg, "magma", 0.0, 1.0,
                                      levels=mcfg["coherence_preview_levels"])
         add_layer(Layer(id=lid_c, kind="observation", title_key="layer.coherence", params={"pair": p.id},
                         url=f"layers/{lid_c}.png", corners=info["corners"],

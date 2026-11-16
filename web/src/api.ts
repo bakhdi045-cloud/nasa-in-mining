@@ -1,4 +1,5 @@
 import { assertMiningCase, type ApiErrorBody, type MiningCase } from "./contract";
+import { assertSurfaceStudy, type SurfaceStudy } from "./studyContract";
 
 export class LoadError extends Error {
   constructor(public code: string, message: string) {
@@ -50,6 +51,44 @@ export async function loadCase(caseId?: string, run?: string): Promise<{ data: M
   const data = await getJson(`${API}/cases/${encodeURIComponent(item.case_id)}${r ? `?run=${encodeURIComponent(r)}` : ""}`);
   try {
     assertMiningCase(data);
+  } catch (e) {
+    throw new LoadError("contract_violation", (e as Error).message);
+  }
+  return { data, list };
+}
+
+export interface StudyListItem {
+  study_id: string;
+  published_run: string | null;
+  runs: string[];
+  error?: string;
+  message?: string;
+}
+
+export function studyFileUrl(studyId: string, path: string, run?: string | null): string {
+  const p = path.split("/").map(encodeURIComponent).join("/");
+  return `${API}/studies/${encodeURIComponent(studyId)}/files/${p}${run ? `?run=${encodeURIComponent(run)}` : ""}`;
+}
+
+/** The recorded studies, or an empty list when the service holds none (the v2 case view then stays the default). */
+export async function listStudies(): Promise<StudyListItem[]> {
+  try {
+    const list = (await getJson(`${API}/studies`)) as StudyListItem[];
+    return Array.isArray(list) ? list : [];
+  } catch {
+    return [];
+  }
+}
+
+export async function loadStudy(studyId?: string, run?: string): Promise<{ data: SurfaceStudy; list: StudyListItem[] }> {
+  const list = await listStudies();
+  if (!list.length) throw new LoadError("no_study", "the service holds no recorded surface study");
+  const item = list.find((c) => c.study_id === studyId) ?? list.find((c) => !c.error) ?? list[0];
+  if (item.error) throw new LoadError(item.error, item.message ?? "the recorded study is unreadable");
+  const r = run && item.runs.includes(run) ? run : undefined;
+  const data = await getJson(`${API}/studies/${encodeURIComponent(item.study_id)}${r ? `?run=${encodeURIComponent(r)}` : ""}`);
+  try {
+    assertSurfaceStudy(data);
   } catch (e) {
     throw new LoadError("contract_violation", (e as Error).message);
   }

@@ -23,7 +23,7 @@ for (const lang of ["fr", "en", "ar"] as const) {
     const external = await offline(page);
     const errors: string[] = [];
     page.on("pageerror", (e) => errors.push(e.message));
-    await page.goto(`/?lang=${lang}`);
+    await page.goto(`/?lang=${lang}&view=case`);
     await expect(page.locator("html")).toHaveAttribute("dir", lang === "ar" ? "rtl" : "ltr");
     await expect(page.locator(".kpi--lead .value__num")).toBeVisible();
     const axe = await new AxeBuilder({ page }).exclude(".maplibregl-canvas").analyze();
@@ -56,7 +56,7 @@ test("values, dates and shareable state match the recorded run, offline", async 
   const data = await published(page);
   const ok = data.pairs.filter((p: { status: string }) => p.status === "ok");
   const target = ok[2];
-  await page.goto(`/?lang=fr&pair=${target.pair_id}&layer=coh`);
+  await page.goto(`/?lang=fr&view=case&pair=${target.pair_id}&layer=coh`);
   const main = target.profiles.find((p: { id: string }) => p.id === data.method.main_profile);
   const v = main.study_flagged_area_km2.value;
   const d = v < 1 ? 3 : 2;
@@ -83,7 +83,7 @@ test("values, dates and shareable state match the recorded run, offline", async 
 
 test("print view keeps a static map with legend, dates and sources", async ({ page }) => {
   await offline(page);
-  await page.goto("/?lang=en");
+  await page.goto("/?lang=en&view=case");
   await expect(page.locator(".map__canvas canvas")).toHaveCount(1);
   await page.waitForTimeout(1500);
   await page.evaluate(() => window.dispatchEvent(new Event("beforeprint")));

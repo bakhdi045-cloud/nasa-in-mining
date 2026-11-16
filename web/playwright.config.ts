@@ -11,7 +11,8 @@ export default defineConfig({
   timeout: 60_000,
   use: { baseURL: "http://127.0.0.1:8799", trace: "off" },
   webServer: {
-    command: `"${python}" -m nasa_in_mining serve --cases "${resolve(here, "..", "cases")}" --web "${resolve(here, "dist")}" --port 8799`,
+    // the launcher stops the whole server process tree on Windows, where the venv python is a trampoline
+    command: `node "${resolve(here, "e2e", "serve.mjs")}" "${python}" -m nasa_in_mining serve --cases "${resolve(here, "..", "cases")}" --web "${resolve(here, "dist")}" --port 8799`,
     url: "http://127.0.0.1:8799/api/health",
     reuseExistingServer: false,
     timeout: 60_000,

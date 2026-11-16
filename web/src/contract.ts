@@ -20,7 +20,8 @@ export interface ApiErrorBody {
 const ajv = new Ajv2020({ allErrors: false, strict: false });
 const validate = ajv.compile(schema);
 
-export const SCHEMA_VERSION = "2.0";
+export const SCHEMA_VERSION = "2.1";
+export const READABLE_VERSIONS = ["2.0", "2.1"];   // 2.1 only adds optional evidence blocks
 
 /** Rules the JSON schema cannot express, mirrored from the Pydantic validators. Returns the first violation. */
 export function semanticViolation(node: unknown, path = ""): string | null {
@@ -54,7 +55,7 @@ export function semanticViolation(node: unknown, path = ""): string | null {
 
 export function assertMiningCase(data: unknown): asserts data is MiningCase {
   const v = (data as { schema_version?: unknown } | null)?.schema_version;
-  if (v !== SCHEMA_VERSION) throw new Error(`unsupported schema_version ${String(v)} (expected ${SCHEMA_VERSION})`);
+  if (typeof v !== "string" || !READABLE_VERSIONS.includes(v)) throw new Error(`unsupported schema_version ${String(v)} (expected ${READABLE_VERSIONS.join(" or ")})`);
   if (!validate(data)) {
     const e = validate.errors?.[0];
     throw new Error(`the case does not satisfy the contract at ${e?.instancePath || "/"}: ${e?.message ?? "invalid"}`);

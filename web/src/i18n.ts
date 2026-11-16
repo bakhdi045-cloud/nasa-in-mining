@@ -727,3 +727,9 @@ export function translate(lang: Lang, key: string, params: Params = {}): string 
   }
   return typeof entry === "function" ? entry(params, makeFmt(lang), (k, p) => translate(lang, k, p)) : entry;
 }
+
+// Surface-study texts live in study/studyDict.ts; they are merged here so that translate() finds them for every key.
+import { studyAr, studyEn, studyFr } from "./study/studyDict";
+Object.assign(fr, studyFr);
+Object.assign(en, studyEn);
+Object.assign(ar, studyAr);

@@ -23,6 +23,13 @@ from tests import surface_fixtures as sf
 ROOT = Path(__file__).resolve().parents[1]
 
 
+class StudyContract(unittest.TestCase):
+    def test_schema_file_is_in_sync(self):
+        recorded = json.loads((ROOT / "contract" / "surface_study.schema.json").read_text(encoding="utf-8"))
+        self.assertEqual(recorded, SurfaceStudy.model_json_schema(),
+                         "regenerate with: python -m nasa_in_mining contract-schema --kind study --out contract/surface_study.schema.json")
+
+
 class Backscatter(unittest.TestCase):
     def test_delta_db_known_values(self):
         before = np.array([[1.0, 1.0, 0.5]], "float32")
@@ -299,6 +306,16 @@ class SurfacePipeline(unittest.TestCase):
         text = json.dumps(packet)
         for word in ("flagged", "stratum", "radar", "darker"):
             self.assertNotIn(word, text)
+
+    def test_evaluated_state_or_reviewed_boundary_cannot_be_declared_by_label(self):
+        data = json.loads((self.folder / "study.json").read_text(encoding="utf-8"))
+        data["references"]["status"] = "evaluated"                       # a label, with no effective structured reference
+        with self.assertRaises(ValidationError):
+            SurfaceStudy.model_validate(data)
+        data = json.loads((self.folder / "study.json").read_text(encoding="utf-8"))
+        data["boundary"]["state"] = "remote_sensing_reviewed"            # a state, with the review still pending
+        with self.assertRaises(ValidationError):
+            SurfaceStudy.model_validate(data)
 
     def test_no_validation_language_in_the_report(self):
         html = (self.folder / "report" / "report.html").read_text(encoding="utf-8")

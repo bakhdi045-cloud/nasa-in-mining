@@ -301,3 +301,16 @@ html { scroll-behavior: smooth; }
 /* numbers with units and intervals read left to right inside Arabic text */
 [dir="rtl"] .value__num, [dir="rtl"] .value__ci, [dir="rtl"] td, [dir="rtl"] .legend__ticks span { unicode-bidi: isolate; }
 [dir="rtl"] .value__num, [dir="rtl"] .value__ci { direction: ltr; }
+
+/* ---- surface study ---- */
+.modebar { padding: 0.5rem clamp(1rem, 3vw, 2.5rem); border-bottom: 1px solid var(--rule-soft); }
+.chart { margin: 1rem 0; }
+.chart__svg { width: 100%; max-width: 640px; height: auto; color: var(--ink-2); }
+.chart__tick { font-size: 10px; fill: currentColor; }
+.bar--asc { fill: var(--signal); }
+.bar--desc { fill: var(--ochre); }
+.tag--pending, .tag--awaiting_annotations, .tag--historical_map { border-color: var(--ochre); color: var(--ochre); }
+.tag--rejected { border-color: var(--ochre); color: var(--ochre); }
+.filelink { margin-inline-end: 0.5rem; }
+.conclusions th[scope="row"] { text-align: start; font-weight: 600; }
+.classes { padding-inline-start: 1.1rem; }

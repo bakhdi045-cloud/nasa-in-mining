@@ -56,8 +56,12 @@ def _parser() -> argparse.ArgumentParser:
     run.add_argument("--case", type=Path, required=True, help="case folder holding case_config.json and zones")
     run.add_argument("--no-publish", action="store_true",
                      help="keep the verified run in <case>/runs/<run_id>/ without publishing it to <case>/output")
-    sch = sub.add_parser("contract-schema", help="write the MiningCase JSON schema")
+    st = sub.add_parser("study-run", parents=[common], help="run the surface-change study (NISAR GCOV backscatter change)")
+    st.add_argument("--case", type=Path, required=True, help="study folder holding study_config.json, protocol.json and zones")
+    st.add_argument("--no-publish", action="store_true", help="keep the verified run in <case>/runs/<run_id>/ only")
+    sch = sub.add_parser("contract-schema", help="write the MiningCase (or SurfaceStudy) JSON schema")
     sch.add_argument("--out", type=Path, required=True)
+    sch.add_argument("--kind", choices=("case", "study"), default="case")
     srv = sub.add_parser("serve", help="serve recorded cases and the web interface (offline capable)")
     srv.add_argument("--cases", type=Path, default=Path("cases"))
     srv.add_argument("--web", type=Path, default=Path("web") / "dist")
@@ -115,10 +119,23 @@ def main(argv: list[str] | None = None) -> int:
                       "run_id": case.run_id, "run_folder": str(args.case / "runs" / case.run_id),
                       "published": not args.no_publish}
             exit_code = 0 if case.processing.status in ("complete", "partial") else 2
+        elif args.command == "study-run":
+            from .surface import study
+            data = args.data or Path(os.environ.get("MINING_DATA", "data"))
+            st = study.run(args.case, data, publish=not args.no_publish)
+            comp = [w for w in st.windows if w.status == "computed"]
+            result = {"study_id": st.study_id, "processing_status": st.processing.status, "windows": len(st.windows),
+                      "windows_computed": len(comp), "boundary_state": st.boundary.state,
+                      "reference_status": st.references.status, "run_id": st.run_id,
+                      "run_folder": str(args.case / "runs" / st.run_id), "published": not args.no_publish}
+            exit_code = 0 if st.processing.status in ("complete", "partial") else 2
         elif args.command == "contract-schema":
-            from .mining.contract import MiningCase
+            if args.kind == "study":
+                from .surface.contract import SurfaceStudy as Model
+            else:
+                from .mining.contract import MiningCase as Model
             args.out.parent.mkdir(parents=True, exist_ok=True)
-            args.out.write_text(json.dumps(MiningCase.model_json_schema(), indent=1) + "\n", encoding="utf-8")
+            args.out.write_text(json.dumps(Model.model_json_schema(), indent=1) + "\n", encoding="utf-8")
             result = {"written": str(args.out)}
         elif args.command == "serve":
             import uvicorn

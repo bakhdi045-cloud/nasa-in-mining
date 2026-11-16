@@ -504,7 +504,8 @@
       "geojson",
       "geotiff",
       "json",
-      "markdown"
+      "markdown",
+      "html"
      ],
      "title": "Format",
      "type": "string"

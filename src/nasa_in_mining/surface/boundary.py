@@ -131,8 +131,8 @@ def build(zones_path: Path, out_dir: Path, wc_path: Path | None, s2_stack: Path 
                      "not_assumed_stable": True},
         "context_zone": "rings 1-2 km and 2-4 km are kept as context and comparators; 1-4 km is an analysis convention, not an influence boundary",
         "needed_for_next_state": {
-            "remote_sensing_reviewed": ["contemporary imagery with its date and rights", "a reviewer name and date", "digitised limits with a log"],
-            "operator_confirmed": ["written confirmation from an OCP/UM6P contact of the authorised outline, with date"]},
+            "remote_sensing_reviewed": ["need.contemporary_imagery", "need.reviewer", "need.digitised_limits"],
+            "operator_confirmed": ["need.operator_written_confirmation"]},
         "built_utc": datetime.now(timezone.utc).isoformat(timespec="seconds")}
     (out_dir / "boundary_review.json").write_text(json.dumps(review, indent=1, ensure_ascii=False), encoding="utf-8", newline="\n")
     return review

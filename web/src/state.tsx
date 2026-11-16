@@ -40,13 +40,15 @@ export interface UrlState {
   run?: string;
   pair?: string;
   layer?: string;
+  view?: string;
+  study?: string;
 }
 
 export function readUrl(): UrlState {
   try {
     const q = new URLSearchParams(window.location.search);
     const out: UrlState = {};
-    for (const k of ["lang", "case", "run", "pair", "layer"] as const) {
+    for (const k of ["lang", "case", "run", "pair", "layer", "view", "study"] as const) {
       const v = q.get(k);
       if (v) out[k] = v;
     }

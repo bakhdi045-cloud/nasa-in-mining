@@ -238,7 +238,7 @@ def run(case_dir: Path, data_dir: Path, repo_root: Path | None = None, publish: 
     if vz and (repo_root / vz).exists():
         fc = json.loads(log(repo_root / vz, role="v2_verification_zones").read_text(encoding="utf-8"))
         for f in fc["features"]:
-            if (f.get("id") or f["properties"].get("id")) == "Z1":
+            if f["properties"].get("dossier") == "Z1":
                 extra["Z1"] = sshape(f["geometry"])
     Z, zones, zfc = _zones(case_dir, cfg, grid, log, extra)
     calib = stats.checkerboard(shape, int(round(pf["calibration_block_m"] / px_m)))
@@ -269,7 +269,7 @@ def run(case_dir: Path, data_dir: Path, repo_root: Path | None = None, publish: 
         mem = by_batch[b["id"]]
         gaps = []
         for x, y in zip(mem, mem[1:]):
-            span = (_dt(y.time) - _dt(x.time)).days
+            span = round((_dt(y.time) - _dt(x.time)).total_seconds() / 86400)   # acquisitions are 12 d minus a second apart
             if span > 14:
                 overlap = x.date <= GAP_DOCUMENTED[1] and y.date >= GAP_DOCUMENTED[0]
                 gaps.append({"between": [x.date, y.date], "span_days": span, "documented_instrument_gap": overlap,
@@ -698,7 +698,9 @@ def _conclusions(zone_masks, W, opt_extra, Z, ctrl_eval, cfg, pix_km2, centroid,
                         "median_flagged_fraction": float(np.median(fr)) if fr else None,
                         "median_darker_share_of_flags": float(np.median(dark)) if dark else None,
                         "median_study_minus_control_db": float(np.median(desc)) if desc else None,
-                        "n_windows_descriptive": len(desc), "elevated_rule": f"flagged fraction >= {ratio_min} x control rate and >= {cells_min} cells"}
+                        "n_windows_descriptive": len(desc),
+                        "selection": ("recurrence_of_the_same_flags" if zid.startswith("N") else "v2_coherence_recurrence" if zid == "Z1" else "perimeter_definition"),
+                        "elevated_rule": f"flagged fraction >= {ratio_min} x control rate and >= {cells_min} cells"}
         # optical, per distinct optical pair
         pairs: dict[tuple[str, str], list[bool]] = {}
         for key, ex_ in opt_extra.items():
