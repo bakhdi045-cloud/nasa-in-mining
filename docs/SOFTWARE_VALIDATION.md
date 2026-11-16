@@ -1,3 +1,33 @@
+# Validation logicielle de l'étude de surface — 16 novembre 2026
+
+Complète le rapport v2 ci-dessous. Tests logiciels, reproductibilité et évaluation scientifique restent trois preuves
+distinctes : **aucune évaluation indépendante des résultats n'a été faite** ([SURFACE_STUDY.md](SURFACE_STUDY.md)).
+Environnement : Windows 10, Python 3.12, Node 24, Chromium Playwright (exécution sous PowerShell : Git Bash perd la
+configuration jest-dom de Vitest).
+
+| Contrôle | Commande | Résultat |
+|---|---|---|
+| Tests Python | `.\.venv\Scripts\python.exe -B -m unittest discover -s tests` | **105 réussis** (34 nouveaux : 30 sur la surface et 4 sur la lecture des preuves ; valeurs de Δ en dB connues, moyenne linéaire, bits de raison, bits de validité P05036, référence temporelle, plan d'échantillonnage, refus d'évaluation sans références, échelon de 0,25 km² retrouvé, `insufficient_baseline`, grille incompatible, date rejetée, crop altéré) |
+| Dépendance optique et validation sans référence | `tests.test_mining.EvidenceReading`, `FindingRules` | 3 comparaisons / 2 couples sur le cas v2 publié ; une étiquette seule est refusée |
+| Types TypeScript ↔ schémas (2.1 et 3.0) | `npm run contract` + Vitest | identiques |
+| Tests unitaires interface | `npm test` | 21 réussis (dont clés de traduction FR/EN/AR de l'étude enregistrée) |
+| Typage, construction | `npm run typecheck`, `npm run build` | aucune erreur |
+| Parcours navigateur | `npm run e2e` (bureau 1440 × 900, mobile 390 × 844) | **22 réussis** (10 v2, 12 étude : cinq étapes, axe sans violation sérieuse, pas de débordement, FR/EN/AR, fichiers servis, impression) |
+| Fin du serveur Playwright sous Windows | lanceur `web/e2e/serve.mjs` (arrêt de l'arbre de processus) | l'exécution se termine seule (1,1 min), aucun serveur résiduel sur le port 8799 |
+| Reproductibilité | deux exécutions réelles successives (20261116T131053Z publiée, 20261116T131225Z) | 507 des 508 sorties identiques ; la seule différence est le rapport HTML qui porte l'identifiant d'exécution ; contenu de `study.json` identique hors manifeste |
+| Intégrité | empreintes lues à l'entrée (286 entrées) et vérifiées avant publication (508 sorties) | conformes |
+| Cas v2 | `cases/benguerir/output` | inchangé (aucun fichier modifié) ; relu avec son bloc de preuves calculé à la lecture |
+
+Défauts trouvés en exécutant sur les données réelles, corrigés et testés : durée de fenêtre arrondie vers le bas (11 j au lieu
+de 12) ; bits de validité du masque d'exception P05036 pris pour des anomalies (deux acquisitions rejetées à tort) ;
+GeoTIFF de Δ en virgule flottante trop lourds (57 Mo) remplacés par un entier 16 bits à échelle 0,05 dB (40 Mo au total,
+HV non exporté en raster).
+
+Limites de la validation logicielle : pas de test avec lecteur d'écran ; pas de démarrage depuis un clone vierge de cette
+branche (les données GCOV restent dans `data/`, non versionné) ; le téléchargement réel dépend du jeton Earthdata local.
+
+---
+
 # Validation logicielle v2 — 15 novembre 2026
 
 Rapport distinct de la validation scientifique ([SCIENTIFIC_VALIDATION.md](SCIENTIFIC_VALIDATION.md)).

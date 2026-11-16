@@ -49,6 +49,21 @@ def main() -> None:
         p = next(x for x in w["pols"] if x["pol"] == "HH")
         z = {x["zone_id"]: x["aggregate_db"]["value"] for x in p["zones"]}
         o.append(f"| {w['before_date']} → {w['after_date']} | {w['direction']} | {w['span_days']} | " + " | ".join(f(z.get(i)) for i in zids) + " |")
+    # windows of both orbits overlapping by at least 6 days (12-day pairs of the main period): sign of the Z1 change
+    from datetime import date
+    d = date.fromisoformat
+    hhz = lambda w, zid: next(z["aggregate_db"]["value"] for p_ in w["pols"] if p_["pol"] == "HH" for z in p_["zones"] if z["zone_id"] == zid)  # noqa: E731
+    ok12 = [w for w in s["windows"] if w["span_days"] == 12 and w["status"] == "computed" and w["role"] == "main"]
+    if "Z1" in zids:
+        rows, same = [], 0
+        for a in (w for w in ok12 if w["direction"] == "ascending"):
+            for b in (w for w in ok12 if w["direction"] == "descending"):
+                if (min(d(a["after_date"]), d(b["after_date"])) - max(d(a["before_date"]), d(b["before_date"]))).days >= 6:
+                    za, zb = hhz(a, "Z1"), hhz(b, "Z1")
+                    same += za * zb > 0
+                    rows.append(f"| {a['before_date']} → {a['after_date']} | {b['before_date']} → {b['after_date']} | {f(za)} | {f(zb)} | {'oui' if za * zb > 0 else 'non'} |")
+        o += ["", f"## Z1 : signe de Δγ⁰ HH sur des fenêtres des deux orbites qui se recouvrent (≥ 6 jours) — même signe : {same}/{len(rows)}", "",
+              "| Ascendante | Descendante | Z1 asc. (dB) | Z1 desc. (dB) | Même signe |", "|---|---|---:|---:|---|"] + rows
     o += ["", "## Appui optique par couple Sentinel-2 distinct", "", "| Mode | Comparaisons radar | Couples optiques distincts | Couples avec IC > 1 |", "|---|---:|---:|---:|"]
     for e in s["evidence"]["optical"]:
         o.append(f"| {e['mode']} | {e['n_radar_comparisons']} | {e['n_unique_optical_pairs']} | {e['n_groups_ci_above_1']} |")

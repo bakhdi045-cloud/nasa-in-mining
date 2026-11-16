@@ -6,10 +6,12 @@ Benguerir, Maroc, juin–octobre 2026), un pipeline reproductible, une API lég�
 **Niveau de présentation : étude exploratoire calculée, avec associations entre observations et limites explicites.**
 Aucune observation de terrain n'a été utilisée ; les produits NISAR sont provisoires.
 
-**Orientation du 16 novembre 2026 : Benguerir OCP uniquement.** L'[audit du projet et de toutes les branches](docs/audit/2026-11-16/AUDIT.md)
-établit les acquis et les écarts vers une étude validée. Le [plan d'exécution](docs/audit/2026-11-16/PLAN_EXECUTION.md)
-et le [prompt pour l'agent suivant](docs/audit/2026-11-16/PROMPT_AGENT.md) définissent la suite ; les résultats ci-dessous
-restent ceux de l'étude exploratoire v2.
+**Orientation du 16 novembre 2026 : Benguerir OCP uniquement, étude de changements de surface.** À partir de l'[audit](docs/audit/2026-11-16/AUDIT.md)
+et du [plan](docs/audit/2026-11-16/PLAN_EXECUTION.md), la branche `feature/benguerir-surface-study` ajoute une étude de variation de
+rétrodiffusion NISAR GCOV (gamma-0 en dB, qualité par pixel, référence temporelle, recoupement Sentinel-2 compté par couple
+optique distinct, protocole de références indépendantes) : [docs/SURFACE_STUDY.md](docs/SURFACE_STUDY.md). Elle est **exploratoire et non
+validée** : le périmètre est une carte historique (revue humaine en attente) et aucune référence indépendante n'a été évaluée.
+L'interface s'ouvre sur cette étude ; la v2 (cohérence) reste accessible en « Cas historique v2 ». Les résultats ci-dessous sont ceux de la v2.
 
 ## Question et observable
 
@@ -47,7 +49,7 @@ cd web; npm ci; npm run build; cd ..
 .\.venv\Scripts\python.exe -m nasa_in_mining serve
 ```
 
-Ouvrir http://127.0.0.1:8000. **Mode hors ligne** : l'application et le serveur local fonctionnent sans Internet
+Ouvrir http://127.0.0.1:8000 (ou `--port 8010` si ce port est pris). L'étude de surface est servie sous `/api/studies`. **Mode hors ligne** : l'application et le serveur local fonctionnent sans Internet
 (polices, worker MapLibre, fonds Sentinel-2 datés et couches servis localement) ; seul le fond OpenStreetMap, proposé
 en option, demande un accès réseau. L'état affiché est partageable par l'URL : `?lang=fr&case=…&run=…&pair=…&layer=…`.
 
@@ -70,7 +72,10 @@ API : `/api/health`, `/api/cases` (exécution publiée et exécutions locales v�
 La carte affiche toujours la date de son fond ; un avertissement apparaît si ce fond ne correspond pas à la paire.
 La vue imprimable garde une carte statique, la légende, les dates, les sources et les limites.
 
-## Recalculer l'étude depuis les données
+## Recalculer l'étude de surface depuis les données
+
+Commandes exactes dans [docs/SURFACE_STUDY.md](docs/SURFACE_STUDY.md) (`fetch_benguerir_gcov.py` pour les 21 crops GCOV, puis
+`python -m nasa_in_mining study-run --case casesenguerir-surface-study`). Le cas v2 se recalcule ainsi :
 
 ```powershell
 .\.venv\Scripts\python.exe scripts\build_benguerir_zones.py           # zones OSM (option --fetch)
@@ -88,8 +93,8 @@ vérification du contrat, des fichiers et des empreintes (`--no-publish` pour ne
 ## Vérifier
 
 ```powershell
-.\.venv\Scripts\python.exe -B -m unittest discover -s tests          # 71 tests
-cd web; npm run typecheck; npm test; npm run build; npm run e2e       # 14 tests unitaires, 10 parcours navigateur (axe inclus)
+.\.venv\Scripts\python.exe -B -m unittest discover -s tests          # 105 tests
+cd web; npm run typecheck; npm test; npm run build; npm run e2e       # 21 tests unitaires, 22 parcours navigateur (axe inclus)
 ```
 
 Le parcours navigateur démarre le service sur le port 8799 et nécessite une fois
@@ -102,9 +107,11 @@ Le parcours navigateur démarre le service sur le port 8799 et nécessite une fo
 | `src/nasa_in_mining/` (modules hérités) | traitements extraits de NASA_SAR, inchangés (empreintes `UPSTREAM.json`) |
 | `src/nasa_in_mining/access/` | CMR et STAC paginés, lecture partielle HDF5 NISAR, Sentinel-2, WorldCover |
 | `src/nasa_in_mining/mining/` | statistiques, comparaison optique, conclusions, pipeline, contrat `MiningCase` 2.0, exports |
-| `src/nasa_in_mining/api.py` | FastAPI en lecture seule |
+| `src/nasa_in_mining/surface/` | étude de surface : rétrodiffusion, qualité, référence temporelle, références, périmètre, rapport, contrat 3.0 |
+| `src/nasa_in_mining/api.py` | FastAPI en lecture seule (cas v2 et études) |
 | `contract/mining_case.schema.json` | schéma JSON du contrat (source des types TypeScript générés) |
-| `cases/benguerir/` | configuration, zones, inventaires datés, exécution publiée |
+| `cases/benguerir/` | configuration, zones, inventaires datés, exécution publiée (v2, référence inchangée) |
+| `cases/benguerir-surface-study/` | protocole figé, configuration, périmètre, inventaires CMR/OPERA, étude publiée (contrat 3.0) |
 | `web/` | interface React + TypeScript + Vite + MapLibre |
 | `docs/` | périmètre, sources, méthode, validations, comparaison v1/v2, tableaux générés |
 

@@ -1,0 +1,3 @@
+# Blind annotation packet
+
+For each unit (60 m x 60 m) look at the `before` and `after` chips (Sentinel-2 true colour, 10 m native) and fill `annotation_template.csv`: `label` in {change_visible, no_change_visible, indeterminate}; `source` = human; `annotator`; `blind_to_radar` = true only if you did not see any radar product; `annotated_utc`. Add `annotation_meta.json` (reference_id, reviewer, reviewer_independent, method, rights, source, date_start, date_end, geometry_ref). Put both files in `cases/<case>/annotations/` and re-run. Proposals made by an agent or an algorithm must use source = agent / automated: they are counted but never support a validation.

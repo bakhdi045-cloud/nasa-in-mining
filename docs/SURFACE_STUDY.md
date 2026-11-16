@@ -19,13 +19,49 @@ Chiffres : [tables générées](generated/surface_tables.md) à partir de `study
 | HV | secondaire ; les cellules à moins de 2 × le plancher de bruit (NEBS) sont exclues et comptées |
 | Cohérence GUNW | contexte seulement (v2) ; jamais rebaptisée « changement de surface » |
 
+Le masque d'exception du produit P05036 contient des bits de validité par polarisation (256 = HH, 512 = HV) : ils ne sont pas des anomalies (découvert en lisant les premières acquisitions, test `test_validity_bits_of_the_p05036_exception_mask_are_not_anomalies`).
+
 Une grandeur absente est une raison, jamais un zéro ni « stable ». Les raisons par pixel (bits) : hors acquisition,
 non focalisé, anomalie instrumentale, valeur invalide, proche du plancher de bruit, sous-pixels insuffisants,
 date indisponible. Aucun masque d'ombre ou de repli n'est inventé : le produit ne le fournit pas.
 
+## Résultats de l'exécution publiée (20261116T131053Z)
+
+Calculés par `study-run` sur 21 acquisitions GCOV réelles ; détails dans [generated/surface_tables.md](generated/surface_tables.md).
+
+- **Fenêtres** : 18 (9 ascendantes, 8 descendantes P05023, 1 pilote P05036) ; 16 calculées ; 2 rejetées parce que
+  l'acquisition descendante du 7 septembre est entièrement « non focalisée » (le masque du produit, comme dans la v2). Les
+  fenêtres de 24 jours qui traversent la lacune instrument (27 juillet–10 août) sont gardées à part : sans référence de
+  même durée, `insufficient_baseline`. Pilote P05036 (25 oct.–6 nov.) : une seule fenêtre, décrite sans signalement.
+- **Variation d'ensemble** : Δγ⁰ HH périmètre − témoin entre −0,21 et +0,24 dB sur les fenêtres de 12 jours : pas de
+  changement de rétrodiffusion d'ensemble du périmètre. Un décalage commun d'environ +0,3 dB (24 jours, des deux orbites)
+  et de +0,5 à +0,7 dB (25 oct.–6 nov.) apparaît **dans toutes les zones, témoin compris** : c'est un décalage de fenêtre
+  (lacune, calibration, état de surface régional), qu'une comparaison au témoin retire ; il illustre l'effet possible de
+  la calibration d'avant le 12 novembre (non vérifiable ici).
+- **Signalement** (13 fenêtres de 12 jours avec référence de 3 à 6 couples) : fraction signalée 1,2–3,9 % dans le périmètre
+  contre 0,8–1,3 % dans le témoin d'évaluation ; rapport 1,10–3,31, intervalle par blocs entièrement au-dessus de 1 pour
+  **6/13** fenêtres (2 ascendantes, 4 descendantes). La référence des fenêtres descendantes repose sur 3–4 couples : le
+  rapport plus élevé de cette orbite peut refléter une référence plus bruitée. Un rapport supérieur à 1 n'établit pas un
+  changement de surface.
+- **Où se concentre l'excès** : Z1 (0,306 km²) et quatre petites zones candidates (0,014–0,061 km²) sont signalées dans
+  12–13 des 13 fenêtres (fraction médiane signalée de 24 à 63 % de leurs cellules). Pour Z1, Δγ⁰ HH vaut de −3,4 à +1,4 dB sur les fenêtres de 12 jours
+  (jusqu'à +3,9 dB sur celles de 24 jours) alors que le périmètre reste à ±0,3 dB ; le signe est le même sur 4 des 5
+  fenêtres qui se recouvrent entre les deux orbites. Les zones `N*` sont choisies **par** la récurrence des signalements :
+  leur décompte est circulaire. Z1 provient de la v2 : sa lecture n'est pas indépendante.
+- **Optique** : 3 comparaisons strictes mais **2 couples Sentinel-2 distincts** (14–29 juin ; 13–28 août), tous deux avec un
+  intervalle > 1 ; 8 comparaisons exploratoires, 5 couples. Z1 est élevée sur les 2 couples stricts, mais ces couples
+  viennent de fenêtres de développement ; le couple du 13–28 août soutient aussi une fenêtre descendante hors développement.
+- **Références indépendantes** : aucune annotation ; échantillon tiré (40/40/33/40/35 unités par strate) en attente.
+- **Périmètre** : carte historique, revue humaine en attente.
+
+**Lecture proportionnée** : le radar GCOV montre, dans de petites zones dont Z1, des variations répétées de plusieurs dB
+entre acquisitions, associées dans l'optique à un changement visible sur deux couples ; l'ensemble du périmètre ne varie
+pas de façon mesurable par rapport au témoin. Aucun résultat ne dit si ces variations sont des travaux, de l'humidité,
+de la végétation, de la rugosité ou de la calibration : cause indéterminée, validation en attente.
+
 ## Données et provenance
 
-- **GCOV** (extraction par lecture partielle HTTP, `scripts/fetch_benguerir_gcov.py`) : lot P05023 trace 44 ascendante
+- **GCOV** (extraction par lecture partielle HTTP, `scripts/fetch_benguerir_gcov.py`, 21 crops d'environ 100 Mo transférés chacun sur 6 Go) : lot P05023 trace 44 ascendante
   cadre 18 (10 acquisitions) et trace 23 descendante cadre 72 (9) ; pilote séparé P05036 trace 23 descendante
   (25 octobre, 6 novembre). Le 27 octobre ascendant est isolé et n'est pas comparé. Catalogue CMR interrogé à
   l'exécution (19 GCOV provisoires, 3 GCOV validés ; mêmes comptes que l'audit). DOI, concept ID, granule, URL, CRID,
