@@ -464,6 +464,33 @@
    "title": "Dossier",
    "type": "object"
   },
+  "EvidenceSummary": {
+   "additionalProperties": false,
+   "description": "Counts of independent supports, derived from the recorded comparisons (never typed by hand).",
+   "properties": {
+    "derived_at_read": {
+     "default": false,
+     "title": "Derived At Read",
+     "type": "boolean"
+    },
+    "optical": {
+     "items": {
+      "$ref": "#/$defs/OpticalEvidence"
+     },
+     "title": "Optical",
+     "type": "array"
+    },
+    "references": {
+     "items": {
+      "$ref": "#/$defs/ReferenceEvidence"
+     },
+     "title": "References",
+     "type": "array"
+    }
+   },
+   "title": "EvidenceSummary",
+   "type": "object"
+  },
   "Export": {
    "additionalProperties": false,
    "properties": {
@@ -1567,6 +1594,119 @@
    "title": "OpticalComparison",
    "type": "object"
   },
+  "OpticalEvidence": {
+   "additionalProperties": false,
+   "properties": {
+    "mode": {
+     "enum": [
+      "strict",
+      "exploratory"
+     ],
+     "title": "Mode",
+     "type": "string"
+    },
+    "n_radar_comparisons": {
+     "title": "N Radar Comparisons",
+     "type": "integer"
+    },
+    "n_attempted": {
+     "title": "N Attempted",
+     "type": "integer"
+    },
+    "n_unique_optical_pairs": {
+     "title": "N Unique Optical Pairs",
+     "type": "integer"
+    },
+    "n_groups_ci_above_1": {
+     "title": "N Groups Ci Above 1",
+     "type": "integer"
+    },
+    "groups": {
+     "items": {
+      "$ref": "#/$defs/OpticalGroup"
+     },
+     "title": "Groups",
+     "type": "array"
+    },
+    "note_key": {
+     "default": "evidence.optical_dependency",
+     "title": "Note Key",
+     "type": "string"
+    }
+   },
+   "required": [
+    "mode",
+    "n_radar_comparisons",
+    "n_attempted",
+    "n_unique_optical_pairs",
+    "n_groups_ci_above_1",
+    "groups"
+   ],
+   "title": "OpticalEvidence",
+   "type": "object"
+  },
+  "OpticalGroup": {
+   "additionalProperties": false,
+   "description": "Radar comparisons that rely on the same pair of optical scenes: one temporal reference, not several.",
+   "properties": {
+    "group_id": {
+     "title": "Group Id",
+     "type": "string"
+    },
+    "before_item": {
+     "title": "Before Item",
+     "type": "string"
+    },
+    "after_item": {
+     "title": "After Item",
+     "type": "string"
+    },
+    "before_datetime": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Before Datetime"
+    },
+    "after_datetime": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "After Datetime"
+    },
+    "pair_ids": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Pair Ids",
+     "type": "array"
+    },
+    "n_ci_above_1": {
+     "title": "N Ci Above 1",
+     "type": "integer"
+    }
+   },
+   "required": [
+    "group_id",
+    "before_item",
+    "after_item",
+    "pair_ids",
+    "n_ci_above_1"
+   ],
+   "title": "OpticalGroup",
+   "type": "object"
+  },
   "OpticalScene": {
    "additionalProperties": false,
    "properties": {
@@ -2178,6 +2318,187 @@
    "title": "Reference",
    "type": "object"
   },
+  "ReferenceEvidence": {
+   "additionalProperties": false,
+   "description": "A structured independent reference (field observation or dated, geolocated annotation).\n\nA text marker is not a reference: `effective()` states what a reference must carry before it can support the\nlevel `independently_validated`. Every field is recorded; none is inferred.",
+   "properties": {
+    "id": {
+     "title": "Id",
+     "type": "string"
+    },
+    "kind": {
+     "enum": [
+      "field_observation",
+      "dated_imagery_annotation",
+      "operator_record",
+      "other"
+     ],
+     "title": "Kind",
+     "type": "string"
+    },
+    "observable": {
+     "title": "Observable",
+     "type": "string"
+    },
+    "source": {
+     "title": "Source",
+     "type": "string"
+    },
+    "reviewer": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Reviewer"
+    },
+    "reviewer_independent": {
+     "default": false,
+     "title": "Reviewer Independent",
+     "type": "boolean"
+    },
+    "blind_to_radar": {
+     "default": false,
+     "title": "Blind To Radar",
+     "type": "boolean"
+    },
+    "method": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Method"
+    },
+    "rights": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Rights"
+    },
+    "date_start": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Date Start"
+    },
+    "date_end": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Date End"
+    },
+    "geometry_ref": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Geometry Ref"
+    },
+    "n_units_flagged": {
+     "default": 0,
+     "title": "N Units Flagged",
+     "type": "integer"
+    },
+    "n_units_unflagged": {
+     "default": 0,
+     "title": "N Units Unflagged",
+     "type": "integer"
+    },
+    "n_units_indeterminate": {
+     "default": 0,
+     "title": "N Units Indeterminate",
+     "type": "integer"
+    },
+    "n_independent_groups": {
+     "default": 0,
+     "title": "N Independent Groups",
+     "type": "integer"
+    },
+    "sampling_probabilities_recorded": {
+     "default": false,
+     "title": "Sampling Probabilities Recorded",
+     "type": "boolean"
+    },
+    "evaluation": {
+     "anyOf": [
+      {
+       "additionalProperties": {
+        "anyOf": [
+         {
+          "type": "boolean"
+         },
+         {
+          "type": "integer"
+         },
+         {
+          "type": "number"
+         },
+         {
+          "type": "string"
+         },
+         {
+          "type": "null"
+         }
+        ]
+       },
+       "type": "object"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Evaluation"
+    },
+    "limits": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Limits",
+     "type": "array"
+    }
+   },
+   "required": [
+    "id",
+    "kind",
+    "observable",
+    "source"
+   ],
+   "title": "ReferenceEvidence",
+   "type": "object"
+  },
   "Site": {
    "additionalProperties": false,
    "properties": {
@@ -2442,6 +2763,13 @@
      },
      "title": "Missing Keys",
      "type": "array"
+    },
+    "reference_ids": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Reference Ids",
+     "type": "array"
     }
    },
    "required": [
@@ -2617,8 +2945,11 @@
  "additionalProperties": false,
  "properties": {
   "schema_version": {
-   "const": "2.0",
-   "default": "2.0",
+   "default": "2.1",
+   "enum": [
+    "2.0",
+    "2.1"
+   ],
    "title": "Schema Version",
    "type": "string"
   },
@@ -2803,6 +3134,17 @@
      "type": "null"
     }
    ]
+  },
+  "evidence": {
+   "anyOf": [
+    {
+     "$ref": "#/$defs/EvidenceSummary"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null
   }
  },
  "required": [

@@ -11,6 +11,7 @@ from __future__ import annotations
 import numpy as np
 
 from .contract import Finding, NextCheck, ValidationItem
+from .evidence import optical_evidence
 
 MIN_STRICT_FOR_ASSOCIATION = 3
 MIN_MATCHED_FOR_CROSSCHECK = 3
@@ -96,7 +97,10 @@ def derive(case_parts: dict, cfg: dict) -> tuple[list[Finding], list[ValidationI
     for mode in ("strict", "exploratory"):
         comps = [(p, c) for p in ok for c in p.optical if c.mode == mode]
         okc = [(p, c) for p, c in comps if c.status == "ok"]
+        ev = next(e for e in optical_evidence(pairs) if e.mode == mode)
         params = {"mode": mode, "n_pairs": len(comps), "n_compared": len(okc),
+                  "n_unique_optical_pairs": ev.n_unique_optical_pairs, "n_groups_ci_above_1": ev.n_groups_ci_above_1,
+                  "optical_pairs": [[g.before_item, g.after_item, len(g.pair_ids)] for g in ev.groups],
                   "n_ci_above_1": sum(1 for _, c in okc if (_ci_low(c.association_ratio) or 0) > 1),
                   "median_p_opt_given_radar": _median([c.p_optical_given_radar.value for _, c in okc]),
                   "median_p_opt_given_not_radar": _median([c.p_optical_given_not_radar.value for _, c in okc]),
@@ -162,8 +166,9 @@ def derive(case_parts: dict, cfg: dict) -> tuple[list[Finding], list[ValidationI
     if ok and c_cross:
         level = "internally_cross_checked"
         evidence.append("evidence.cross_geometry")
-    c_opt = bool(fs and fs.params["n_ci_above_1"] >= MIN_STRICT_FOR_ASSOCIATION)
-    crit.append(f"criterion.strict_optical:{fs.params['n_ci_above_1'] if fs else 0}/{MIN_STRICT_FOR_ASSOCIATION}")
+    # the criterion counts independent optical pairs, not radar comparisons that reuse the same two scenes
+    c_opt = bool(fs and fs.params["n_groups_ci_above_1"] >= MIN_STRICT_FOR_ASSOCIATION)
+    crit.append(f"criterion.strict_optical_pairs:{fs.params['n_groups_ci_above_1'] if fs else 0}/{MIN_STRICT_FOR_ASSOCIATION}")
     if ok and c_cross and c_opt:
         level = "associated_with_independent_observation"
         evidence.append("evidence.optical_association")

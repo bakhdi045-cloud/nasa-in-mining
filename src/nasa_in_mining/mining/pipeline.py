@@ -30,14 +30,14 @@ from scipy import ndimage
 from shapely.geometry import mapping, shape
 
 from . import coherence_change as cc
-from . import export, optical, stats
+from . import evidence, export, optical, stats
 from .contract import (Acquisition, ControlDef, CrossGeometry, Export, FileRecord, GeometrySummary, Layer, LayerFile,
                        Legend, LosPair, Manifest, Method, MiningCase, OpticalScene, PairResult, PerimeterVersion,
                        Processing, Profile, QualityCheck, Recurrence, Reference, Site, Step, Uncertainty, WindowMatch,
                        Zone, ZoneMetrics, Cluster, Dossier, absent, maybe, measured)
 from .findings import derive
 
-METHOD_VERSION = "2.0.0"
+METHOD_VERSION = "2.1.0"   # 2.1: optical support counted per distinct optical pair; structured references
 REUSED = ["catalog.load/parse_name (product index, CRID, dates)", "quality.check (phase QC, LOS only)",
           "roi.summarize_raster (polygon statistics cross-check)", "raster._colormap (palettes)",
           "recipes.displacement.los_cm_full (phase to LOS, masks)", "recipes.wavelength (product frequency)",
@@ -711,7 +711,8 @@ def run(case_dir: Path, data_dir: Path, repo_root: Path | None = None, publish: 
                    zones_url="zones.geojson", acquisitions=acquisitions, optical_scenes=optical_scenes,
                    optical_search=search_rec, method=method, pairs=pairs, geometries=geometries, cross_geometry=cross,
                    los=los_pairs, layers=layers, exports=ex, references=references, validation=validation,
-                   findings=findings, dossiers=dossiers, next_checks=checks, limits=limits, processing=processing)
+                   findings=findings, dossiers=dossiers, next_checks=checks, limits=limits, processing=processing,
+                   evidence=evidence.build(pairs))
     return _finish(case_kw, staging, case_dir, cfg_path, log, t_start, run_id, repo_root, publish)
 
 

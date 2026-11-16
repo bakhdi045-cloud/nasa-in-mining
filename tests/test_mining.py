@@ -227,7 +227,7 @@ def _m(v, low=None, high=None, unit="ratio"):
     return contract.measured(v, unit, u)
 
 
-def _pair(pid, span=12, ratio=2.0, inner=0.01, outer=0.005, opt_ratio=None, opt_low=None):
+def _pair(pid, span=12, ratio=2.0, inner=0.01, outer=0.005, opt_ratio=None, opt_low=None, scenes=None):
     prof = NS(id="ring@0.01", ratio_to_evaluation_rate=_m(ratio), exceeds_control=ratio > 1,
               evaluation_rate=_m(0.01, unit="fraction"))
     zones = [NS(zone_id="control_1_2km", flagged_fraction=_m(inner, unit="fraction")),
@@ -235,7 +235,10 @@ def _pair(pid, span=12, ratio=2.0, inner=0.01, outer=0.005, opt_ratio=None, opt_
              NS(zone_id="panels_outside", flagged_fraction=_m(0.0, unit="fraction"))]
     opt = []
     if opt_ratio is not None:
+        before, after = scenes or (f"S2_before_{pid}", f"S2_after_{pid}")   # distinct optical scenes unless shared
         opt = [NS(mode="strict", status="ok", max_gap_days=3, association_ratio=_m(opt_ratio, opt_low, opt_ratio + 1),
+                  before_item=before, after_item=after, before_datetime="2026-01-01T10:00:00Z",
+                  after_datetime="2026-01-13T10:00:00Z",
                   p_optical_given_radar=_m(0.02, unit="fraction"), p_optical_given_not_radar=_m(0.001, unit="fraction"),
                   share_of_optical_change_in_radar_flags=_m(0.05, unit="fraction"))]
     return NS(pair_id=pid, status="ok", span_days=span, profiles=[prof], zones=zones, optical=opt, reasons=[],
@@ -268,6 +271,18 @@ class FindingRules(unittest.TestCase):
         _, v, _ = self.derive(pairs, cross_ok=False)
         self.assertEqual(v[0].level, "computed")
 
+    def test_comparisons_sharing_the_same_optical_pair_count_once(self):
+        shared = ("S2C_20260813", "S2B_20260828")
+        pairs = [_pair(str(i), opt_ratio=3.0, opt_low=1.4, scenes=shared) for i in range(3)]   # three radar pairs, 2 scenes
+        f, v, _ = self.derive(pairs)
+        p = next(x for x in f if x.id == "F_optical_strict").params
+        self.assertEqual((p["n_compared"], p["n_unique_optical_pairs"], p["n_groups_ci_above_1"]), (3, 1, 1))
+        self.assertEqual(v[0].level, "internally_cross_checked")     # one temporal reference is not three
+        pairs = [_pair(str(i), opt_ratio=3.0, opt_low=1.4, scenes=shared if i < 2 else None) for i in range(3)]
+        f, v, _ = self.derive(pairs)
+        self.assertEqual(next(x for x in f if x.id == "F_optical_strict").params["n_unique_optical_pairs"], 2)
+        self.assertEqual(v[0].level, "internally_cross_checked")     # two distinct optical pairs: still below 3
+
     def test_24_day_pairs_are_summarised_separately(self):
         f, _, _ = self.derive([_pair("a"), _pair("b", span=24, ratio=5)])
         self.assertEqual(next(x for x in f if x.id == "F_rate_12d").params["n_pairs"], 1)
@@ -282,6 +297,58 @@ class FindingRules(unittest.TestCase):
         with self.assertRaises(ValidationError):
             contract.ValidationItem(observable="x", level="independently_validated", criteria=[], evidence_keys=[],
                                     missing_keys=[])
+
+
+class EvidenceReading(unittest.TestCase):
+    """The recorded v2 case is read with its dependencies counted; a label cannot produce a validation."""
+    case_json = ROOT / "cases" / "benguerir" / "output" / "case.json"
+
+    def load(self):
+        return contract.MiningCase.model_validate(json.loads(self.case_json.read_text(encoding="utf-8")))
+
+    def test_published_v2_case_has_two_optical_pairs_for_three_comparisons(self):
+        from nasa_in_mining.mining import evidence
+        case = self.load()
+        self.assertEqual(case.schema_version, "2.0")                 # the recorded file is untouched and still readable
+        ev = evidence.with_evidence(case).evidence
+        strict = next(e for e in ev.optical if e.mode == "strict")
+        self.assertTrue(ev.derived_at_read)
+        self.assertEqual((strict.n_radar_comparisons, strict.n_unique_optical_pairs), (3, 2))
+        shared = [g for g in strict.groups if len(g.pair_ids) == 2]
+        self.assertEqual(len(shared), 1)                              # the 13-28 August pair serves two radar geometries
+
+    def _validated(self, case, ref):
+        val = [v for v in case.validation]
+        val[0] = contract.ValidationItem(observable="low_coherence_location", level="independently_validated",
+                                         criteria=[], evidence_keys=["evidence.field_truth"], missing_keys=[],
+                                         reference_ids=["R1"])
+        data = json.loads(case.model_dump_json())
+        data["validation"] = [json.loads(v.model_dump_json()) for v in val]
+        data["evidence"] = {"derived_at_read": False, "optical": [], "references": [json.loads(ref.model_dump_json())]}
+        return contract.MiningCase.model_validate(data)
+
+    def test_validation_label_without_effective_reference_is_refused(self):
+        weak = contract.ReferenceEvidence(id="R1", kind="field_observation", observable="low_coherence_location",
+                                          source="x")
+        with self.assertRaises(ValidationError):
+            self._validated(self.load(), weak)
+        with self.assertRaises(ValidationError):                       # a label alone, without any reference
+            contract.ValidationItem(observable="x", level="independently_validated", criteria=[],
+                                    evidence_keys=["evidence.field_truth"], missing_keys=[])
+        self.assertIn("independent_reviewer", weak.missing())
+
+    def test_complete_structured_reference_is_the_only_way_to_reach_validated(self):
+        ref = contract.ReferenceEvidence(
+            id="R1", kind="field_observation", observable="low_coherence_location", source="site visit log",
+            reviewer="independent reviewer", reviewer_independent=True, blind_to_radar=True, method="blind survey",
+            rights="owner agreement", date_start="2026-09-01", date_end="2026-09-10", geometry_ref="units.geojson",
+            n_units_flagged=40, n_units_unflagged=45, n_independent_groups=3, sampling_probabilities_recorded=True,
+            evaluation={"precision": 0.5})
+        self.assertTrue(ref.effective())                               # test fixture only, never study data
+        self.assertEqual(self._validated(self.load(), ref).validation[0].level, "independently_validated")
+        other = ref.model_copy(update={"observable": "los_displacement"})
+        with self.assertRaises(ValidationError):                       # a reference supports its own observable only
+            self._validated(self.load(), other)
 
 
 class AccessCaches(unittest.TestCase):
@@ -321,7 +388,7 @@ class Api(unittest.TestCase):
         cls.client = TestClient(create_app(cls.dir.parent, cls.dir.parent / "no_web"))
 
     def test_health_list_and_runs(self):
-        self.assertEqual(self.client.get("/api/health").json()["schema_version"], "2.0")
+        self.assertEqual(self.client.get("/api/health").json()["schema_version"], "2.1")
         lst = self.client.get("/api/cases").json()
         self.assertEqual(lst[0]["case_id"], "synthetic-test")
         self.assertEqual(lst[0]["published_run"], self.case.run_id)

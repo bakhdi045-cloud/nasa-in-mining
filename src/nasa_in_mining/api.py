@@ -22,6 +22,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import ValidationError
 
 from .mining.contract import SCHEMA_VERSION, MiningCase
+from .mining.evidence import with_evidence
 
 mimetypes.add_type("text/javascript", ".mjs")   # module workers need a JavaScript MIME type
 mimetypes.add_type("text/javascript", ".js")
@@ -82,7 +83,7 @@ def create_app(cases_root: str | Path | None = None, web_dist: str | Path | None
     def load(case_id: str, run: str | None) -> MiningCase:
         f = folder(case_id, run)
         try:
-            return MiningCase.model_validate(json.loads((f / "case.json").read_text(encoding="utf-8")))
+            return with_evidence(MiningCase.model_validate(json.loads((f / "case.json").read_text(encoding="utf-8"))))
         except json.JSONDecodeError as exc:
             raise ApiError(500, "case_unreadable", f"case.json is not valid JSON: {exc.msg}") from exc
         except ValidationError as exc:

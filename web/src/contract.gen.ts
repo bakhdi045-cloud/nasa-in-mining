@@ -1,6 +1,6 @@
 /* Generated from contract/mining_case.schema.json by `npm run contract`. Do not edit. */
 
-export type SchemaVersion = "2.0";
+export type SchemaVersion = "2.0" | "2.1";
 export type CaseId = string;
 export type RunId = string;
 export type DataNature = "real" | "synthetic";
@@ -238,6 +238,7 @@ export type Level1 =
 export type Criteria = string[];
 export type EvidenceKeys = string[];
 export type MissingKeys = string[];
+export type ReferenceIds = string[];
 export type Validation = ValidationItem[];
 export type Id10 = string;
 export type Kind4 = string;
@@ -284,6 +285,44 @@ export type DeclaredSha256 = string | null;
 export type Inputs = FileRecord[];
 export type Outputs = FileRecord[];
 export type DurationS = number;
+export type DerivedAtRead = boolean;
+export type Mode1 = "strict" | "exploratory";
+export type NRadarComparisons = number;
+export type NAttempted = number;
+export type NUniqueOpticalPairs = number;
+export type NGroupsCiAbove1 = number;
+export type GroupId = string;
+export type BeforeItem1 = string;
+export type AfterItem1 = string;
+export type BeforeDatetime1 = string | null;
+export type AfterDatetime1 = string | null;
+export type PairIds1 = string[];
+export type NCiAbove1 = number;
+export type Groups = OpticalGroup[];
+export type NoteKey = string;
+export type Optical1 = OpticalEvidence[];
+export type Id13 = string;
+export type Kind6 = "field_observation" | "dated_imagery_annotation" | "operator_record" | "other";
+export type Observable1 = string;
+export type Source2 = string;
+export type Reviewer = string | null;
+export type ReviewerIndependent = boolean;
+export type BlindToRadar = boolean;
+export type Method2 = string | null;
+export type Rights = string | null;
+export type DateStart1 = string | null;
+export type DateEnd1 = string | null;
+export type GeometryRef = string | null;
+export type NUnitsFlagged = number;
+export type NUnitsUnflagged = number;
+export type NUnitsIndeterminate = number;
+export type NIndependentGroups = number;
+export type SamplingProbabilitiesRecorded = boolean;
+export type Evaluation = {
+  [k: string]: boolean | number | string | null;
+} | null;
+export type Limits1 = string[];
+export type References1 = ReferenceEvidence[];
 
 export interface MiningCase {
   schema_version?: SchemaVersion;
@@ -315,6 +354,7 @@ export interface MiningCase {
   limits: Limits;
   processing: Processing;
   manifest: Manifest | null;
+  evidence?: EvidenceSummary | null;
 }
 /**
  * This interface was referenced by `MiningCase`'s JSON-Schema
@@ -749,6 +789,7 @@ export interface ValidationItem {
   criteria: Criteria;
   evidence_keys: EvidenceKeys;
   missing_keys: MissingKeys;
+  reference_ids?: ReferenceIds;
 }
 /**
  * This interface was referenced by `MiningCase`'s JSON-Schema
@@ -846,4 +887,73 @@ export interface FileRecord {
   sha256: Sha2562;
   role: Role1;
   declared_sha256?: DeclaredSha256;
+}
+/**
+ * Counts of independent supports, derived from the recorded comparisons (never typed by hand).
+ *
+ * This interface was referenced by `MiningCase`'s JSON-Schema
+ * via the `definition` "EvidenceSummary".
+ */
+export interface EvidenceSummary {
+  derived_at_read?: DerivedAtRead;
+  optical?: Optical1;
+  references?: References1;
+}
+/**
+ * This interface was referenced by `MiningCase`'s JSON-Schema
+ * via the `definition` "OpticalEvidence".
+ */
+export interface OpticalEvidence {
+  mode: Mode1;
+  n_radar_comparisons: NRadarComparisons;
+  n_attempted: NAttempted;
+  n_unique_optical_pairs: NUniqueOpticalPairs;
+  n_groups_ci_above_1: NGroupsCiAbove1;
+  groups: Groups;
+  note_key?: NoteKey;
+}
+/**
+ * Radar comparisons that rely on the same pair of optical scenes: one temporal reference, not several.
+ *
+ * This interface was referenced by `MiningCase`'s JSON-Schema
+ * via the `definition` "OpticalGroup".
+ */
+export interface OpticalGroup {
+  group_id: GroupId;
+  before_item: BeforeItem1;
+  after_item: AfterItem1;
+  before_datetime?: BeforeDatetime1;
+  after_datetime?: AfterDatetime1;
+  pair_ids: PairIds1;
+  n_ci_above_1: NCiAbove1;
+}
+/**
+ * A structured independent reference (field observation or dated, geolocated annotation).
+ *
+ * A text marker is not a reference: `effective()` states what a reference must carry before it can support the
+ * level `independently_validated`. Every field is recorded; none is inferred.
+ *
+ * This interface was referenced by `MiningCase`'s JSON-Schema
+ * via the `definition` "ReferenceEvidence".
+ */
+export interface ReferenceEvidence {
+  id: Id13;
+  kind: Kind6;
+  observable: Observable1;
+  source: Source2;
+  reviewer?: Reviewer;
+  reviewer_independent?: ReviewerIndependent;
+  blind_to_radar?: BlindToRadar;
+  method?: Method2;
+  rights?: Rights;
+  date_start?: DateStart1;
+  date_end?: DateEnd1;
+  geometry_ref?: GeometryRef;
+  n_units_flagged?: NUnitsFlagged;
+  n_units_unflagged?: NUnitsUnflagged;
+  n_units_indeterminate?: NUnitsIndeterminate;
+  n_independent_groups?: NIndependentGroups;
+  sampling_probabilities_recorded?: SamplingProbabilitiesRecorded;
+  evaluation?: Evaluation;
+  limits?: Limits1;
 }

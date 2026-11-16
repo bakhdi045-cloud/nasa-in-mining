@@ -18,7 +18,10 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
-SCHEMA_VERSION = "2.0"
+SCHEMA_VERSION = "2.1"          # 2.1 adds optional evidence blocks only; 2.0 cases stay valid and readable
+READABLE_VERSIONS = ("2.0", "2.1")
+MIN_REFERENCE_UNITS_PER_CLASS = 30   # flagged and unflagged units each, before a reference can support a validation
+MIN_REFERENCE_GROUPS = 3             # independent dates/events behind the reference units
 Scalar = bool | int | float | str | None
 
 
@@ -400,6 +403,61 @@ class Reference(Strict):
     cannot_support_key: str
 
 
+class ReferenceEvidence(Strict):
+    """A structured independent reference (field observation or dated, geolocated annotation).
+
+    A text marker is not a reference: `effective()` states what a reference must carry before it can support the
+    level `independently_validated`. Every field is recorded; none is inferred.
+    """
+    id: str
+    kind: Literal["field_observation", "dated_imagery_annotation", "operator_record", "other"]
+    observable: str
+    source: str
+    reviewer: str | None = None
+    reviewer_independent: bool = False
+    blind_to_radar: bool = False
+    method: str | None = None
+    rights: str | None = None
+    date_start: str | None = None
+    date_end: str | None = None
+    geometry_ref: str | None = None          # id of a file/layer holding the geolocated units
+    n_units_flagged: int = 0
+    n_units_unflagged: int = 0
+    n_units_indeterminate: int = 0
+    n_independent_groups: int = 0            # distinct dates / events / shared acquisitions behind the units
+    sampling_probabilities_recorded: bool = False
+    evaluation: dict[str, Scalar] | None = None
+    limits: list[str] = Field(default_factory=list)
+
+    def missing(self) -> list[str]:
+        """What prevents this reference from supporting an independent validation (empty list = nothing missing)."""
+        out = []
+        if not (self.reviewer and self.reviewer_independent):
+            out.append("independent_reviewer")
+        if not self.blind_to_radar:
+            out.append("review_blind_to_radar")
+        if not (self.method and self.rights and self.source):
+            out.append("method_rights_source")
+        if not (self.date_start and self.date_end):
+            out.append("dates")
+        if not self.geometry_ref:
+            out.append("geolocated_units")
+        if self.n_units_flagged < MIN_REFERENCE_UNITS_PER_CLASS:
+            out.append(f"flagged_units>={MIN_REFERENCE_UNITS_PER_CLASS}")
+        if self.n_units_unflagged < MIN_REFERENCE_UNITS_PER_CLASS:
+            out.append(f"unflagged_units>={MIN_REFERENCE_UNITS_PER_CLASS}")
+        if self.n_independent_groups < MIN_REFERENCE_GROUPS:
+            out.append(f"independent_groups>={MIN_REFERENCE_GROUPS}")
+        if not self.sampling_probabilities_recorded:
+            out.append("sampling_probabilities")
+        if not self.evaluation:
+            out.append("evaluation_metrics")
+        return out
+
+    def effective(self) -> bool:
+        return not self.missing()
+
+
 class ValidationItem(Strict):
     observable: str
     level: Literal["not_computed", "computed", "internally_cross_checked", "associated_with_independent_observation",
@@ -407,12 +465,43 @@ class ValidationItem(Strict):
     criteria: list[str]
     evidence_keys: list[str]
     missing_keys: list[str]
+    reference_ids: list[str] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def _field_truth(self):
         if self.level == "independently_validated" and "evidence.field_truth" not in self.evidence_keys:
             raise ValueError("independent validation requires recorded field truth")
+        if self.level == "independently_validated" and not self.reference_ids:
+            raise ValueError("independent validation requires structured references (reference_ids), not a label")
         return self
+
+
+class OpticalGroup(Strict):
+    """Radar comparisons that rely on the same pair of optical scenes: one temporal reference, not several."""
+    group_id: str
+    before_item: str
+    after_item: str
+    before_datetime: str | None = None
+    after_datetime: str | None = None
+    pair_ids: list[str]
+    n_ci_above_1: int
+
+
+class OpticalEvidence(Strict):
+    mode: Literal["strict", "exploratory"]
+    n_radar_comparisons: int      # comparisons actually made (status ok)
+    n_attempted: int              # radar pairs for which a comparison was looked for
+    n_unique_optical_pairs: int
+    n_groups_ci_above_1: int
+    groups: list[OpticalGroup]
+    note_key: str = "evidence.optical_dependency"
+
+
+class EvidenceSummary(Strict):
+    """Counts of independent supports, derived from the recorded comparisons (never typed by hand)."""
+    derived_at_read: bool = False
+    optical: list[OpticalEvidence] = Field(default_factory=list)
+    references: list[ReferenceEvidence] = Field(default_factory=list)
 
 
 class Finding(Strict):
@@ -494,7 +583,7 @@ class Export(Strict):
 
 
 class MiningCase(Strict):
-    schema_version: Literal["2.0"] = SCHEMA_VERSION
+    schema_version: Literal["2.0", "2.1"] = SCHEMA_VERSION
     case_id: str
     run_id: str
     data_nature: Literal["real", "synthetic"]
@@ -523,6 +612,7 @@ class MiningCase(Strict):
     limits: list[str]
     processing: Processing
     manifest: Manifest | None
+    evidence: EvidenceSummary | None = None
 
     @model_validator(mode="after")
     def _links(self):
@@ -559,7 +649,16 @@ class MiningCase(Strict):
                 raise ValueError(f"next check {c.id} cites unknown findings {unknown}")
         if self.processing.status == "unavailable" and self.pairs:
             raise ValueError("an unavailable case carries no pair result")
+        refs = {r.id: r for r in (self.evidence.references if self.evidence else [])}
         for v in self.validation:
-            if v.level == "independently_validated" and "evidence.field_truth" not in v.evidence_keys:
-                raise ValueError("independent validation requires recorded field truth")
+            if v.level == "independently_validated":
+                if "evidence.field_truth" not in v.evidence_keys:
+                    raise ValueError("independent validation requires recorded field truth")
+                bad = [r for r in v.reference_ids if r not in refs]
+                if bad or not v.reference_ids:
+                    raise ValueError(f"independent validation cites unknown references {bad or v.reference_ids}")
+                weak = {r: refs[r].missing() for r in v.reference_ids if refs[r].missing() or refs[r].observable != v.observable}
+                if weak:
+                    raise ValueError(f"independent validation of {v.observable} is not supported by effective "
+                                     f"references: {weak}")
         return self
