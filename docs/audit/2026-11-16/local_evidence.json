@@ -1,0 +1,1191 @@
+{
+  "audited_utc": "2026-11-16T11:06:46+00:00",
+  "git_head": "22c6ed951463bdb965a7557d57c19f88ec90c545",
+  "git_branch": "feature/benguerir-robustness-v2",
+  "refs": [
+    "feature/benguerir-mining-case|1a151713bd73988414bf5adebaaef64aa5edb6ca",
+    "feature/benguerir-robustness-v2|22c6ed951463bdb965a7557d57c19f88ec90c545",
+    "main|6a3690791e120c5a37cf10749fb9f50604004694",
+    "origin/feature/benguerir-robustness-v2|22c6ed951463bdb965a7557d57c19f88ec90c545",
+    "origin/main|6a3690791e120c5a37cf10749fb9f50604004694"
+  ],
+  "tracked_files": 214,
+  "scope": "OCP Benguerir only; confirmed by user on 2026-11-16",
+  "case_id": "benguerir-2026-low-coherence",
+  "published_run": "20261115T150945Z",
+  "published_code": "ec59393b5421099c61af0f61ec3d8149fe06fb44",
+  "case_json_sha256": "391202bfb91caa702669737bf4044fba3f9cdb664a05e2dbcbb3e515ece0a4d4",
+  "contract_and_output_problems": [],
+  "input_integrity": {
+    "declared": 218,
+    "missing": [],
+    "changed": [],
+    "matching": 218
+  },
+  "input_roles": {
+    "config": 1,
+    "inventory": 1,
+    "zones": 1,
+    "nisar_provenance": 17,
+    "radar_geometry": 17,
+    "nisar_80m": 51,
+    "nisar_coherence": 17,
+    "nisar_mask": 17,
+    "s2_provenance": 41,
+    "s2_scl": 41,
+    "s2_stack": 12,
+    "worldcover_provenance": 1,
+    "worldcover": 1
+  },
+  "output_integrity": {
+    "declared": 102,
+    "missing": [],
+    "changed": [],
+    "matching": 102
+  },
+  "upstream_integrity": {
+    "declared": 16,
+    "missing": [],
+    "changed": [],
+    "matching": 16
+  },
+  "pair_status": {
+    "ok": 15,
+    "rejected_coherence_qc": 2
+  },
+  "maturities": {
+    "provisional": 17
+  },
+  "pair_summaries": [
+    {
+      "span_days": 12,
+      "n": 13,
+      "ratio_min": 1.177998608783183,
+      "ratio_median": 1.9880224116745027,
+      "ratio_max": 2.62562892185479,
+      "interval_above_1": 2,
+      "threshold_sensitivity": [
+        {
+          "quantile": 0.005,
+          "n": 13,
+          "n_above_1": 13,
+          "median_ratio": 2.667066869859571
+        },
+        {
+          "quantile": 0.01,
+          "n": 13,
+          "n_above_1": 13,
+          "median_ratio": 1.9880224116745027
+        },
+        {
+          "quantile": 0.05,
+          "n": 13,
+          "n_above_1": 0,
+          "median_ratio": 0.8410427077305409
+        }
+      ]
+    },
+    {
+      "span_days": 24,
+      "n": 2,
+      "ratio_min": 1.6838528381118076,
+      "ratio_median": 2.2295766896691256,
+      "ratio_max": 2.7753005412264438,
+      "interval_above_1": 1,
+      "threshold_sensitivity": [
+        {
+          "quantile": 0.005,
+          "n": 2,
+          "n_above_1": 2,
+          "median_ratio": 3.0762169840510594
+        },
+        {
+          "quantile": 0.01,
+          "n": 2,
+          "n_above_1": 2,
+          "median_ratio": 2.2295766896691256
+        },
+        {
+          "quantile": 0.05,
+          "n": 2,
+          "n_above_1": 1,
+          "median_ratio": 0.8757293800845848
+        }
+      ]
+    }
+  ],
+  "strict_optical_comparisons": [
+    {
+      "pair_id": "GUNW_T044_F018_20260617_20260629",
+      "before": "S2C_29SPR_20260614_0_L2A",
+      "after": "S2B_29SPR_20260629_0_L2A",
+      "jaccard": 0.09504273504273504,
+      "ratio": 66.25793103448277,
+      "interval": {
+        "kind": "block_bootstrap_interval",
+        "low": 37.63493894282463,
+        "high": 152.7203841785981,
+        "value": null,
+        "level": 0.95,
+        "method": "percentile interval, resampling square blocks of the perimeter",
+        "block_m": 1000.0,
+        "n_blocks": 64,
+        "block_size_sensitivity": null
+      },
+      "table": {
+        "n11": 278,
+        "n10": 2502,
+        "n01": 145,
+        "n00": 95929
+      }
+    },
+    {
+      "pair_id": "GUNW_T044_F018_20260816_20260828",
+      "before": "S2C_29SPR_20260813_0_L2A",
+      "after": "S2B_29SPR_20260828_0_L2A",
+      "jaccard": 0.17218708388814913,
+      "ratio": 7.962232494086543,
+      "interval": {
+        "kind": "block_bootstrap_interval",
+        "low": 6.009190415928594,
+        "high": 9.926777940387302,
+        "value": null,
+        "level": 0.95,
+        "method": "percentile interval, resampling square blocks of the perimeter",
+        "block_m": 1000.0,
+        "n_blocks": 64,
+        "block_size_sensitivity": null
+      },
+      "table": {
+        "n11": 2069,
+        "n10": 607,
+        "n01": 9340,
+        "n00": 86845
+      }
+    },
+    {
+      "pair_id": "GUNW_T023_F072_20260814_20260826",
+      "before": "S2C_29SPR_20260813_0_L2A",
+      "after": "S2B_29SPR_20260828_0_L2A",
+      "jaccard": 0.09358242518595399,
+      "ratio": 8.282312667277985,
+      "interval": {
+        "kind": "block_bootstrap_interval",
+        "low": 6.775091953692747,
+        "high": 10.160190893089101,
+        "value": null,
+        "level": 0.95,
+        "method": "percentile interval, resampling square blocks of the perimeter",
+        "block_m": 1000.0,
+        "n_blocks": 64,
+        "block_size_sensitivity": null
+      },
+      "table": {
+        "n11": 1082,
+        "n10": 153,
+        "n01": 10327,
+        "n00": 87299
+      }
+    }
+  ],
+  "distinct_optical_pairs": [
+    {
+      "before": "S2C_29SPR_20260614_0_L2A",
+      "after": "S2B_29SPR_20260629_0_L2A",
+      "radar_comparisons": [
+        "GUNW_T044_F018_20260617_20260629"
+      ]
+    },
+    {
+      "before": "S2C_29SPR_20260813_0_L2A",
+      "after": "S2B_29SPR_20260828_0_L2A",
+      "radar_comparisons": [
+        "GUNW_T044_F018_20260816_20260828",
+        "GUNW_T023_F072_20260814_20260826"
+      ]
+    }
+  ],
+  "validation": [
+    {
+      "observable": "low_coherence_location",
+      "level": "associated_with_independent_observation",
+      "criteria": [
+        "criterion.cross_geometry:5/3",
+        "criterion.strict_optical:3/3"
+      ],
+      "evidence_keys": [
+        "evidence.reproducible_run",
+        "evidence.quality_control",
+        "evidence.threshold_and_control_sensitivity",
+        "evidence.cross_geometry",
+        "evidence.optical_association"
+      ],
+      "missing_keys": [
+        "missing.field_truth",
+        "missing.validated_products",
+        "missing.recent_perimeter"
+      ]
+    },
+    {
+      "observable": "los_displacement",
+      "level": "computed",
+      "criteria": [
+        "criterion.los_deferred"
+      ],
+      "evidence_keys": [
+        "evidence.control_noise"
+      ],
+      "missing_keys": [
+        "missing.sign_check",
+        "missing.gnss_or_levelling",
+        "missing.iono_tropo_correction"
+      ]
+    },
+    {
+      "observable": "cause_of_change",
+      "level": "not_computed",
+      "criteria": [],
+      "evidence_keys": [],
+      "missing_keys": [
+        "missing.field_truth",
+        "missing.operations_calendar"
+      ]
+    }
+  ],
+  "geometry": [
+    {
+      "id": "study",
+      "valid": true,
+      "area_km2": 39.54763952619512
+    },
+    {
+      "id": "control",
+      "valid": true,
+      "area_km2": 146.46060789355815
+    },
+    {
+      "id": "panels_outside",
+      "valid": true,
+      "area_km2": 2.3878115893818976
+    },
+    {
+      "id": "exclusions",
+      "valid": true,
+      "area_km2": 83.81826668193885
+    }
+  ],
+  "optical_scenes_read": 41,
+  "optical_scenes_usable": 26,
+  "published_layers": [
+    {
+      "id": "coh_GUNW_T044_F018_20260617_20260629",
+      "kind": "observation",
+      "url": "layers/coh_GUNW_T044_F018_20260617_20260629.png"
+    },
+    {
+      "id": "flags_GUNW_T044_F018_20260617_20260629",
+      "kind": "derived",
+      "url": "layers/flags_GUNW_T044_F018_20260617_20260629.png"
+    },
+    {
+      "id": "opt_GUNW_T044_F018_20260617_20260629",
+      "kind": "reference",
+      "url": "layers/opt_GUNW_T044_F018_20260617_20260629.png"
+    },
+    {
+      "id": "s2before_GUNW_T044_F018_20260617_20260629",
+      "kind": "basemap",
+      "url": "layers/s2before_GUNW_T044_F018_20260617_20260629.jpg"
+    },
+    {
+      "id": "s2after_GUNW_T044_F018_20260617_20260629",
+      "kind": "basemap",
+      "url": "layers/s2after_GUNW_T044_F018_20260617_20260629.jpg"
+    },
+    {
+      "id": "los_GUNW_T044_F018_20260617_20260629",
+      "kind": "derived",
+      "url": "layers/los_GUNW_T044_F018_20260617_20260629.png"
+    },
+    {
+      "id": "coh_GUNW_T044_F018_20260629_20260711",
+      "kind": "observation",
+      "url": "layers/coh_GUNW_T044_F018_20260629_20260711.png"
+    },
+    {
+      "id": "flags_GUNW_T044_F018_20260629_20260711",
+      "kind": "derived",
+      "url": "layers/flags_GUNW_T044_F018_20260629_20260711.png"
+    },
+    {
+      "id": "los_GUNW_T044_F018_20260629_20260711",
+      "kind": "derived",
+      "url": "layers/los_GUNW_T044_F018_20260629_20260711.png"
+    },
+    {
+      "id": "coh_GUNW_T044_F018_20260711_20260723",
+      "kind": "observation",
+      "url": "layers/coh_GUNW_T044_F018_20260711_20260723.png"
+    },
+    {
+      "id": "flags_GUNW_T044_F018_20260711_20260723",
+      "kind": "derived",
+      "url": "layers/flags_GUNW_T044_F018_20260711_20260723.png"
+    },
+    {
+      "id": "los_GUNW_T044_F018_20260711_20260723",
+      "kind": "derived",
+      "url": "layers/los_GUNW_T044_F018_20260711_20260723.png"
+    },
+    {
+      "id": "coh_GUNW_T044_F018_20260723_20260816",
+      "kind": "observation",
+      "url": "layers/coh_GUNW_T044_F018_20260723_20260816.png"
+    },
+    {
+      "id": "flags_GUNW_T044_F018_20260723_20260816",
+      "kind": "derived",
+      "url": "layers/flags_GUNW_T044_F018_20260723_20260816.png"
+    },
+    {
+      "id": "los_GUNW_T044_F018_20260723_20260816",
+      "kind": "derived",
+      "url": "layers/los_GUNW_T044_F018_20260723_20260816.png"
+    },
+    {
+      "id": "coh_GUNW_T044_F018_20260816_20260828",
+      "kind": "observation",
+      "url": "layers/coh_GUNW_T044_F018_20260816_20260828.png"
+    },
+    {
+      "id": "flags_GUNW_T044_F018_20260816_20260828",
+      "kind": "derived",
+      "url": "layers/flags_GUNW_T044_F018_20260816_20260828.png"
+    },
+    {
+      "id": "opt_GUNW_T044_F018_20260816_20260828",
+      "kind": "reference",
+      "url": "layers/opt_GUNW_T044_F018_20260816_20260828.png"
+    },
+    {
+      "id": "s2before_GUNW_T044_F018_20260816_20260828",
+      "kind": "basemap",
+      "url": "layers/s2before_GUNW_T044_F018_20260816_20260828.jpg"
+    },
+    {
+      "id": "s2after_GUNW_T044_F018_20260816_20260828",
+      "kind": "basemap",
+      "url": "layers/s2after_GUNW_T044_F018_20260816_20260828.jpg"
+    },
+    {
+      "id": "los_GUNW_T044_F018_20260816_20260828",
+      "kind": "derived",
+      "url": "layers/los_GUNW_T044_F018_20260816_20260828.png"
+    },
+    {
+      "id": "coh_GUNW_T044_F018_20260828_20260909",
+      "kind": "observation",
+      "url": "layers/coh_GUNW_T044_F018_20260828_20260909.png"
+    },
+    {
+      "id": "flags_GUNW_T044_F018_20260828_20260909",
+      "kind": "derived",
+      "url": "layers/flags_GUNW_T044_F018_20260828_20260909.png"
+    },
+    {
+      "id": "los_GUNW_T044_F018_20260828_20260909",
+      "kind": "derived",
+      "url": "layers/los_GUNW_T044_F018_20260828_20260909.png"
+    },
+    {
+      "id": "coh_GUNW_T044_F018_20260909_20260921",
+      "kind": "observation",
+      "url": "layers/coh_GUNW_T044_F018_20260909_20260921.png"
+    },
+    {
+      "id": "flags_GUNW_T044_F018_20260909_20260921",
+      "kind": "derived",
+      "url": "layers/flags_GUNW_T044_F018_20260909_20260921.png"
+    },
+    {
+      "id": "los_GUNW_T044_F018_20260909_20260921",
+      "kind": "derived",
+      "url": "layers/los_GUNW_T044_F018_20260909_20260921.png"
+    },
+    {
+      "id": "coh_GUNW_T044_F018_20260921_20261003",
+      "kind": "observation",
+      "url": "layers/coh_GUNW_T044_F018_20260921_20261003.png"
+    },
+    {
+      "id": "flags_GUNW_T044_F018_20260921_20261003",
+      "kind": "derived",
+      "url": "layers/flags_GUNW_T044_F018_20260921_20261003.png"
+    },
+    {
+      "id": "los_GUNW_T044_F018_20260921_20261003",
+      "kind": "derived",
+      "url": "layers/los_GUNW_T044_F018_20260921_20261003.png"
+    },
+    {
+      "id": "coh_GUNW_T044_F018_20261003_20261015",
+      "kind": "observation",
+      "url": "layers/coh_GUNW_T044_F018_20261003_20261015.png"
+    },
+    {
+      "id": "flags_GUNW_T044_F018_20261003_20261015",
+      "kind": "derived",
+      "url": "layers/flags_GUNW_T044_F018_20261003_20261015.png"
+    },
+    {
+      "id": "los_GUNW_T044_F018_20261003_20261015",
+      "kind": "derived",
+      "url": "layers/los_GUNW_T044_F018_20261003_20261015.png"
+    },
+    {
+      "id": "coh_GUNW_T023_F072_20260627_20260709",
+      "kind": "observation",
+      "url": "layers/coh_GUNW_T023_F072_20260627_20260709.png"
+    },
+    {
+      "id": "flags_GUNW_T023_F072_20260627_20260709",
+      "kind": "derived",
+      "url": "layers/flags_GUNW_T023_F072_20260627_20260709.png"
+    },
+    {
+      "id": "los_GUNW_T023_F072_20260627_20260709",
+      "kind": "derived",
+      "url": "layers/los_GUNW_T023_F072_20260627_20260709.png"
+    },
+    {
+      "id": "coh_GUNW_T023_F072_20260709_20260721",
+      "kind": "observation",
+      "url": "layers/coh_GUNW_T023_F072_20260709_20260721.png"
+    },
+    {
+      "id": "flags_GUNW_T023_F072_20260709_20260721",
+      "kind": "derived",
+      "url": "layers/flags_GUNW_T023_F072_20260709_20260721.png"
+    },
+    {
+      "id": "los_GUNW_T023_F072_20260709_20260721",
+      "kind": "derived",
+      "url": "layers/los_GUNW_T023_F072_20260709_20260721.png"
+    },
+    {
+      "id": "coh_GUNW_T023_F072_20260721_20260814",
+      "kind": "observation",
+      "url": "layers/coh_GUNW_T023_F072_20260721_20260814.png"
+    },
+    {
+      "id": "flags_GUNW_T023_F072_20260721_20260814",
+      "kind": "derived",
+      "url": "layers/flags_GUNW_T023_F072_20260721_20260814.png"
+    },
+    {
+      "id": "los_GUNW_T023_F072_20260721_20260814",
+      "kind": "derived",
+      "url": "layers/los_GUNW_T023_F072_20260721_20260814.png"
+    },
+    {
+      "id": "coh_GUNW_T023_F072_20260814_20260826",
+      "kind": "observation",
+      "url": "layers/coh_GUNW_T023_F072_20260814_20260826.png"
+    },
+    {
+      "id": "flags_GUNW_T023_F072_20260814_20260826",
+      "kind": "derived",
+      "url": "layers/flags_GUNW_T023_F072_20260814_20260826.png"
+    },
+    {
+      "id": "opt_GUNW_T023_F072_20260814_20260826",
+      "kind": "reference",
+      "url": "layers/opt_GUNW_T023_F072_20260814_20260826.png"
+    },
+    {
+      "id": "s2before_GUNW_T023_F072_20260814_20260826",
+      "kind": "basemap",
+      "url": "layers/s2before_GUNW_T023_F072_20260814_20260826.jpg"
+    },
+    {
+      "id": "s2after_GUNW_T023_F072_20260814_20260826",
+      "kind": "basemap",
+      "url": "layers/s2after_GUNW_T023_F072_20260814_20260826.jpg"
+    },
+    {
+      "id": "los_GUNW_T023_F072_20260814_20260826",
+      "kind": "derived",
+      "url": "layers/los_GUNW_T023_F072_20260814_20260826.png"
+    },
+    {
+      "id": "coh_GUNW_T023_F072_20260919_20261001",
+      "kind": "observation",
+      "url": "layers/coh_GUNW_T023_F072_20260919_20261001.png"
+    },
+    {
+      "id": "flags_GUNW_T023_F072_20260919_20261001",
+      "kind": "derived",
+      "url": "layers/flags_GUNW_T023_F072_20260919_20261001.png"
+    },
+    {
+      "id": "los_GUNW_T023_F072_20260919_20261001",
+      "kind": "derived",
+      "url": "layers/los_GUNW_T023_F072_20260919_20261001.png"
+    },
+    {
+      "id": "coh_GUNW_T023_F072_20261001_20261013",
+      "kind": "observation",
+      "url": "layers/coh_GUNW_T023_F072_20261001_20261013.png"
+    },
+    {
+      "id": "flags_GUNW_T023_F072_20261001_20261013",
+      "kind": "derived",
+      "url": "layers/flags_GUNW_T023_F072_20261001_20261013.png"
+    },
+    {
+      "id": "los_GUNW_T023_F072_20261001_20261013",
+      "kind": "derived",
+      "url": "layers/los_GUNW_T023_F072_20261001_20261013.png"
+    },
+    {
+      "id": "recurrence_023D_F072_12d",
+      "kind": "derived",
+      "url": "layers/recurrence_023D_F072_12d.png"
+    },
+    {
+      "id": "observed_023D_F072_12d",
+      "kind": "derived",
+      "url": "layers/observed_023D_F072_12d.png"
+    },
+    {
+      "id": "recurrence_044A_F018_12d",
+      "kind": "derived",
+      "url": "layers/recurrence_044A_F018_12d.png"
+    },
+    {
+      "id": "observed_044A_F018_12d",
+      "kind": "derived",
+      "url": "layers/observed_044A_F018_12d.png"
+    },
+    {
+      "id": "s2_early",
+      "kind": "basemap",
+      "url": "layers/s2_early.jpg"
+    },
+    {
+      "id": "s2_late",
+      "kind": "basemap",
+      "url": "layers/s2_late.jpg"
+    }
+  ],
+  "raster_exports": [
+    {
+      "path": "rasters/flags_GUNW_T044_F018_20260617_20260629.tif",
+      "crs": "EPSG:32629",
+      "shape": [
+        1060,
+        860
+      ],
+      "spacing": [
+        20.0,
+        20.0
+      ],
+      "nodata": 255.0,
+      "valid_pixels": 911600,
+      "range": [
+        0.0,
+        1.0
+      ],
+      "tags": {
+        "pair": "GUNW_T044_F018_20260617_20260629",
+        "profile": "ring@0.01",
+        "threshold": "0.3293251395225525",
+        "values": "0 observed not flagged; 1 low coherence relative to control; 255 not observed (product mask, water, anomaly)",
+        "AREA_OR_POINT": "Area"
+      }
+    },
+    {
+      "path": "rasters/flags_GUNW_T044_F018_20260629_20260711.tif",
+      "crs": "EPSG:32629",
+      "shape": [
+        1060,
+        860
+      ],
+      "spacing": [
+        20.0,
+        20.0
+      ],
+      "nodata": 255.0,
+      "valid_pixels": 911600,
+      "range": [
+        0.0,
+        1.0
+      ],
+      "tags": {
+        "pair": "GUNW_T044_F018_20260629_20260711",
+        "profile": "ring@0.01",
+        "threshold": "0.3176437020301819",
+        "values": "0 observed not flagged; 1 low coherence relative to control; 255 not observed (product mask, water, anomaly)",
+        "AREA_OR_POINT": "Area"
+      }
+    },
+    {
+      "path": "rasters/flags_GUNW_T044_F018_20260711_20260723.tif",
+      "crs": "EPSG:32629",
+      "shape": [
+        1060,
+        860
+      ],
+      "spacing": [
+        20.0,
+        20.0
+      ],
+      "nodata": 255.0,
+      "valid_pixels": 911600,
+      "range": [
+        0.0,
+        1.0
+      ],
+      "tags": {
+        "pair": "GUNW_T044_F018_20260711_20260723",
+        "profile": "ring@0.01",
+        "threshold": "0.34338921308517456",
+        "values": "0 observed not flagged; 1 low coherence relative to control; 255 not observed (product mask, water, anomaly)",
+        "AREA_OR_POINT": "Area"
+      }
+    },
+    {
+      "path": "rasters/flags_GUNW_T044_F018_20260723_20260816.tif",
+      "crs": "EPSG:32629",
+      "shape": [
+        1060,
+        860
+      ],
+      "spacing": [
+        20.0,
+        20.0
+      ],
+      "nodata": 255.0,
+      "valid_pixels": 911600,
+      "range": [
+        0.0,
+        1.0
+      ],
+      "tags": {
+        "pair": "GUNW_T044_F018_20260723_20260816",
+        "profile": "ring@0.01",
+        "threshold": "0.2985185980796814",
+        "values": "0 observed not flagged; 1 low coherence relative to control; 255 not observed (product mask, water, anomaly)",
+        "AREA_OR_POINT": "Area"
+      }
+    },
+    {
+      "path": "rasters/flags_GUNW_T044_F018_20260816_20260828.tif",
+      "crs": "EPSG:32629",
+      "shape": [
+        1060,
+        860
+      ],
+      "spacing": [
+        20.0,
+        20.0
+      ],
+      "nodata": 255.0,
+      "valid_pixels": 911600,
+      "range": [
+        0.0,
+        1.0
+      ],
+      "tags": {
+        "pair": "GUNW_T044_F018_20260816_20260828",
+        "profile": "ring@0.01",
+        "threshold": "0.35323217511177063",
+        "values": "0 observed not flagged; 1 low coherence relative to control; 255 not observed (product mask, water, anomaly)",
+        "AREA_OR_POINT": "Area"
+      }
+    },
+    {
+      "path": "rasters/flags_GUNW_T044_F018_20260828_20260909.tif",
+      "crs": "EPSG:32629",
+      "shape": [
+        1060,
+        860
+      ],
+      "spacing": [
+        20.0,
+        20.0
+      ],
+      "nodata": 255.0,
+      "valid_pixels": 911600,
+      "range": [
+        0.0,
+        1.0
+      ],
+      "tags": {
+        "pair": "GUNW_T044_F018_20260828_20260909",
+        "profile": "ring@0.01",
+        "threshold": "0.3422353267669678",
+        "values": "0 observed not flagged; 1 low coherence relative to control; 255 not observed (product mask, water, anomaly)",
+        "AREA_OR_POINT": "Area"
+      }
+    },
+    {
+      "path": "rasters/flags_GUNW_T044_F018_20260909_20260921.tif",
+      "crs": "EPSG:32629",
+      "shape": [
+        1060,
+        860
+      ],
+      "spacing": [
+        20.0,
+        20.0
+      ],
+      "nodata": 255.0,
+      "valid_pixels": 911600,
+      "range": [
+        0.0,
+        1.0
+      ],
+      "tags": {
+        "pair": "GUNW_T044_F018_20260909_20260921",
+        "profile": "ring@0.01",
+        "threshold": "0.31804755330085754",
+        "values": "0 observed not flagged; 1 low coherence relative to control; 255 not observed (product mask, water, anomaly)",
+        "AREA_OR_POINT": "Area"
+      }
+    },
+    {
+      "path": "rasters/flags_GUNW_T044_F018_20260921_20261003.tif",
+      "crs": "EPSG:32629",
+      "shape": [
+        1060,
+        860
+      ],
+      "spacing": [
+        20.0,
+        20.0
+      ],
+      "nodata": 255.0,
+      "valid_pixels": 911600,
+      "range": [
+        0.0,
+        1.0
+      ],
+      "tags": {
+        "pair": "GUNW_T044_F018_20260921_20261003",
+        "profile": "ring@0.01",
+        "threshold": "0.33138924837112427",
+        "values": "0 observed not flagged; 1 low coherence relative to control; 255 not observed (product mask, water, anomaly)",
+        "AREA_OR_POINT": "Area"
+      }
+    },
+    {
+      "path": "rasters/flags_GUNW_T044_F018_20261003_20261015.tif",
+      "crs": "EPSG:32629",
+      "shape": [
+        1060,
+        860
+      ],
+      "spacing": [
+        20.0,
+        20.0
+      ],
+      "nodata": 255.0,
+      "valid_pixels": 911600,
+      "range": [
+        0.0,
+        1.0
+      ],
+      "tags": {
+        "pair": "GUNW_T044_F018_20261003_20261015",
+        "profile": "ring@0.01",
+        "threshold": "0.28682708740234375",
+        "values": "0 observed not flagged; 1 low coherence relative to control; 255 not observed (product mask, water, anomaly)",
+        "AREA_OR_POINT": "Area"
+      }
+    },
+    {
+      "path": "rasters/flags_GUNW_T023_F072_20260627_20260709.tif",
+      "crs": "EPSG:32629",
+      "shape": [
+        1060,
+        860
+      ],
+      "spacing": [
+        20.0,
+        20.0
+      ],
+      "nodata": 255.0,
+      "valid_pixels": 911600,
+      "range": [
+        0.0,
+        1.0
+      ],
+      "tags": {
+        "pair": "GUNW_T023_F072_20260627_20260709",
+        "profile": "ring@0.01",
+        "threshold": "0.23334676027297974",
+        "values": "0 observed not flagged; 1 low coherence relative to control; 255 not observed (product mask, water, anomaly)",
+        "AREA_OR_POINT": "Area"
+      }
+    },
+    {
+      "path": "rasters/flags_GUNW_T023_F072_20260709_20260721.tif",
+      "crs": "EPSG:32629",
+      "shape": [
+        1060,
+        860
+      ],
+      "spacing": [
+        20.0,
+        20.0
+      ],
+      "nodata": 255.0,
+      "valid_pixels": 911600,
+      "range": [
+        0.0,
+        1.0
+      ],
+      "tags": {
+        "pair": "GUNW_T023_F072_20260709_20260721",
+        "profile": "ring@0.01",
+        "threshold": "0.2448035180568695",
+        "values": "0 observed not flagged; 1 low coherence relative to control; 255 not observed (product mask, water, anomaly)",
+        "AREA_OR_POINT": "Area"
+      }
+    },
+    {
+      "path": "rasters/flags_GUNW_T023_F072_20260721_20260814.tif",
+      "crs": "EPSG:32629",
+      "shape": [
+        1060,
+        860
+      ],
+      "spacing": [
+        20.0,
+        20.0
+      ],
+      "nodata": 255.0,
+      "valid_pixels": 911600,
+      "range": [
+        0.0,
+        1.0
+      ],
+      "tags": {
+        "pair": "GUNW_T023_F072_20260721_20260814",
+        "profile": "ring@0.01",
+        "threshold": "0.22147519886493683",
+        "values": "0 observed not flagged; 1 low coherence relative to control; 255 not observed (product mask, water, anomaly)",
+        "AREA_OR_POINT": "Area"
+      }
+    },
+    {
+      "path": "rasters/flags_GUNW_T023_F072_20260814_20260826.tif",
+      "crs": "EPSG:32629",
+      "shape": [
+        1060,
+        860
+      ],
+      "spacing": [
+        20.0,
+        20.0
+      ],
+      "nodata": 255.0,
+      "valid_pixels": 911600,
+      "range": [
+        0.0,
+        1.0
+      ],
+      "tags": {
+        "pair": "GUNW_T023_F072_20260814_20260826",
+        "profile": "ring@0.01",
+        "threshold": "0.24193693697452545",
+        "values": "0 observed not flagged; 1 low coherence relative to control; 255 not observed (product mask, water, anomaly)",
+        "AREA_OR_POINT": "Area"
+      }
+    },
+    {
+      "path": "rasters/flags_GUNW_T023_F072_20260919_20261001.tif",
+      "crs": "EPSG:32629",
+      "shape": [
+        1060,
+        860
+      ],
+      "spacing": [
+        20.0,
+        20.0
+      ],
+      "nodata": 255.0,
+      "valid_pixels": 911600,
+      "range": [
+        0.0,
+        1.0
+      ],
+      "tags": {
+        "pair": "GUNW_T023_F072_20260919_20261001",
+        "profile": "ring@0.01",
+        "threshold": "0.2531263530254364",
+        "values": "0 observed not flagged; 1 low coherence relative to control; 255 not observed (product mask, water, anomaly)",
+        "AREA_OR_POINT": "Area"
+      }
+    },
+    {
+      "path": "rasters/flags_GUNW_T023_F072_20261001_20261013.tif",
+      "crs": "EPSG:32629",
+      "shape": [
+        1060,
+        860
+      ],
+      "spacing": [
+        20.0,
+        20.0
+      ],
+      "nodata": 255.0,
+      "valid_pixels": 911600,
+      "range": [
+        0.0,
+        1.0
+      ],
+      "tags": {
+        "pair": "GUNW_T023_F072_20261001_20261013",
+        "profile": "ring@0.01",
+        "threshold": "0.1980147808790207",
+        "values": "0 observed not flagged; 1 low coherence relative to control; 255 not observed (product mask, water, anomaly)",
+        "AREA_OR_POINT": "Area"
+      }
+    },
+    {
+      "path": "rasters/recurrence_023D_F072_12d.tif",
+      "crs": "EPSG:32629",
+      "shape": [
+        1060,
+        860
+      ],
+      "spacing": [
+        20.0,
+        20.0
+      ],
+      "nodata": "NaN",
+      "valid_pixels": 911600,
+      "range": [
+        0.0,
+        1.0
+      ],
+      "tags": {
+        "pairs": "GUNW_T023_F072_20260627_20260709,GUNW_T023_F072_20260709_20260721,GUNW_T023_F072_20260814_20260826,GUNW_T023_F072_20260919_20261001,GUNW_T023_F072_20261001_20261013",
+        "values": "fraction of observed 12-day pairs flagged",
+        "AREA_OR_POINT": "Area"
+      }
+    },
+    {
+      "path": "rasters/observed_023D_F072_12d.tif",
+      "crs": "EPSG:32629",
+      "shape": [
+        1060,
+        860
+      ],
+      "spacing": [
+        20.0,
+        20.0
+      ],
+      "nodata": 0.0,
+      "valid_pixels": 911600,
+      "range": [
+        5.0,
+        5.0
+      ],
+      "tags": {
+        "values": "number of observed 12-day pairs",
+        "AREA_OR_POINT": "Area"
+      }
+    },
+    {
+      "path": "rasters/recurrence_044A_F018_12d.tif",
+      "crs": "EPSG:32629",
+      "shape": [
+        1060,
+        860
+      ],
+      "spacing": [
+        20.0,
+        20.0
+      ],
+      "nodata": "NaN",
+      "valid_pixels": 911600,
+      "range": [
+        0.0,
+        1.0
+      ],
+      "tags": {
+        "pairs": "GUNW_T044_F018_20260617_20260629,GUNW_T044_F018_20260629_20260711,GUNW_T044_F018_20260711_20260723,GUNW_T044_F018_20260816_20260828,GUNW_T044_F018_20260828_20260909,GUNW_T044_F018_20260909_20260921,GUNW_T044_F018_20260921_20261003,GUNW_T044_F018_20261003_20261015",
+        "values": "fraction of observed 12-day pairs flagged",
+        "AREA_OR_POINT": "Area"
+      }
+    },
+    {
+      "path": "rasters/observed_044A_F018_12d.tif",
+      "crs": "EPSG:32629",
+      "shape": [
+        1060,
+        860
+      ],
+      "spacing": [
+        20.0,
+        20.0
+      ],
+      "nodata": 0.0,
+      "valid_pixels": 911600,
+      "range": [
+        8.0,
+        8.0
+      ],
+      "tags": {
+        "values": "number of observed 12-day pairs",
+        "AREA_OR_POINT": "Area"
+      }
+    }
+  ],
+  "recorded_inventories": [
+    {
+      "collection": "NISAR_L2_GCOV_PROVISIONAL_V1",
+      "searched_utc": "2026-11-15T14:31:13+00:00",
+      "bbox_wgs84": [
+        -7.913499502600662,
+        32.164121536460875,
+        -7.741689447311278,
+        32.34798962039192
+      ],
+      "n": 19,
+      "completeness": {
+        "pages": 1,
+        "cmr_hits": 19,
+        "n_unique": 19,
+        "complete": true
+      }
+    },
+    {
+      "collection": "NISAR_L2_GCOV_V1",
+      "searched_utc": "2026-11-15T14:31:13+00:00",
+      "bbox_wgs84": [
+        -7.913499502600662,
+        32.164121536460875,
+        -7.741689447311278,
+        32.34798962039192
+      ],
+      "n": 3,
+      "completeness": {
+        "pages": 1,
+        "cmr_hits": 3,
+        "n_unique": 3,
+        "complete": true
+      }
+    },
+    {
+      "collection": "NISAR_L2_GOFF_PROVISIONAL_V1",
+      "searched_utc": "2026-11-15T14:31:13+00:00",
+      "bbox_wgs84": [
+        -7.913499502600662,
+        32.164121536460875,
+        -7.741689447311278,
+        32.34798962039192
+      ],
+      "n": 0,
+      "completeness": {
+        "pages": 1,
+        "cmr_hits": 0,
+        "n_unique": 0,
+        "complete": true
+      }
+    },
+    {
+      "collection": "NISAR_L2_GOFF_V1",
+      "searched_utc": "2026-11-15T14:31:13+00:00",
+      "bbox_wgs84": [
+        -7.913499502600662,
+        32.164121536460875,
+        -7.741689447311278,
+        32.34798962039192
+      ],
+      "n": 0,
+      "completeness": {
+        "pages": 1,
+        "cmr_hits": 0,
+        "n_unique": 0,
+        "complete": true
+      }
+    },
+    {
+      "collection": "NISAR_L2_GUNW_BETA_V1",
+      "searched_utc": "2026-11-15T14:31:13+00:00",
+      "bbox_wgs84": [
+        -7.913499502600662,
+        32.164121536460875,
+        -7.741689447311278,
+        32.34798962039192
+      ],
+      "n": 0,
+      "completeness": {
+        "pages": 1,
+        "cmr_hits": 0,
+        "n_unique": 0,
+        "complete": true
+      }
+    },
+    {
+      "collection": "NISAR_L2_GUNW_PROVISIONAL_V1",
+      "searched_utc": "2026-11-15T14:31:13+00:00",
+      "bbox_wgs84": [
+        -7.913499502600662,
+        32.164121536460875,
+        -7.741689447311278,
+        32.34798962039192
+      ],
+      "n": 17,
+      "completeness": {
+        "pages": 1,
+        "cmr_hits": 17,
+        "n_unique": 17,
+        "complete": true
+      }
+    },
+    {
+      "collection": "NISAR_L2_GUNW_V1",
+      "searched_utc": "2026-11-15T14:31:13+00:00",
+      "bbox_wgs84": [
+        -7.913499502600662,
+        32.164121536460875,
+        -7.741689447311278,
+        32.34798962039192
+      ],
+      "n": 0,
+      "completeness": {
+        "pages": 1,
+        "cmr_hits": 0,
+        "n_unique": 0,
+        "complete": true
+      }
+    },
+    {
+      "collection": "NISAR_L3_SME2_PROVISIONAL_V1",
+      "searched_utc": "2026-11-15T14:31:13+00:00",
+      "bbox_wgs84": [
+        -7.913499502600662,
+        32.164121536460875,
+        -7.741689447311278,
+        32.34798962039192
+      ],
+      "n": 19,
+      "completeness": {
+        "pages": 1,
+        "cmr_hits": 19,
+        "n_unique": 19,
+        "complete": true
+      }
+    }
+  ],
+  "limitations": [
+    "Hashes establish local integrity, not independent source authenticity or field validation.",
+    "Recorded inventories are dated snapshots, not live availability.",
+    "No new scientific result is published by this audit."
+  ]
+}

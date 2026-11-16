@@ -1,0 +1,193 @@
+{
+  "decision_date": "2026-11-16",
+  "site": "OCP Benguerir",
+  "site_confirmed_by_user": true,
+  "source_catalogue": "catalogue_live.json",
+  "priority": "Add temporal GCOV backscatter change; preserve GUNW low-coherence baseline.",
+  "selected_pairs": [
+    {
+      "role": "historical_integration_pilot",
+      "crid": "P05023",
+      "status": "catalogue_candidates_only",
+      "granules": [
+        {
+          "collection": "NISAR_L2_GCOV_PROVISIONAL_V1",
+          "concept_id": "G4284608674-ASF",
+          "granule_id": "NISAR_L2_PR_GCOV_028_044_A_018_4005_DHDH_A_20260816T054640_20260816T054715_P05023_N_F_J_001",
+          "time_start": "2026-08-16T05:46:40.000Z",
+          "time_end": "2026-08-16T05:47:15.999Z",
+          "updated": "2026-08-21T14:37:18.849Z",
+          "size_mb": 5954.277600288391,
+          "data_url": "https://nisar.asf.earthdatacloud.nasa.gov/NISAR/NISAR_L2_GCOV_PROVISIONAL_V1/NISAR_L2_PR_GCOV_028_044_A_018_4005_DHDH_A_20260816T054640_20260816T054715_P05023_N_F_J_001/NISAR_L2_PR_GCOV_028_044_A_018_4005_DHDH_A_20260816T054640_20260816T054715_P05023_N_F_J_001.h5",
+          "footprint": [
+            [
+              "31.93833 -6.2574 34.06765 -6.93041 33.40632 -9.55739 31.30065 -8.79675 31.93833 -6.2574"
+            ]
+          ],
+          "metadata_footprint_covers_osm_study": true,
+          "downloaded_for_this_audit": false,
+          "usable_pixels_verified": false
+        },
+        {
+          "collection": "NISAR_L2_GCOV_PROVISIONAL_V1",
+          "concept_id": "G4292293428-ASF",
+          "granule_id": "NISAR_L2_PR_GCOV_029_044_A_018_4005_DHDH_A_20260828T054640_20260828T054714_P05023_N_F_J_001",
+          "time_start": "2026-08-28T05:46:40.000Z",
+          "time_end": "2026-08-28T05:47:14.999Z",
+          "updated": "2026-08-30T06:27:03.972Z",
+          "size_mb": 5822.265623092651,
+          "data_url": "https://nisar.asf.earthdatacloud.nasa.gov/NISAR/NISAR_L2_GCOV_PROVISIONAL_V1/NISAR_L2_PR_GCOV_029_044_A_018_4005_DHDH_A_20260828T054640_20260828T054714_P05023_N_F_J_001/NISAR_L2_PR_GCOV_029_044_A_018_4005_DHDH_A_20260828T054640_20260828T054714_P05023_N_F_J_001.h5",
+          "footprint": [
+            [
+              "31.95683 -6.25327 34.0252 -6.91499 33.36422 -9.54092 31.317 -8.80167 31.95683 -6.25327"
+            ]
+          ],
+          "metadata_footprint_covers_osm_study": true,
+          "downloaded_for_this_audit": false,
+          "usable_pixels_verified": false
+        }
+      ],
+      "optical_pair_already_used_in_v2": [
+        "S2C_29SPR_20260813_0_L2A",
+        "S2B_29SPR_20260828_0_L2A"
+      ],
+      "independent_validation_holdout": false,
+      "calibration_review_required": true
+    },
+    {
+      "role": "historical_secondary_window",
+      "crid": "P05023",
+      "status": "catalogue_candidates_only",
+      "granules": [
+        {
+          "collection": "NISAR_L2_GCOV_PROVISIONAL_V1",
+          "concept_id": "G4250125297-ASF",
+          "granule_id": "NISAR_L2_PR_GCOV_023_044_A_018_4005_DHDH_A_20260617T054643_20260617T054718_P05023_F_F_J_001",
+          "time_start": "2026-06-17T05:46:43.000Z",
+          "time_end": "2026-06-17T05:47:18.999Z",
+          "updated": "2026-07-17T04:44:05.962Z",
+          "size_mb": 5954.515669822693,
+          "data_url": "https://nisar.asf.earthdatacloud.nasa.gov/NISAR/NISAR_L2_GCOV_PROVISIONAL_V1/NISAR_L2_PR_GCOV_023_044_A_018_4005_DHDH_A_20260617T054643_20260617T054718_P05023_F_F_J_001/NISAR_L2_PR_GCOV_023_044_A_018_4005_DHDH_A_20260617T054643_20260617T054718_P05023_F_F_J_001.h5",
+          "footprint": [
+            [
+              "31.94019 -6.25528 34.06933 -6.92907 33.40756 -9.55792 31.3019 -8.79726 31.94019 -6.25528"
+            ]
+          ],
+          "metadata_footprint_covers_osm_study": true,
+          "downloaded_for_this_audit": false,
+          "usable_pixels_verified": false
+        },
+        {
+          "collection": "NISAR_L2_GCOV_PROVISIONAL_V1",
+          "concept_id": "G4240953981-ASF",
+          "granule_id": "NISAR_L2_PR_GCOV_024_044_A_018_4005_DHDH_A_20260629T054642_20260629T054717_P05023_N_F_J_001",
+          "time_start": "2026-06-29T05:46:42.000Z",
+          "time_end": "2026-06-29T05:47:17.999Z",
+          "updated": "2026-07-09T12:30:07.760Z",
+          "size_mb": 5974.574241638184,
+          "data_url": "https://nisar.asf.earthdatacloud.nasa.gov/NISAR/NISAR_L2_GCOV_PROVISIONAL_V1/NISAR_L2_PR_GCOV_024_044_A_018_4005_DHDH_A_20260629T054642_20260629T054717_P05023_N_F_J_001/NISAR_L2_PR_GCOV_024_044_A_018_4005_DHDH_A_20260629T054642_20260629T054717_P05023_N_F_J_001.h5",
+          "footprint": [
+            [
+              "31.91913 -6.24705 34.04784 -6.9225 33.38664 -9.54918 31.28085 -8.78915 31.91913 -6.24705"
+            ]
+          ],
+          "metadata_footprint_covers_osm_study": true,
+          "downloaded_for_this_audit": false,
+          "usable_pixels_verified": false
+        }
+      ],
+      "optical_pair_already_used_in_v2": [
+        "S2C_29SPR_20260614_0_L2A",
+        "S2B_29SPR_20260629_0_L2A"
+      ],
+      "independent_validation_holdout": false,
+      "calibration_review_required": true
+    },
+    {
+      "role": "validated_collection_separate_pilot",
+      "crid": "P05036",
+      "status": "catalogue_candidates_only",
+      "granules": [
+        {
+          "collection": "NISAR_L2_GCOV_V1",
+          "concept_id": "G4406084628-ASF",
+          "granule_id": "NISAR_L2_PR_GCOV_034_023_D_072_4005_DHDH_A_20261025T191958_20261025T192033_P05036_N_F_J_001",
+          "time_start": "2026-10-25T19:19:58.000Z",
+          "time_end": "2026-10-25T19:20:33.999Z",
+          "updated": "2026-11-09T02:50:57.474Z",
+          "size_mb": 5834.772025108337,
+          "data_url": "https://nisar.asf.earthdatacloud.nasa.gov/NISAR/NISAR_L2_GCOV_V1/NISAR_L2_PR_GCOV_034_023_D_072_4005_DHDH_A_20261025T191958_20261025T192033_P05036_N_F_J_001/NISAR_L2_PR_GCOV_034_023_D_072_4005_DHDH_A_20261025T191958_20261025T192033_P05036_N_F_J_001.h5",
+          "footprint": [
+            [
+              "34.10233 -9.07391 31.98175 -9.78339 31.33 -7.1886 33.43822 -6.43762 34.10233 -9.07391"
+            ]
+          ],
+          "metadata_footprint_covers_osm_study": true,
+          "downloaded_for_this_audit": false,
+          "usable_pixels_verified": false
+        },
+        {
+          "collection": "NISAR_L2_GCOV_V1",
+          "concept_id": "G4408178338-ASF",
+          "granule_id": "NISAR_L2_PR_GCOV_035_023_D_072_4005_DHDH_A_20261106T191958_20261106T192028_P05036_N_F_J_001",
+          "time_start": "2026-11-06T19:19:58.000Z",
+          "time_end": "2026-11-06T19:20:28.999Z",
+          "updated": "2026-11-11T06:26:36.802Z",
+          "size_mb": 4987.9650411605835,
+          "data_url": "https://nisar.asf.earthdatacloud.nasa.gov/NISAR/NISAR_L2_GCOV_V1/NISAR_L2_PR_GCOV_035_023_D_072_4005_DHDH_A_20261106T191958_20261106T192028_P05036_N_F_J_001/NISAR_L2_PR_GCOV_035_023_D_072_4005_DHDH_A_20261106T191958_20261106T192028_P05036_N_F_J_001.h5",
+          "footprint": [
+            [
+              "34.12221 -9.05592 32.29649 -9.66931 31.6465 -7.08304 33.46027 -6.42888 34.12221 -9.05592"
+            ]
+          ],
+          "metadata_footprint_covers_osm_study": true,
+          "downloaded_for_this_audit": false,
+          "usable_pixels_verified": false
+        }
+      ],
+      "optical_pair_already_used_in_v2": null,
+      "independent_validation_holdout": false,
+      "calibration_review_required": true
+    }
+  ],
+  "isolated_validated_ascending_granule": {
+    "collection": "NISAR_L2_GCOV_V1",
+    "concept_id": "G4407437430-ASF",
+    "granule_id": "NISAR_L2_PR_GCOV_034_044_A_018_4005_DHDH_A_20261027T054640_20261027T054715_P05036_N_F_J_001",
+    "time_start": "2026-10-27T05:46:40.000Z",
+    "time_end": "2026-10-27T05:47:15.999Z",
+    "updated": "2026-11-10T11:22:56.546Z",
+    "size_mb": 5974.59123134613,
+    "data_url": "https://nisar.asf.earthdatacloud.nasa.gov/NISAR/NISAR_L2_GCOV_V1/NISAR_L2_PR_GCOV_034_044_A_018_4005_DHDH_A_20261027T054640_20261027T054715_P05036_N_F_J_001/NISAR_L2_PR_GCOV_034_044_A_018_4005_DHDH_A_20261027T054640_20261027T054715_P05036_N_F_J_001.h5",
+    "footprint": [
+      [
+        "31.9147 -6.24691 34.04359 -6.92155 33.38242 -9.5481 31.27662 -8.78819 31.9147 -6.24691"
+      ]
+    ]
+  },
+  "requirements_before_use": [
+    "Read product masks, instrument mode/RCID, processing and calibration metadata.",
+    "Check positive finite gamma0, incidence/geometry and grid compatibility.",
+    "Measure valid coverage independently in study and control, beyond catalogue footprints.",
+    "Do not combine P05023/P05036 or different orbit directions into a raw difference.",
+    "Read official pre-2026-11-12 calibration issues; applicability to these products remains to be checked.",
+    "Treat pilot dates already studied in v2 as development data, not independent validation holdout.",
+    "Freeze reference sampling and interpretation before examining new held-out radar changes."
+  ],
+  "opera": {
+    "catalogue_granules": 148,
+    "acquisition_count": "not_established",
+    "role": "optional C-band complement",
+    "status": "metadata_only",
+    "requirements": [
+      "deduplicate processing versions by burst and sensing date",
+      "assemble coverage of study and control",
+      "read COG assets and RTC validity mask; the NISAR HDF5 link adapter is insufficient"
+    ]
+  },
+  "sources": {
+    "gcov": "https://nisar-docs.asf.alaska.edu/gcov/",
+    "release_notes": "https://hyp3-docs.asf.alaska.edu/nisar-docs/release-notes/",
+    "opera": "https://hyp3-docs.asf.alaska.edu/guides/opera_rtc_product_guide/"
+  }
+}

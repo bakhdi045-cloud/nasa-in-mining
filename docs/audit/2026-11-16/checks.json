@@ -1,0 +1,77 @@
+{
+  "date": "2026-11-16",
+  "baseline_commit": "22c6ed951463bdb965a7557d57c19f88ec90c545",
+  "origin": "https://github.com/bakhdi045-cloud/nasa-in-mining.git",
+  "live_remote_refs": {
+    "refs/heads/main": "6a3690791e120c5a37cf10749fb9f50604004694",
+    "refs/heads/feature/benguerir-robustness-v2": "22c6ed951463bdb965a7557d57c19f88ec90c545"
+  },
+  "remote_command": "git ls-remote --heads origin",
+  "local_only_branch": "feature/benguerir-mining-case",
+  "ancestry": "main -> feature/benguerir-mining-case (+7 commits) -> feature/benguerir-robustness-v2 (+8 commits)",
+  "checks": [
+    {
+      "command": ".venv/Scripts/python.exe -B -m unittest discover -s tests",
+      "exit_code": 0,
+      "tests_passed": 71,
+      "duration_s": 22.973,
+      "notes": "Deprecation warnings observed."
+    },
+    {
+      "cwd": "web",
+      "command": "npm.cmd test",
+      "tests_passed": 14,
+      "result": "passed"
+    },
+    {
+      "cwd": "web",
+      "command": "npm.cmd run build",
+      "exit_code": 0,
+      "result": "TypeScript and Vite passed"
+    },
+    {
+      "cwd": "web",
+      "command": "npm.cmd run e2e",
+      "exit_code": 0,
+      "tests_passed": 10,
+      "notes": "All 10 scenarios passed against the real local API and published case. Windows server teardown remained running; the audit stopped only the test-owned server, after which Playwright reported 10 passed (5.6m).",
+      "dimensions": [
+        "1440x900",
+        "390x844"
+      ],
+      "languages": [
+        "fr",
+        "en",
+        "ar"
+      ]
+    },
+    {
+      "command": ".venv/Scripts/python.exe -B scripts/audit_study_readiness.py --out docs/audit/2026-11-16/local_evidence.json",
+      "exit_code": 0,
+      "result": "218 inputs, 102 outputs and 16 upstream files matched; contract and referenced files passed"
+    },
+    {
+      "command": ".venv/Scripts/python.exe -B -m nasa_in_mining case-run --case cases/benguerir --data data --no-publish",
+      "exit_code": 0,
+      "run_id": "20261116T105616Z",
+      "duration_s": 46.0,
+      "result": "102 outputs and scientific payload reproduced; original output not replaced"
+    }
+  ],
+  "not_executed": [
+    "Fresh clone/install in this audit",
+    "New GCOV or OPERA downloads",
+    "Independent annotation or field validation",
+    "Reconstruction of a recent operator-confirmed perimeter"
+  ],
+  "spaceapps_resource_page": {
+    "url": "https://www.spaceappschallenge.org/2026/challenges/dancing-with-the-sars/?tab=resources",
+    "status": "unavailable",
+    "attempts": [
+      "web open with and without www and query: fetch errors",
+      "Python requests: certificate verification failure",
+      "Windows Invoke-WebRequest: TLS trust failure"
+    ],
+    "consequence": "Exact Resources tab contents were not verified; primary NASA/ASF sources and public CMR were verified separately."
+  }
+}

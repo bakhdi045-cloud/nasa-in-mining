@@ -6,6 +6,11 @@ Benguerir, Maroc, juin–octobre 2026), un pipeline reproductible, une API lég�
 **Niveau de présentation : étude exploratoire calculée, avec associations entre observations et limites explicites.**
 Aucune observation de terrain n'a été utilisée ; les produits NISAR sont provisoires.
 
+**Orientation du 16 novembre 2026 : Benguerir OCP uniquement.** L'[audit du projet et de toutes les branches](docs/audit/2026-11-16/AUDIT.md)
+établit les acquis et les écarts vers une étude validée. Le [plan d'exécution](docs/audit/2026-11-16/PLAN_EXECUTION.md)
+et le [prompt pour l'agent suivant](docs/audit/2026-11-16/PROMPT_AGENT.md) définissent la suite ; les résultats ci-dessous
+restent ceux de l'étude exploratoire v2.
+
 ## Question et observable
 
 Pour chaque paire d'acquisitions NISAR, quelles parties du périmètre cartographié de la mine présentent une cohérence
