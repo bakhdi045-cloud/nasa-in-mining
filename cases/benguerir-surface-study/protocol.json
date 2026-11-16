@@ -1,0 +1,91 @@
+{
+  "protocol_id": "benguerir-surface-study-protocol",
+  "version": "1.0.0",
+  "frozen_utc": "2026-11-16T14:00:00Z",
+  "status": "frozen_before_new_results",
+  "history_note": "Frozen before any GCOV change map, flag count or optical comparison of the new observable was computed. Before freezing, only product metadata and the global value ranges of one granule (16 August 2026, HH and HV) were inspected, to choose the primary channel and the noise margin below. The same dates were examined in the v2 coherence study: they are development data, not an independent holdout.",
+  "site": {"id": "benguerir", "scope": "OCP Benguerir phosphate mine only; Guemassa is excluded"},
+  "periods": {
+    "main": {"start": "2026-06-17", "end": "2026-10-15", "batch": "P05023, provisional collection NISAR_L2_GCOV_PROVISIONAL_V1"},
+    "extension": {"start": "2026-10-25", "end": "2026-11-06", "batch": "P05036, collection NISAR_L2_GCOV_V1; separate analysis, never pooled with the main period"}
+  },
+  "homogeneous_batch": "same collection, CRID, track, frame, orbit direction, polarisation and span; ascending and descending are never differenced with each other",
+  "observable": {
+    "primary": {
+      "id": "delta_gamma0_hh_db",
+      "channel": "HH",
+      "formula": "10 * log10(gamma0_after / gamma0_before)",
+      "quantity": "gamma-0 linear power (terrain-normalised backscatter), NISAR L2 GCOV frequency A",
+      "native_spacing_m": 10,
+      "analysis_spacing_m": 20,
+      "aggregation": "2 x 2 native samples averaged in linear power before the dB conversion; zone aggregates also in linear power",
+      "why_primary": "HH is well above the noise-equivalent backscatter over the whole scene; HV median power is within about 3 dB of it in the inspected granule"
+    },
+    "secondary": [{
+      "id": "delta_gamma0_hv_db", "channel": "HV",
+      "role": "reported with its own quality layer; cells within the noise margin are excluded and counted, not interpreted as no change"
+    }],
+    "auxiliary": {"id": "low_coherence_gunw", "role": "context only: persistent low coherence relative to a control (v2 observable); never renamed surface change"},
+    "effective_resolution": "the 10 m grid is not the effective resolution: numberOfLooks and the adaptive multilooking of the product apply; the empirical spread in the control is the working precision"
+  },
+  "quality": {
+    "reasons": ["outside_acquisition", "not_fully_focused", "instrument_anomaly", "invalid_value", "near_noise_floor", "insufficient_subpixel_coverage", "date_not_available"],
+    "min_valid_subpixel_fraction": 0.75,
+    "noise_margin_linear": 2.0,
+    "noise_margin_note": "cell power below 2 x noise-equivalent backscatter (3 dB) is excluded; the product states that noise correction is not applied",
+    "water_and_built_land_cover": "context only; never used as an automatic rejection",
+    "unknown_property": "a quality property the product does not state stays unknown; no shadow or layover mask is invented"
+  },
+  "coverage": {"min_observed_fraction_study": 0.5, "min_observed_fraction_control": 0.5, "min_control_cells": 500},
+  "baseline": {
+    "min_disjoint_pairs": 3,
+    "min_pairs_per_cell": 3,
+    "rule": "the temporal reference of a pair is the per-cell median change of homogeneous pairs of the same span sharing no acquisition with it; fewer than the minimum gives insufficient_baseline",
+    "spans_days_kept_separate": [12, 24]
+  },
+  "flagging": {
+    "rule": "cell flagged when |residual - control centre| > k * robust sigma of the calibration control residuals",
+    "k_sigma": 3.0,
+    "two_sided": true,
+    "directions_reported_separately": true,
+    "control": "ring 1-4 km outside the perimeter, built-up and industrial exclusions removed (as v2); calibration / evaluation halves are alternating 1 km blocks",
+    "calibration_block_m": 1000,
+    "bootstrap_block_m": 1000,
+    "bootstrap_block_sizes_m": [500, 1000, 2000],
+    "bootstrap_replicates": 2000,
+    "level": 0.95,
+    "interval_scope": "conditional on this protocol: not on the choice of control, geometry, threshold or interpretation"
+  },
+  "optical_comparison": {
+    "sensor": "Sentinel-2 L2A tile 29SPR (ESA / Copernicus)",
+    "strict_gap_days": 3,
+    "dependency_rule": "comparisons sharing the same two optical scenes are one temporal support; counts are reported per distinct optical pair",
+    "min_distinct_optical_pairs_for_association_level": 3,
+    "windows_already_examined_in_v2": ["2026-06-17/2026-06-29", "2026-08-16/2026-08-28"]
+  },
+  "references": {
+    "purpose": "evaluate detection of visible surface change at the working resolution, not the cross-sensor agreement",
+    "unit": "20 m analysis cell blocks (60 m x 60 m = 3 x 3 cells) so that the unit exceeds the effective resolution of both sensors",
+    "classes": ["change_visible", "no_change_visible", "indeterminate"],
+    "strata": ["flagged_study", "unflagged_study", "flagged_control", "unflagged_control", "not_observable"],
+    "min_units_per_class": 30,
+    "min_independent_groups": 3,
+    "annotators_blind_to_radar": true,
+    "sampling_probabilities_recorded": true,
+    "reserved_for_evaluation": "units are drawn once, from a seed recorded in the sampling file, before any annotation; Z1 and the most spectacular zones are not privileged",
+    "automated_or_agent_proposals": "labelled as such; never counted as independent human review",
+    "no_target_accuracy": "no accuracy target is chosen after seeing results; a confidence interval level is not an accuracy"
+  },
+  "claims_not_made": [
+    "ore, grade, production or volume",
+    "dam or slope hazard",
+    "annual velocity or vertical displacement",
+    "excavation demonstrated by radar variation alone",
+    "mining boundary or concession (the perimeter is a historical map)"
+  ],
+  "sources": {
+    "gcov": "https://nisar-docs.asf.alaska.edu/gcov/",
+    "release_notes": "https://hyp3-docs.asf.alaska.edu/nisar-docs/release-notes/",
+    "known_issues": "https://hyp3-docs.asf.alaska.edu/nisar-docs/nisar-known-issues/"
+  }
+}

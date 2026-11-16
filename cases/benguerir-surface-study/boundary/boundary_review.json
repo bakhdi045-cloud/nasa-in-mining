@@ -1,0 +1,95 @@
+{
+ "site": "OCP Benguerir (Gantour site; OCP states a Living Lab with UM6P at Benguerir)",
+ "operator": "OCP Group",
+ "documentary_source": {
+  "name": "OpenStreetMap way 638354631 (landuse=quarry), version 3",
+  "date": "2020-02-10T12:19:15Z",
+  "license": "ODbL-1.0",
+  "crs": "EPSG:4326",
+  "operator_source": "https://www.ocpgroup.ma/fr/nos-activites/operations-industrielles"
+ },
+ "state": "historical_map",
+ "state_scale": [
+  "historical_map",
+  "draft_interpretation",
+  "remote_sensing_reviewed",
+  "operator_confirmed"
+ ],
+ "review": {
+  "status": "pending_human_review",
+  "imagery_date": null,
+  "review_date": null,
+  "reviewer": null,
+  "evidence": null,
+  "operator_confirmation": null
+ },
+ "position_uncertainty_m": null,
+ "position_uncertainty_note": "not estimated: it requires a review on dated imagery; the study uses +/- one 20 m pixel only as a sensitivity",
+ "classes": {
+  "study_extent": "historical_map",
+  "installations": "not_identified",
+  "visible_excavations": "not_identified",
+  "waste_dumps": "not_identified",
+  "ponds_basins": "not_identified"
+ },
+ "class_note": "installations, excavations, dumps and basins are not separated: no reviewed source identifies them; the OSM industrial parcels (2020) are kept as a context layer with unconfirmed semantics",
+ "comparison_with_osm_2020": {
+  "overlap": "identical: the perimeter in use is the OSM 2020 polygon",
+  "area_km2": 39.548
+ },
+ "automated_checks": {
+  "geometry_valid": true,
+  "n_parts": 1,
+  "area_km2_rasterised": 39.544,
+  "raster_grid_m": 20.0,
+  "edge_band_m": 300,
+  "landcover_2021_share": {
+   "inside": {
+    "grassland": 0.322,
+    "cropland": 0.02,
+    "bare / sparse vegetation": 0.658
+   },
+   "outside_band_300m": {
+    "grassland": 0.577,
+    "cropland": 0.107,
+    "bare / sparse vegetation": 0.311
+   }
+  },
+  "optical_contrast_across_edge": {
+   "scene": "S2B_29SPR_20260828_0_L2A",
+   "brightness_inner_band": 0.3586,
+   "brightness_outer_band": 0.3251,
+   "ndvi_inner_band": 0.1353,
+   "ndvi_outer_band": 0.1349,
+   "reading": "a contrast between the 300 m bands on either side of the edge is consistent with a boundary that follows a surface change; it does not locate the operational limit"
+  },
+  "panels_outside_osm_2020_km2": 2.389
+ },
+ "automated_checks_note": "descriptive; a valid geometry or a surface contrast is not a verification of the boundary",
+ "legal_claim": "none: not a concession, a permit area or an operating limit",
+ "controls": {
+  "definition": "ring 1-4 km outside the perimeter with built-up and industrial exclusions (OSM 2020, 100 m buffer); defined before results",
+  "comparability_checked": [
+   "land cover (WorldCover 2021) shares per control"
+  ],
+  "comparability_not_checked": [
+   "slope",
+   "soil",
+   "land use history",
+   "irrigation"
+  ],
+  "not_assumed_stable": true
+ },
+ "context_zone": "rings 1-2 km and 2-4 km are kept as context and comparators; 1-4 km is an analysis convention, not an influence boundary",
+ "needed_for_next_state": {
+  "remote_sensing_reviewed": [
+   "contemporary imagery with its date and rights",
+   "a reviewer name and date",
+   "digitised limits with a log"
+  ],
+  "operator_confirmed": [
+   "written confirmation from an OCP/UM6P contact of the authorised outline, with date"
+  ]
+ },
+ "built_utc": "2026-11-16T11:59:35+00:00"
+}
