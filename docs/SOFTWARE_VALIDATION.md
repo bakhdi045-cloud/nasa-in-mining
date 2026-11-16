@@ -14,7 +14,7 @@ configuration jest-dom de Vitest).
 | Typage, construction | `npm run typecheck`, `npm run build` | aucune erreur |
 | Parcours navigateur | `npm run e2e` (bureau 1440 × 900, mobile 390 × 844) | **22 réussis** (10 v2, 12 étude : cinq étapes, axe sans violation sérieuse, pas de débordement, FR/EN/AR, fichiers servis, impression) |
 | Fin du serveur Playwright sous Windows | lanceur `web/e2e/serve.mjs` (arrêt de l'arbre de processus) | l'exécution se termine seule (1,1 min), aucun serveur résiduel sur le port 8799 |
-| Reproductibilité | deux exécutions réelles successives (20261116T131053Z publiée, 20261116T131225Z) | 507 des 508 sorties identiques ; la seule différence est le rapport HTML qui porte l'identifiant d'exécution ; contenu de `study.json` identique hors manifeste |
+| Reproductibilité | deux exécutions réelles successives de la même version du code (20261116T131850Z publiée, puis une seconde non publiée) | 507 des 508 sorties identiques (même constat sur deux paires d'exécutions précédentes du même code de calcul) ; la seule différence est le rapport HTML qui porte l'identifiant d'exécution ; contenu de `study.json` identique hors manifeste |
 | Intégrité | empreintes lues à l'entrée (286 entrées) et vérifiées avant publication (508 sorties) | conformes |
 | Cas v2 | `cases/benguerir/output` | inchangé (aucun fichier modifié) ; relu avec son bloc de preuves calculé à la lecture |
 

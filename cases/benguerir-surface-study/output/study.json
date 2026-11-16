@@ -1,7 +1,7 @@
 {
  "schema_version": "3.0",
  "study_id": "benguerir-surface-study-2026",
- "run_id": "20261116T131053Z",
+ "run_id": "20261116T131850Z",
  "data_nature": "real",
  "presentation_level_key": "presentation.exploratory_surface",
  "site": {
@@ -31492,7 +31492,7 @@
    "format": "html",
    "path": "report/report.html",
    "description_key": "export.report_html",
-   "sha256": "8900ed0bdb27fb52808d50126757ce2cc69d3d9a54671f46b9a3acb642ad212d"
+   "sha256": "05210c7e443a79ff2dd5e59764304c2d94e966680239c112459ff48f91819852"
   }
  ],
  "limits": [
@@ -31575,9 +31575,9 @@
   "blockers": []
  },
  "manifest": {
-  "run_id": "20261116T131053Z",
-  "created_utc": "2026-11-16T13:12:21+00:00",
-  "code_commit": "9ba8835b37cda0810ca8aae38e122e6bdfb249ac",
+  "run_id": "20261116T131850Z",
+  "created_utc": "2026-11-16T13:20:21+00:00",
+  "code_commit": "edea32b91a04b4332241d7178e97158d427d868a",
   "code_dirty": false,
   "python": "3.12.10",
   "packages": {
@@ -36349,7 +36349,7 @@
    },
    {
     "path": "report/report.html",
-    "sha256": "8900ed0bdb27fb52808d50126757ce2cc69d3d9a54671f46b9a3acb642ad212d",
+    "sha256": "05210c7e443a79ff2dd5e59764304c2d94e966680239c112459ff48f91819852",
     "role": "output",
     "declared_sha256": null
    },
@@ -36360,7 +36360,7 @@
     "declared_sha256": null
    }
   ],
-  "duration_s": 88.6
+  "duration_s": 91.4
  },
  "v2_context": {
   "case_id": "benguerir-2026-low-coherence",

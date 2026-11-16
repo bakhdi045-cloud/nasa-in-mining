@@ -25,7 +25,7 @@ Une grandeur absente est une raison, jamais un zéro ni « stable ». Les raison
 non focalisé, anomalie instrumentale, valeur invalide, proche du plancher de bruit, sous-pixels insuffisants,
 date indisponible. Aucun masque d'ombre ou de repli n'est inventé : le produit ne le fournit pas.
 
-## Résultats de l'exécution publiée (20261116T131053Z)
+## Résultats de l'exécution publiée (20261116T131850Z)
 
 Calculés par `study-run` sur 21 acquisitions GCOV réelles ; détails dans [generated/surface_tables.md](generated/surface_tables.md).
 
