@@ -338,6 +338,8 @@ class SurfacePipeline(unittest.TestCase):
         html = (self.folder / "report" / "report.html").read_text(encoding="utf-8")
         self.assertIn("étude exploratoire calculée", html)
         self.assertNotIn("validée par", html.lower())
+        for raw in ("limit.", "layer.", "historical_map", "awaiting_annotations", "not_fully"):   # keys are always rendered as sentences
+            self.assertNotIn(raw, html)
 
     def test_incompatible_grid_is_rejected_not_resampled(self):
         tmp = Path(tempfile.mkdtemp(prefix="surface_grid_"))

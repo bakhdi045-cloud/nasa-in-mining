@@ -25,12 +25,38 @@ OPT = {"corroborated_two_or_more_optical_pairs": "visible sur au moins deux coup
        "not_observable": "non observable (nuages ou recouvrement insuffisant)", "not_assessed": "non évalué (aucun couple optique)"}
 
 
+LIMITS_FR = {
+    "limit.gcov_provisional": "Produits GCOV provisoires (CRID P05023) : la collection validée ne couvre pas la période principale.",
+    "limit.calibration_before_2026_11_12": "Environ 30 % des données de certains modes acquises avant le 12 novembre 2026 ont des résidus radiométriques d'environ 1 dB ; le RCID n'est pas dans les métadonnées du produit (le nom 4005 / DHDH est cohérent avec une famille de modes concernée) : l'applicabilité n'a pas pu être vérifiée. Les valeurs absolues peuvent être décalées ; la soustraction du témoin en annule une partie.",
+    "limit.no_noise_correction": "Le produit n'applique pas la correction du bruit : les pixels proches du plancher de bruit sont exclus, surtout en HV.",
+    "limit.effective_resolution": "La grille de 10 m (20 m ici) n'est pas la résolution effective : le nombre de vues médian est d'environ 5 et l'étalement empirique du témoin sert de précision de travail.",
+    "limit.perimeter_historical": "Le périmètre est la carte OSM de 2020 : ni concession, ni limite d'exploitation actuelle ; sa revue humaine est en attente.",
+    "limit.no_independent_reference": "Aucune référence indépendante n'a été évaluée : pas de précision, pas de validation, pas de vérité terrain.",
+    "limit.optical_dependency": "Les comparaisons Sentinel-2 réutilisent des couples de scènes : elles ne sont pas des confirmations indépendantes. Le recoupement entre capteurs observe aussi les mêmes propriétés persistantes du terrain.",
+    "limit.not_attribution": "Une variation radar n'est pas une cause : humidité, végétation, rugosité, opérations et calibration restent possibles.",
+    "limit.development_windows": "Les fenêtres du 17–29 juin et du 16–28 août ont déjà été examinées dans l'étude v2 : données de développement, pas un échantillon d'évaluation indépendant.",
+    "limit.interval_conditional": "Les intervalles par blocs sont conditionnels au protocole : ils ne couvrent ni le choix du témoin, ni le seuil, ni la géométrie, ni l'interprétation.",
+    "limit.p05036_separate": "La période du 25 octobre au 6 novembre (CRID P05036) est analysée séparément et n'est jamais mêlée à P05023 ni à l'autre orbite.",
+    "limit.instrument_gap": "Aucune donnée n'a été collectée par la plateforme du 27 juillet au 10 août 2026 : la lacune reste visible et n'est pas interpolée.",
+    "limit.no_data_is_not_no_change": "Une donnée absente ou une référence insuffisante n'est ni zéro ni « stable ».",
+    "limit.not_ore_or_hazard": "Ni minerai, ni teneur, ni volume, ni production, ni danger de digue, ni vitesse annuelle, ni déplacement vertical ne sont déduits de ces résultats.",
+}
+STATE_FR = {"historical_map": "carte historique", "draft_interpretation": "interprétation provisoire",
+            "remote_sensing_reviewed": "revu sur imagerie datée", "operator_confirmed": "confirmé par l'opérateur"}
+REF_FR = {"awaiting_annotations": "en attente d'annotations", "annotated_insufficient": "annotations insuffisantes", "evaluated": "évaluées"}
+STRATA_FR = {"flagged_study": "signalées dans le périmètre", "unflagged_study": "non signalées dans le périmètre", "flagged_control": "signalées dans le témoin",
+             "unflagged_control": "non signalées dans le témoin", "not_observable": "non observables"}
+MISSING_FR = {"annotations_filled_by_an_independent_person": "annotations renseignées par une personne indépendante",
+              "annotation_meta": "fichier de métadonnées de l'annotation (relecteur, méthode, droits)"}
+LAYER_FR = {"layer.quality": "Qualité : raisons de non-observation", "layer.delta_db": "Δγ⁰ HH (dB)", "layer.flags_temporal": "Signalement par rapport à la référence temporelle"}
+
+
 def _f(v, d=2, unit=""):
     return "—" if v is None else f"{v:.{d}f}{unit}"
 
 
 def _m(m, d=2, unit=""):
-    return f"<span class='mut'>{e(m.reason or m.status)}</span>" if m.value is None else _f(m.value, d, unit)
+    return "<span class='mut'>n. d.</span>" if m.value is None else _f(m.value, d, unit)
 
 
 def write(folder: Path, s: SurfaceStudy) -> str:
@@ -45,8 +71,8 @@ def write(folder: Path, s: SurfaceStudy) -> str:
          "au 12 novembre 2026.</div>"]
     b = s.boundary
     h += ["<h2>1. Périmètre</h2>",
-          f"<p>État : <b>{e(b.state)}</b> ({'revue humaine en attente' if b.review_status == 'pending_human_review' else 'revue enregistrée'}). "
-          f"Source : {e(b.source)} ({e(b.source_date or '')}), {b.area_km2:.3f} km². {e(b.legal_claim)}. "
+          f"<p>État : <b>{e(STATE_FR[b.state])}</b> ({'revue humaine en attente' if b.review_status == 'pending_human_review' else 'revue enregistrée'}). "
+          f"Source : {e(b.source)} ({e((b.source_date or '')[:10])}), {b.area_km2:.3f} km². Ce n'est ni une concession, ni une zone autorisée, ni une limite d'exploitation. "
           "Incertitude de position : non estimée. Les installations, excavations, verses et bassins ne sont pas séparés.</p>"]
     h += ["<h2>2. Dates et qualité</h2><table><tr><th>Géométrie</th><th>Lot</th><th>Collection / CRID</th><th>Dates utilisables</th><th>Dates rejetées</th><th>Lacunes</th></tr>"]
     for bt in s.batches:
@@ -79,7 +105,7 @@ def write(folder: Path, s: SurfaceStudy) -> str:
         for lid in [pilot.quality_layer_id] + [l for p in pilot.pols if p.pol == "HH" for l in p.layer_ids]:
             lay = next((x for x in s.layers if x.id == lid), None)
             if lay:
-                h.append(f"<figure><img src='{e(lay.url)}' alt='{e(lay.id)}'><figcaption>{e(lay.title_key)} — {e(lay.id)}</figcaption></figure>")
+                h.append(f"<figure><img src='{e(lay.url)}' alt='{e(lay.id)}'><figcaption>{e(LAYER_FR.get(lay.title_key, lay.title_key))}</figcaption></figure>")
         if pilot.gunw_context:
             g = pilot.gunw_context
             h.append(f"<p class='mut'>Contexte (observable différent, cohérence GUNW v2) : rapport {_f(g.get('ratio'), 2)}, intervalle "
@@ -92,9 +118,10 @@ def write(folder: Path, s: SurfaceStudy) -> str:
             h.append("<table><tr><th>Groupe</th><th>Avant</th><th>Après</th><th>Fenêtres radar</th></tr>" + "".join(
                 f"<tr><td>{e(g.group_id)}</td><td>{e(g.before_item)}</td><td>{e(g.after_item)}</td><td>{e(', '.join(g.pair_ids))}</td></tr>" for g in ev.groups) + "</table>")
     r = s.references
-    h.append(f"<p><b>Références indépendantes :</b> état <b>{e(r.status)}</b>. Unités de {e(r.unit_definition)}. Échantillon tiré : "
-             f"{', '.join(f'{k} = {v}' for k, v in r.n_units_sampled.items()) or 'aucun'}. Annotations comptées : {r.n_annotated}. "
-             f"Manque : {e('; '.join(r.missing)) or 'rien'}. Sans référence évaluée, aucune précision ni validation n'est annoncée.</p>")
+    h.append(f"<p><b>Références indépendantes :</b> état <b>{e(REF_FR[r.status])}</b>. Unités de 3 × 3 cellules d'analyse (60 m), tirées d'une graine enregistrée, "
+             f"stratifiées selon le statut radar. Échantillon tiré : "
+             f"{', '.join(f'{STRATA_FR[k]} = {v}' for k, v in r.n_units_sampled.items()) or 'aucun'}. Annotations comptées : {r.n_annotated}. "
+             f"Manque : {e('; '.join(MISSING_FR.get(k, k) for k in r.missing)) or 'rien'}. Sans référence évaluée, aucune précision ni validation n'est annoncée.</p>")
     h += ["<h2>5. Conclusion par zone</h2><table><tr><th>Zone</th><th>Surface</th><th>Variation radar mesurée</th><th>Changement optique visible</th><th>Cause</th></tr>"]
     for c in s.conclusions:
         rp, op = c.radar_params, c.optical_params
@@ -109,7 +136,7 @@ def write(folder: Path, s: SurfaceStudy) -> str:
                  f"<td>aucune cause documentée ; indéterminée</td></tr>")
     h.append("</table><p class='mut'>Z1 est une zone à vérifier, pas une excavation démontrée. Hypothèses alternatives : humidité, végétation ou culture, rugosité, opérations, "
              "calibration instrumentale. Ni minerai, teneur, volume, production, danger de digue, vitesse annuelle ou déplacement vertical ne sont déduits de ces résultats.</p>")
-    h += ["<h2>6. Limites</h2><ul>"] + [f"<li>{e(k)}</li>" for k in s.limits] + ["</ul>"]
+    h += ["<h2>6. Limites</h2><ul>"] + [f"<li>{e(LIMITS_FR.get(k, k))}</li>" for k in s.limits] + ["</ul>"]
     h += ["<h2>7. Sources et traçabilité</h2><ul>"] + [f"<li><a href='{e(x['url'])}'>{e(x['title'])}</a></li>" for x in s.external_sources] + ["</ul>",
           f"<p class='mut'>Contrat {e(s.schema_version)} ; protocole sha256 {e(s.protocol.sha256[:16])}… ; le manifeste (study.json → manifest) relie chaque sortie à ses entrées hachées.</p></body></html>"]
     (folder / "report").mkdir(parents=True, exist_ok=True)
