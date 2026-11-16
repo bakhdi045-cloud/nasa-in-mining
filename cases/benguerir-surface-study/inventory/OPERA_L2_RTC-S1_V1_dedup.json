@@ -1,0 +1,425 @@
+{
+ "collection": "OPERA_L2_RTC-S1_V1",
+ "searched_utc": "2026-11-16T12:22:35+00:00",
+ "bbox_wgs84": [
+  -7.913499502600662,
+  32.164121536460875,
+  -7.741689447311278,
+  32.34798962039192
+ ],
+ "temporal": "2026-06-01/2026-11-16",
+ "completeness": {
+  "pages": 1,
+  "cmr_hits": 148,
+  "n_unique": 148,
+  "complete": true
+ },
+ "n_granules": 148,
+ "n_unique_burst_dates": 88,
+ "n_acquisition_dates": 44,
+ "processing_versions": [
+  "1.0"
+ ],
+ "dates": [
+  {
+   "date": "2026-06-01",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 1.0
+  },
+  {
+   "date": "2026-06-02",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 0.979
+  },
+  {
+   "date": "2026-06-03",
+   "n_bursts": 2,
+   "platforms": [
+    "S1A"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 1.0
+  },
+  {
+   "date": "2026-06-07",
+   "n_bursts": 2,
+   "platforms": [
+    "S1A"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 1.0
+  },
+  {
+   "date": "2026-06-08",
+   "n_bursts": 2,
+   "platforms": [
+    "S1A"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 0.92
+  },
+  {
+   "date": "2026-06-15",
+   "n_bursts": 2,
+   "platforms": [
+    "S1A"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 1.0
+  },
+  {
+   "date": "2026-06-19",
+   "n_bursts": 2,
+   "platforms": [
+    "S1A"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 1.0
+  },
+  {
+   "date": "2026-06-20",
+   "n_bursts": 2,
+   "platforms": [
+    "S1A"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 0.922
+  },
+  {
+   "date": "2026-06-27",
+   "n_bursts": 2,
+   "platforms": [
+    "S1A"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 1.0
+  },
+  {
+   "date": "2026-06-28",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 1.0
+  },
+  {
+   "date": "2026-07-02",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 1.0
+  },
+  {
+   "date": "2026-07-03",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 0.978
+  },
+  {
+   "date": "2026-07-10",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 1.0
+  },
+  {
+   "date": "2026-07-14",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 1.0
+  },
+  {
+   "date": "2026-07-15",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 0.978
+  },
+  {
+   "date": "2026-07-22",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 1.0
+  },
+  {
+   "date": "2026-07-26",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 1.0
+  },
+  {
+   "date": "2026-07-27",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 0.98
+  },
+  {
+   "date": "2026-08-03",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 1.0
+  },
+  {
+   "date": "2026-08-07",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 1.0
+  },
+  {
+   "date": "2026-08-08",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 0.984
+  },
+  {
+   "date": "2026-08-15",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 1.0
+  },
+  {
+   "date": "2026-08-19",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 1.0
+  },
+  {
+   "date": "2026-08-20",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 0.981
+  },
+  {
+   "date": "2026-08-27",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 1.0
+  },
+  {
+   "date": "2026-08-31",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 1.0
+  },
+  {
+   "date": "2026-09-01",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 0.982
+  },
+  {
+   "date": "2026-09-08",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 1.0
+  },
+  {
+   "date": "2026-09-12",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 1.0
+  },
+  {
+   "date": "2026-09-13",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 0.979
+  },
+  {
+   "date": "2026-09-20",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 1.0
+  },
+  {
+   "date": "2026-09-24",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 1.0
+  },
+  {
+   "date": "2026-09-25",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 0.979
+  },
+  {
+   "date": "2026-10-02",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 1.0
+  },
+  {
+   "date": "2026-10-06",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 1.0
+  },
+  {
+   "date": "2026-10-07",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 0.98
+  },
+  {
+   "date": "2026-10-14",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 1.0
+  },
+  {
+   "date": "2026-10-18",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 1.0
+  },
+  {
+   "date": "2026-10-19",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 0.981
+  },
+  {
+   "date": "2026-10-26",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 1.0
+  },
+  {
+   "date": "2026-10-30",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 1.0
+  },
+  {
+   "date": "2026-10-31",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 0.983
+  },
+  {
+   "date": "2026-11-11",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 1.0
+  },
+  {
+   "date": "2026-11-12",
+   "n_bursts": 2,
+   "platforms": [
+    "S1C"
+   ],
+   "study_covered_fraction": 1.0,
+   "control_covered_fraction": 0.982
+  }
+ ],
+ "status": "metadata_only",
+ "origin": "NASA/JPL OPERA product derived from ESA/Copernicus Sentinel-1 C-band SAR; not a NASA instrument",
+ "rule": "deduplicated by (burst, sensing date) keeping the highest processing version; coverage = union of burst footprints; C-band is compared with C-band only and never subtracted from L-band NISAR values",
+ "note": "footprint coverage does not guarantee valid pixels; no file was downloaded"
+}

@@ -165,6 +165,41 @@ NISAR et Sentinel-2 ne sont réutilisés qu'avec les mêmes paramètres et des e
 Les aperçus de cohérence (64 niveaux, environ 0,6 Mo chacun) sont versionnés : le cas publié (environ 14 Mo)
 fonctionne après clonage, sans `data/` ni jeton.
 
+### DEC-21 — Étude de surface sur GCOV, nouveau contrat séparé (16 novembre 2026)
+Observable principal : Δγ⁰ HH en dB sur la puissance linéaire à 20 m, protocole figé avant les résultats
+(`cases/benguerir-surface-study/protocol.json`). Nouveau contrat 3.0 et nouveau cas ; la v2 (contrat 2.x) reste lisible et
+inchangée. La faible cohérence GUNW devient un contexte, jamais renommée « changement de surface ».
+
+### DEC-22 — Pas de signalement sans référence temporelle
+Un couple seul est descriptif. Le signalement exige ≥ 3 couples homogènes de même durée sans acquisition commune ;
+sinon `insufficient_baseline`. Les durées de 12 et 24 jours, les CRID, les traces et les orbites ne sont jamais mêlés.
+
+### DEC-23 — Appui optique compté par couple Sentinel-2 distinct
+Les 3 comparaisons strictes de la v2 reposent sur 2 couples optiques : le critère « associé à une observation
+indépendante » compte désormais les couples distincts (≥ 3). Les cas 2.0 sont relus avec ce décompte calculé à la lecture.
+
+### DEC-24 — Une étiquette ne vaut pas une validation
+`independently_validated` exige des références structurées effectives (relecteur indépendant, aveugle au radar, méthode,
+droits, dates, unités géolocalisées, effectifs, probabilités d'échantillonnage, métriques). Les annotations d'un agent ou
+d'un algorithme sont comptées à part et n'étayent rien. Un état de périmètre « revu » exige relecteur, dates et preuves.
+
+### DEC-25 — HV secondaire, HH principal
+En HV la puissance médiane est à environ 3 dB du plancher de bruit et le produit n'applique pas la correction du bruit :
+les cellules à moins de 2 × le plancher sont exclues et comptées, pas interprétées.
+
+### DEC-26 — Qualité par pixel avec raisons
+Bits : hors acquisition, non focalisé, anomalie instrumentale, valeur invalide, plancher de bruit, sous-pixels
+insuffisants, date indisponible. Aucun masque d'ombre ou de repli inventé. Les fenêtres rejetées gardent leur couche.
+
+### DEC-27 — Précautions de calibration avant le 12 novembre 2026
+Le RCID n'est pas dans les métadonnées GCOV : l'applicabilité du résidu d'environ 1 dB (modes DH 40M05N) ne peut pas être
+vérifiée ; elle est affichée comme limite. Le pilote P05036 est analysé à part.
+
+### DEC-28 — OPERA en inventaire seulement
+148 granules (88 couples rafale-date, 44 dates) dédoublonnés ; ni téléchargement ni calcul ; bande C jamais soustraite de la
+bande L.
+
 | Date | Décisions | Changement |
 |---|---|---|
 | 2026-11-15 | DEC-12 à DEC-20 | itération de robustesse ; conclusions v1 corrigées (voir docs/COMPARISON_V1_V2.md) |
+| 2026-11-16 | DEC-21 à DEC-28 | étude de surface GCOV, contrat 3.0, références indépendantes (protocole), périmètre en attente de revue |

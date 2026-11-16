@@ -104,7 +104,8 @@ def write(folder: Path, s: SurfaceStudy) -> str:
         elif rp.get("median_study_minus_control_db") is not None:
             radar += f" ; Δ médian vs témoin {_f(rp['median_study_minus_control_db'], 2)} dB (descriptif)"
         h.append(f"<tr><td><b>{e(c.zone_id)}</b></td><td>{_f(c.area_km2, 3, ' km²')}</td><td>{radar}</td>"
-                 f"<td>{OPT[c.optical_visible_change]} ({op['n_distinct_optical_pairs_elevated']}/{op['n_distinct_optical_pairs_assessed']} couples)</td>"
+                 f"<td>{OPT[c.optical_visible_change]} ({op['n_distinct_optical_pairs_elevated']}/{op['n_distinct_optical_pairs_assessed']} couples ; "
+                 f"{op['n_elevated_pairs_with_a_window_outside_development']} soutenu(s) aussi hors fenêtres de développement)</td>"
                  f"<td>aucune cause documentée ; indéterminée</td></tr>")
     h.append("</table><p class='mut'>Z1 est une zone à vérifier, pas une excavation démontrée. Hypothèses alternatives : humidité, végétation ou culture, rugosité, opérations, "
              "calibration instrumentale. Ni minerai, teneur, volume, production, danger de digue, vitesse annuelle ou déplacement vertical ne sont déduits de ces résultats.</p>")

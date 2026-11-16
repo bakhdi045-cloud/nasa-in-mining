@@ -146,7 +146,7 @@ export function StudyView({ data, run }: { data: SurfaceStudy; run?: string }) {
             {["ascending", "descending"].map((d) => (
               <optgroup key={d} label={t(`geometry.${d}`)}>
                 {windowRows.filter((x) => x.direction === d).map((x) => (
-                  <option key={x.window_id} value={x.window_id}>{windowLabel(x, f)} ({x.span_days} d){x.status === "rejected" ? ` — ${t("s.window.rejected")}` : ""}{x.development_window ? " ·dev" : ""}</option>
+                  <option key={x.window_id} value={x.window_id}>{windowLabel(x, f)} ({x.span_days} d){x.status === "rejected" ? ` — ${t("s.window.rejected")}` : ""}{x.development_window ? ` · ${t("s.col.dev")}` : ""}</option>
                 ))}
               </optgroup>
             ))}
@@ -281,7 +281,7 @@ export function StudyView({ data, run }: { data: SurfaceStudy; run?: string }) {
         <h3>{t("s.ref.title")}</h3>
         <p><span className={`tag tag--${data.references.status}`}>{t(`s.ref.${data.references.status}`)}</span></p>
         <dl className="facts">
-          <dt>{t("s.ref.unit")}</dt><dd>{data.references.unit_definition}</dd>
+          <dt>{t("s.ref.unit")}</dt><dd>{t("s.ref.unit_text", { k: 3, m: 60 })}</dd>
           <dt>{t("s.ref.sampled")}</dt><dd>{Object.entries(data.references.n_units_sampled).map(([k, v]) => `${t(`s.ref.stratum.${k}`)} : ${v}`).join(" · ") || "—"}</dd>
           <dt>{t("s.ref.annotated")}</dt><dd>{data.references.n_annotated}</dd>
           <dt>{t("s.ref.missing")}</dt><dd>{data.references.missing.map((k) => t(`missing.${k}`)).join(" ; ") || "—"}</dd>
@@ -308,7 +308,8 @@ export function StudyView({ data, run }: { data: SurfaceStudy; run?: string }) {
                     </th>
                     <td>{f.km2(c.area_km2)}</td>
                     <td>{t(`s.radar.${c.radar_variation}`, { el: rp.n_windows_elevated, n: rp.n_windows_with_baseline, frac: rp.median_flagged_fraction, d: rp.median_study_minus_control_db })}{rp.selection === "recurrence_of_the_same_flags" ? <p className="small muted">{t("s.conc.circular")}</p> : null}{rp.selection === "v2_coherence_recurrence" ? <p className="small muted">{t("s.conc.z1_selection")}</p> : null}</td>
-                    <td>{t(`s.opt.${c.optical_visible_change}`)} <span className="small muted">({t("s.opt.pairs", { e: op.n_distinct_optical_pairs_elevated, a: op.n_distinct_optical_pairs_assessed })})</span></td>
+                    <td>{t(`s.opt.${c.optical_visible_change}`)} <span className="small muted">({t("s.opt.pairs", { e: op.n_distinct_optical_pairs_elevated, a: op.n_distinct_optical_pairs_assessed })})</span>
+                      {Number(op.n_distinct_optical_pairs_elevated) > 0 ? <p className="small muted">{t("s.opt.outside_dev", { k: op.n_elevated_pairs_with_a_window_outside_development })}</p> : null}</td>
                     <td>{t("s.conc.cause_none")}
                       {zoneOpen === c.zone_id ? (
                         <div className="small"><p><b>{t("s.conc.alternatives")}</b> : {c.alternative_keys.map((k) => t(k)).join(" · ")}</p><p><b>{t("s.conc.collect")}</b> : {c.to_collect_keys.map((k) => t(k)).join(" · ")}</p></div>

@@ -78,6 +78,20 @@ class Backscatter(unittest.TestCase):
         bits2[2, 3] = bs.REASONS["invalid_value"]                              # 2 valid: insufficient coverage
         self.assertTrue(bs.aggregate_power(power2, bits2, 2, 0.75)[1][1, 1] & bs.REASONS["insufficient_subpixel_coverage"])
 
+    def test_validity_bits_of_the_p05036_exception_mask_are_not_anomalies(self):
+        power = np.full((2, 2), 0.05, "float32")
+        mask = np.ones((2, 2), "uint8")
+        exc = np.full((2, 2), 768, "uint16")                      # HH (256) and HV (512) fully focused, no exception code
+        self.assertTrue((bs.sample_reasons(power, mask, exc, 256) == 0).all())
+        self.assertTrue((bs.sample_reasons(power, mask, exc, 512) == 0).all())
+        exc[0, 0] = 512                                            # HH validity bit cleared: partially focused for HH only
+        self.assertEqual(bs.sample_reasons(power, mask, exc, 256)[0, 0], bs.REASONS["not_fully_focused"])
+        self.assertEqual(bs.sample_reasons(power, mask, exc, 512)[0, 0], 0)
+        exc[1, 1] = 768 + 2                                        # a real exception code in the low byte
+        self.assertEqual(bs.sample_reasons(power, mask, exc, 256)[1, 1], bs.REASONS["instrument_anomaly"])
+        # without the documented validity bits (P05023) any non-zero value is an anomaly, as before
+        self.assertEqual(bs.sample_reasons(power, mask, np.full((2, 2), 2, "uint8"))[0, 0], bs.REASONS["instrument_anomaly"])
+
     def test_noise_floor_is_a_reason_not_a_zero(self):
         p = np.array([[0.001, 0.05]], "float32")
         nebs = np.full((1, 2), 0.0008, "float32")
@@ -291,8 +305,11 @@ class SurfacePipeline(unittest.TestCase):
         with rasterio.open(self.folder / "rasters" / f"quality_HH_{w.window_id}.tif") as src:
             q = src.read(1)
         with rasterio.open(self.folder / "rasters" / f"delta_db_HH_{w.window_id}.tif") as src:
-            d = src.read(1)
-        self.assertTrue(((q == 0) == np.isfinite(d)).all())                      # same pixels in the layer and the numbers
+            d = src.read(1, masked=True)
+            self.assertEqual(src.scales[0], 0.05)
+        self.assertTrue(((q == 0) == ~np.ma.getmaskarray(d)).all())              # same pixels in the layer and the numbers
+        decoded = d.astype("float64") * 0.05                                      # the scale of the file gives dB
+        self.assertLess(abs(float(np.ma.median(decoded[np.ma.getmaskarray(d) == 0]))), 1.0)   # a quiet window: small variations
 
     def test_hv_noise_exclusion_is_a_reason(self):
         w = self.win("ascending", sf.DATES_8[1])

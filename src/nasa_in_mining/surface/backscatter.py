@@ -30,14 +30,24 @@ def reason_names(bits: int) -> list[str]:
     return [k for k, v in REASONS.items() if bits & v]
 
 
-def sample_reasons(power: np.ndarray, mask: np.ndarray, exception: np.ndarray | None) -> np.ndarray:
-    """Reason bits of each native sample (outside / not focused / anomaly / invalid value)."""
+def sample_reasons(power: np.ndarray, mask: np.ndarray, exception: np.ndarray | None, validity_bit: int | None = None) -> np.ndarray:
+    """Reason bits of each native sample (outside / not focused / anomaly / invalid value).
+
+    `exception` is the product's inputDataExceptionMask. Its low byte holds the exception codes (0 = none, 2 = LSAR
+    qFSP-H1 sample slip). In products whose layer description says it "also includes the validity mask bits" (CRID
+    P05036), bits 8-15 are per-polarisation validity flags, set when the data are fully focused (256 HH, 512 HV):
+    they are not anomalies. `validity_bit` is the bit of the polarisation analysed; a cleared bit means partially
+    focused or missing data.
+    """
     bits = np.zeros(power.shape, dtype="uint16")
     outside = mask == 255
     bits[outside] |= REASONS["outside_acquisition"]
     bits[mask == 0] |= REASONS["not_fully_focused"]
     if exception is not None:
-        bits[(exception != 0) & ~outside] |= REASONS["instrument_anomaly"]
+        exc = exception.astype("uint32")
+        bits[((exc & 0xFF) != 0) & ~outside] |= REASONS["instrument_anomaly"]
+        if validity_bit is not None:
+            bits[((exc & validity_bit) == 0) & ~outside] |= REASONS["not_fully_focused"]
     bad = ~(np.isfinite(power) & (power > 0)) & ~outside & (mask != 0)
     bits[bad] |= REASONS["invalid_value"]
     return bits

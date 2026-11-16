@@ -19,7 +19,8 @@ from rasterio.warp import Resampling, calculate_default_transform, reproject, tr
 from .. import raster as legacy_raster
 
 
-def write_geotiff(path: Path, arr: np.ndarray, transform, epsg: int, nodata=None, tags: dict | None = None) -> str:
+def write_geotiff(path: Path, arr: np.ndarray, transform, epsg: int, nodata=None, tags: dict | None = None,
+                  scale: float | None = None) -> str:
     path.parent.mkdir(parents=True, exist_ok=True)
     if nodata is None and arr.dtype.kind == "f":
         nodata = np.nan
@@ -27,6 +28,8 @@ def write_geotiff(path: Path, arr: np.ndarray, transform, epsg: int, nodata=None
                        count=1 if arr.ndim == 2 else arr.shape[0], dtype=arr.dtype, crs=f"EPSG:{epsg}",
                        transform=transform, nodata=nodata, compress="deflate", predictor=2 if arr.dtype.kind in "iu" else 1) as dst:
         dst.write(arr if arr.ndim == 3 else arr[None])
+        if scale is not None:
+            dst.scales = (scale,) * dst.count
         if tags:
             dst.update_tags(**{k: str(v) for k, v in tags.items()})
     return sha256(path)

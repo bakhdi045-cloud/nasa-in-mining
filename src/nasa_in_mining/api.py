@@ -98,7 +98,7 @@ def create_app(cases_root: str | Path | None = None, web_dist: str | Path | None
         idx = index(root, "study.json", "study_id")
         if study_id not in idx:
             raise ApiError(404, "study_not_found", f"no recorded study '{study_id}' under {root.name}/")
-        rid = run or idx[study_id]["published"]
+        rid = run or idx[study_id]["published"] or max(idx[study_id]["runs"])   # newest verified run if none is published
         if rid not in idx[study_id]["runs"]:
             raise ApiError(404, "run_not_found", f"no verified run '{run}' for study '{study_id}'")
         return idx[study_id]["runs"][rid]

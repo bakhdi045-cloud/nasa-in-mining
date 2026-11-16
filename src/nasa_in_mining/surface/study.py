@@ -119,9 +119,12 @@ def load_acquisition(folder: Path, prov: dict, log: InputLog, grid: dict | None,
         if "incidenceAngle.tif" in files else None
     a.incidence = inc
     a.looks = block = bs.block_reduce(looks.astype("float64"), 2) / 4.0
+    desc = ((prov.get("layers") or {}).get("inputDataExceptionMask.tif") or {}).get("description") or ""
+    has_validity_bits = "validity mask bits" in desc          # documented per product, never assumed
     for pol in prov["polarizations"]:
         power, _, _ = read(f"{pol}{pol}.tif")
-        sample_bits = bs.sample_reasons(power, mask, exc)
+        vbit = {"HH": 256, "HV": 512}.get(pol) if has_validity_bits else None
+        sample_bits = bs.sample_reasons(power, mask, exc, vbit)
         cell, cbits, _ = bs.aggregate_power(power, sample_bits, 2, cfg_q["min_valid_subpixel_fraction"])
         nname = f"noiseEquivalentBackscatter_{pol}.tif"
         nebs = _sample_coarse(folder / nname, g["transform"], cells, log, files[nname]) if nname in files else None
@@ -414,7 +417,9 @@ def run(case_dir: Path, data_dir: Path, repo_root: Path | None = None, publish: 
         r, c = ndimage.center_of_mass(mask)
         return _lonlat(grid, epsg, r, c)
 
-    conclusions = _conclusions(zone_masks, W, opt_extra, Z, ctrl_eval, cfg, pix_km2, centroid, calib)
+    dev = {(d, a, b2) for d, a, b2 in cfg["development_windows"]}
+    dev_wids = {wid for wid, r in W.items() if (r["x"].direction, r["x"].date, r["y"].date) in dev}
+    conclusions = _conclusions(zone_masks, W, opt_extra, Z, ctrl_eval, cfg, pix_km2, centroid, calib, dev_wids)
 
     # ------------------------------------------------------------------ layers and rasters
     study_cells = Z["study"]
@@ -425,8 +430,12 @@ def run(case_dir: Path, data_dir: Path, repo_root: Path | None = None, publish: 
         for pol, p in rec["pols"].items():
             lids = []
             tags = {"window": wid, "pol": pol, "formula": "10*log10(gamma0_after/gamma0_before)", "units": "dB"}
-            if p["delta"] is not None:
-                sha = export.write_geotiff(out_dir / "rasters" / f"delta_db_{pol}_{wid}.tif", p["delta"], grid["transform"], epsg, tags=tags)
+            if p["delta"] is not None and pol == "HH":       # HV change is reported in the tables and its quality layer; no HV delta raster
+                enc = np.full(p["delta"].shape, -32768, dtype="int16")          # 0.05 dB steps (<= 0.025 dB rounding), far below the ~1 dB noise
+                fin = np.isfinite(p["delta"])
+                enc[fin] = np.clip(np.round(p["delta"][fin] / 0.05), -32767, 32767).astype("int16")
+                sha = export.write_geotiff(out_dir / "rasters" / f"delta_db_{pol}_{wid}.tif", enc, grid["transform"], epsg, nodata=-32768,
+                                           tags={**tags, "encoding": "int16 = round(dB / 0.05); nodata -32768 = not observed; scale 0.05"}, scale=0.05)
                 exports.append(Export(id=f"delta_{pol}_{wid}", format="geotiff", path=f"rasters/delta_db_{pol}_{wid}.tif",
                                       description_key="export.delta_geotiff", sha256=sha))
             sha = export.write_geotiff(out_dir / "rasters" / f"quality_{pol}_{wid}.tif", p["bits"].astype("uint16"), grid["transform"], epsg,
@@ -471,8 +480,8 @@ def run(case_dir: Path, data_dir: Path, repo_root: Path | None = None, publish: 
             # zone statistics
             zl = []
             ctrl_agg = None
-            for zid in ("study", "control", "control_1_2km", "control_2_4km", "panels_outside"):
-                zm = Z[zid]
+            for zid in ["control", *zone_masks]:                 # all zones of the conclusions, plus the whole control
+                zm = Z["control"] if zid == "control" else zone_masks[zid]
                 stt = bs.zone_delta_db(x.power[pol], y.power[pol], p["valid"], zm) if p["delta"] is not None else None
                 of = float(p["valid"][zm].mean()) if zm.any() else None
                 if zid == "control" and stt and stt["aggregate_db"] is not None:
@@ -533,7 +542,6 @@ def run(case_dir: Path, data_dir: Path, repo_root: Path | None = None, publish: 
 
     # ------------------------------------------------------------------ contract assembly
     v2_ctx = _v2_context(repo_root, cfg, log)
-    dev = {(d, a, b2) for d, a, b2 in cfg["development_windows"]}
     windows = []
     for wid, rec in W.items():
         x, y, b = rec["x"], rec["y"], rec["batch"]
@@ -653,7 +661,7 @@ def _acq_model(a: Acq, cfg: dict) -> GcovAcquisition:
         files=prov["files"], status=a.status, reasons=a.reasons, calibration_caveat_keys=caveats)
 
 
-def _conclusions(zone_masks, W, opt_extra, Z, ctrl_eval, cfg, pix_km2, centroid, calib) -> list[ZoneConclusion]:
+def _conclusions(zone_masks, W, opt_extra, Z, ctrl_eval, cfg, pix_km2, centroid, calib, dev_wids) -> list[ZoneConclusion]:
     out = []
     ratio_min, cells_min = cfg["elevated_ratio"], cfg["elevated_min_cells"]
     for zid, zm in zone_masks.items():
@@ -703,6 +711,7 @@ def _conclusions(zone_masks, W, opt_extra, Z, ctrl_eval, cfg, pix_km2, centroid,
                         "elevated_rule": f"flagged fraction >= {ratio_min} x control rate and >= {cells_min} cells"}
         # optical, per distinct optical pair
         pairs: dict[tuple[str, str], list[bool]] = {}
+        pair_outside_dev: dict[tuple[str, str], bool] = {}
         for key, ex_ in opt_extra.items():
             wid, mode = key.split("|")
             if mode != "strict":
@@ -715,11 +724,14 @@ def _conclusions(zone_masks, W, opt_extra, Z, ctrl_eval, cfg, pix_km2, centroid,
                 continue
             n_f = int((ex_["oflag"] & sel).sum())
             rate, rc = n_f / sel.sum(), float((ex_["oflag"] & ctrl_sel).sum() / ctrl_sel.sum())
-            pairs.setdefault((ex_["before"]["item_id"], ex_["after"]["item_id"]), []).append(bool(n_f >= cells_min and rate >= ratio_min * max(rc, 1e-6)))
+            pk = (ex_["before"]["item_id"], ex_["after"]["item_id"])
+            pairs.setdefault(pk, []).append(bool(n_f >= cells_min and rate >= ratio_min * max(rc, 1e-6)))
+            pair_outside_dev[pk] = pair_outside_dev.get(pk, False) or wid not in dev_wids
         judged = {k: [v for v in vs if v is not None] for k, vs in pairs.items()}
         judged = {k: v for k, v in judged.items() if v}
         n_pairs = len(judged)
         n_pairs_el = sum(1 for v in judged.values() if any(v))
+        n_el_outside_dev = sum(1 for k, v in judged.items() if any(v) and pair_outside_dev.get(k))
         optical_state = ("not_assessed" if not pairs else
                          "not_observable" if not judged else
                          "corroborated_two_or_more_optical_pairs" if n_pairs_el >= 2 else
@@ -728,6 +740,7 @@ def _conclusions(zone_masks, W, opt_extra, Z, ctrl_eval, cfg, pix_km2, centroid,
             zone_id=zid, label_key=ZONE_LABELS.get(zid, "zone.candidate"), centroid=centroid(zm), area_km2=round(float(zm.sum() * pix_km2), 3),
             radar_variation=status, radar_params=radar_params, optical_visible_change=optical_state,
             optical_params={"n_distinct_optical_pairs_assessed": n_pairs, "n_distinct_optical_pairs_elevated": n_pairs_el,
+                            "n_elevated_pairs_with_a_window_outside_development": n_el_outside_dev,
                             "optical_pairs": [list(k) for k in judged]},
             alternative_keys=["alt.moisture", "alt.vegetation_or_crop", "alt.surface_roughness", "alt.operations", "alt.instrument"],
             to_collect_keys=["collect.dated_imagery", "collect.operations_calendar", "collect.rain_irrigation", "collect.site_observation"],

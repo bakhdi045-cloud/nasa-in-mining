@@ -1,0 +1,23 @@
+{
+ "run_utc": "2026-11-16T12:31:14+00:00",
+ "batch": "p05036_T023_D_F072",
+ "window_utm": [
+  601840.0,
+  3558800.0,
+  619040.0,
+  3580000.0
+ ],
+ "epsg": 32629,
+ "items": [
+  {
+   "granule_id": "NISAR_L2_PR_GCOV_034_023_D_072_4005_DHDH_A_20261025T191958_20261025T192033_P05036_N_F_J_001",
+   "status": "extracted",
+   "bytes_transferred": 104857600
+  },
+  {
+   "granule_id": "NISAR_L2_PR_GCOV_035_023_D_072_4005_DHDH_A_20261106T191958_20261106T192028_P05036_N_F_J_001",
+   "status": "extracted",
+   "bytes_transferred": 101711872
+  }
+ ]
+}
